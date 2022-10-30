@@ -2,13 +2,16 @@ package com.wutsi.marketplace.access.service
 
 import com.wutsi.marketplace.access.dao.StoreRepository
 import com.wutsi.marketplace.access.dto.CreateStoreRequest
+import com.wutsi.marketplace.access.dto.SearchStoreRequest
 import com.wutsi.marketplace.access.dto.Store
+import com.wutsi.marketplace.access.dto.StoreSummary
 import com.wutsi.marketplace.access.entity.StoreEntity
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
 import com.wutsi.platform.core.error.exception.NotFoundException
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.time.ZoneOffset
 import java.util.Date
@@ -67,7 +70,25 @@ class StoreService(
         }
     }
 
+    fun search(request: SearchStoreRequest): List<StoreEntity> {
+        val pagination = PageRequest.of(request.offset / request.limit, request.limit)
+        return if (request.storeIds.isEmpty()) {
+            dao.findByIsDeleted(false, pagination)
+        } else {
+            dao.findByIdInAndIsDeleted(request.storeIds, false, pagination)
+        }
+    }
+
     fun toStore(store: StoreEntity) = Store(
+        id = store.id ?: -1,
+        accountId = store.accountId,
+        productCount = store.productCount,
+        publishedProductCount = store.publishedProductCount,
+        created = store.created.toInstant().atOffset(ZoneOffset.UTC),
+        updated = store.updated.toInstant().atOffset(ZoneOffset.UTC)
+    )
+
+    fun toStoreSummary(store: StoreEntity) = StoreSummary(
         id = store.id ?: -1,
         accountId = store.accountId,
         productCount = store.productCount,
