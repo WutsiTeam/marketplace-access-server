@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface StoreRepository : CrudRepository<StoreEntity, Long>
+interface StoreRepository : CrudRepository<StoreEntity, Long> {
+    fun findByAccountIdAndIsDeleted(accountId: Long, isDeleted: Boolean): List<StoreEntity>
+}

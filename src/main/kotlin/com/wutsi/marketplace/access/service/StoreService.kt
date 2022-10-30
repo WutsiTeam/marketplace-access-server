@@ -1,6 +1,7 @@
 package com.wutsi.marketplace.access.service
 
 import com.wutsi.marketplace.access.dao.StoreRepository
+import com.wutsi.marketplace.access.dto.CreateStoreRequest
 import com.wutsi.marketplace.access.dto.Store
 import com.wutsi.marketplace.access.entity.StoreEntity
 import com.wutsi.marketplace.access.error.ErrorURN
@@ -51,6 +52,19 @@ class StoreService(
         store.isDeleted = true
         store.deleted = Date()
         dao.save(store)
+    }
+
+    fun create(request: CreateStoreRequest): StoreEntity {
+        val stores = dao.findByAccountIdAndIsDeleted(request.accountId, false)
+        return if (stores.isEmpty()) {
+            dao.save(
+                StoreEntity(
+                    accountId = request.accountId
+                )
+            )
+        } else {
+            stores[0]
+        }
     }
 
     fun toStore(store: StoreEntity) = Store(
