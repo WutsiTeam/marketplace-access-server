@@ -1,11 +1,13 @@
 package com.wutsi.marketplace.access.`delegate`
 
+import com.wutsi.marketplace.access.service.ProductService
 import org.springframework.stereotype.Service
-import kotlin.Long
+import javax.transaction.Transactional
 
 @Service
-public class DeleteProductDelegate() {
-    public fun invoke(id: Long) {
-        TODO()
+class DeleteProductDelegate(private val service: ProductService) {
+    @Transactional
+    fun invoke(id: Long) {
+        service.delete(id)
     }
 }

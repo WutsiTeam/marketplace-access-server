@@ -62,6 +62,10 @@ class CreateProductControllerTest {
         assertEquals(request.price, product.get().price)
         assertEquals("XAF", product.get().currency)
         assertEquals(ProductStatus.DRAFT, product.get().status)
+        assertNotNull(product.get().created)
+        assertNotNull(product.get().updated)
+        assertNull(product.get().deleted)
+        assertNull(product.get().published)
         assertNotNull(product.get().thumbnail)
 
         val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)
@@ -96,6 +100,10 @@ class CreateProductControllerTest {
         assertNull(product.get().price)
         assertEquals("XAF", product.get().currency)
         assertEquals(ProductStatus.DRAFT, product.get().status)
+        assertNotNull(product.get().created)
+        assertNotNull(product.get().updated)
+        assertNull(product.get().deleted)
+        assertNull(product.get().published)
         assertNotNull(product.get().thumbnail)
 
         val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)

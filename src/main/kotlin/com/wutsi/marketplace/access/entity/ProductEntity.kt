@@ -1,7 +1,7 @@
 package com.wutsi.marketplace.access.entity
 
 import com.wutsi.marketplace.access.enums.ProductStatus
-import java.time.OffsetDateTime
+import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.Enumerated
 import javax.persistence.FetchType
@@ -47,8 +47,8 @@ data class ProductEntity(
     var quantity: Int? = null,
 
     var isDeleted: Boolean = false,
-    val created: OffsetDateTime = OffsetDateTime.now(),
-    val updated: OffsetDateTime = OffsetDateTime.now(),
-    var published: OffsetDateTime? = null,
-    var deleted: OffsetDateTime? = null
+    val created: Date = Date(),
+    val updated: Date = Date(),
+    var published: Date? = null,
+    var deleted: Date? = null
 )
