@@ -14,11 +14,11 @@ class UpdateProductAttributeDelegate(
     @Transactional
     fun invoke(
         id: Long,
-        name: String,
         request: UpdateProductAttributeRequest
     ) {
-        logger.add("value", request.value)
+        logger.add("request_value", request.name)
+        logger.add("request_value", request.value)
 
-        service.updateAttribute(id, name, request)
+        service.updateAttribute(id, request)
     }
 }

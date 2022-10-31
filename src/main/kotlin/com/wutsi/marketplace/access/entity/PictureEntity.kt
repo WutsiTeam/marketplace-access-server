@@ -1,6 +1,6 @@
 package com.wutsi.marketplace.access.entity
 
-import java.time.OffsetDateTime
+import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -23,6 +23,6 @@ data class PictureEntity(
     val url: String = "",
     val hash: String = "",
     var isDeleted: Boolean = false,
-    val created: OffsetDateTime = OffsetDateTime.now(),
-    var deleted: OffsetDateTime? = null
+    val created: Date = Date(),
+    var deleted: Date? = null
 )

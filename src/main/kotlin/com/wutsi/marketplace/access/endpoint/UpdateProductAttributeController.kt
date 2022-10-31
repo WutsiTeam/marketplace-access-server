@@ -8,19 +8,17 @@ import org.springframework.web.bind.`annotation`.RequestBody
 import org.springframework.web.bind.`annotation`.RestController
 import javax.validation.Valid
 import kotlin.Long
-import kotlin.String
 
 @RestController
 public class UpdateProductAttributeController(
     public val `delegate`: UpdateProductAttributeDelegate
 ) {
-    @PostMapping("/v1/products/{id}/attributes/{name}")
+    @PostMapping("/v1/products/{id}/attributes")
     public fun invoke(
         @PathVariable(name = "id") id: Long,
-        @PathVariable(name = "name") name: String,
         @Valid @RequestBody
         request: UpdateProductAttributeRequest
     ) {
-        delegate.invoke(id, name, request)
+        delegate.invoke(id, request)
     }
 }

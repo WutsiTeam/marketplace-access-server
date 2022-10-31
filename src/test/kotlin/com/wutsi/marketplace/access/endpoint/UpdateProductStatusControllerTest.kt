@@ -1,6 +1,7 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.wutsi.marketplace.access.dao.ProductRepository
+import com.wutsi.marketplace.access.dao.StoreRepository
 import com.wutsi.marketplace.access.dto.UpdateProductStatusRequest
 import com.wutsi.marketplace.access.enums.ProductStatus
 import org.junit.jupiter.api.Test
@@ -25,6 +26,9 @@ class UpdateProductStatusControllerTest {
     @Autowired
     private lateinit var dao: ProductRepository
 
+    @Autowired
+    private lateinit var storeDao: StoreRepository
+
     @Test
     fun publish() {
         val request = UpdateProductStatusRequest(
@@ -37,6 +41,10 @@ class UpdateProductStatusControllerTest {
         val product = dao.findById(100).get()
         assertEquals(ProductStatus.PUBLISHED, product.status)
         assertNotNull(product.published)
+
+        val store = storeDao.findById(product.store.id).get()
+        assertEquals(2, store.productCount)
+        assertEquals(2, store.publishedProductCount)
     }
 
     @Test
@@ -44,13 +52,17 @@ class UpdateProductStatusControllerTest {
         val request = UpdateProductStatusRequest(
             status = ProductStatus.DRAFT.name
         )
-        val response = rest.postForEntity(url(101), request, Any::class.java)
+        val response = rest.postForEntity(url(200), request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
-        val product = dao.findById(101).get()
+        val product = dao.findById(200).get()
         assertEquals(ProductStatus.DRAFT, product.status)
         assertNull(product.published)
+
+        val store = storeDao.findById(product.store.id).get()
+        assertEquals(4, store.productCount)
+        assertEquals(1, store.publishedProductCount)
     }
 
     private fun url(productId: Long = 100L) =

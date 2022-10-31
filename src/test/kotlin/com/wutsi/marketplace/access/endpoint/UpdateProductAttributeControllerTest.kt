@@ -33,8 +33,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun title() {
-        val request = UpdateProductAttributeRequest("THIS IS THE VALUE")
-        val response = rest.postForEntity(url("title"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("title", "THIS IS THE VALUE")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -44,8 +44,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun summary() {
-        val request = UpdateProductAttributeRequest("THIS IS THE VALUE")
-        val response = rest.postForEntity(url("summary"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("summary", "THIS IS THE VALUE")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -55,8 +55,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun summaryEmpty() {
-        val request = UpdateProductAttributeRequest("")
-        val response = rest.postForEntity(url("summary"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("summary", "")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -66,8 +66,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun description() {
-        val request = UpdateProductAttributeRequest("THIS IS THE VALUE")
-        val response = rest.postForEntity(url("description"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("description", "THIS IS THE VALUE")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -77,8 +77,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun price() {
-        val request = UpdateProductAttributeRequest("10000")
-        val response = rest.postForEntity(url("price"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("price", "10000")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -88,8 +88,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun priceNull() {
-        val request = UpdateProductAttributeRequest(null)
-        val response = rest.postForEntity(url("price"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("price", null)
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -99,8 +99,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun priceEmpty() {
-        val request = UpdateProductAttributeRequest("")
-        val response = rest.postForEntity(url("price"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("price", "")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -110,8 +110,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun comparablePrice() {
-        val request = UpdateProductAttributeRequest("55555")
-        val response = rest.postForEntity(url("comparable-price"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("comparable-price", "55555")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -121,8 +121,8 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun thumbnailId() {
-        val request = UpdateProductAttributeRequest("102")
-        val response = rest.postForEntity(url("thumbnail-id"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("thumbnail-id", "102")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -132,9 +132,9 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun thumbnailIdInvalid() {
-        val request = UpdateProductAttributeRequest("99999")
+        val request = UpdateProductAttributeRequest("thumbnail-id", "99999")
         val ex = assertThrows<HttpStatusCodeException> {
-            rest.postForEntity(url("thumbnail-id"), request, Any::class.java)
+            rest.postForEntity(url(), request, Any::class.java)
         }
 
         assertEquals(404, ex.rawStatusCode)
@@ -144,9 +144,20 @@ class UpdateProductAttributeControllerTest {
     }
 
     @Test
+    fun quantity() {
+        val request = UpdateProductAttributeRequest("quantity", "10")
+        val response = rest.postForEntity(url(), request, Any::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val product = dao.findById(PRODUCT_ID).get()
+        assertEquals(request.value?.toInt(), product.quantity)
+    }
+
+    @Test
     fun categoryId() {
-        val request = UpdateProductAttributeRequest("1100")
-        val response = rest.postForEntity(url("category-id"), request, Any::class.java)
+        val request = UpdateProductAttributeRequest("category-id", "1100")
+        val response = rest.postForEntity(url(), request, Any::class.java)
 
         assertEquals(200, response.statusCodeValue)
 
@@ -155,10 +166,10 @@ class UpdateProductAttributeControllerTest {
     }
 
     @Test
-    fun SubCategoryIdInvalid() {
-        val request = UpdateProductAttributeRequest("99999")
+    fun categoryIdInvalid() {
+        val request = UpdateProductAttributeRequest("category-id", "99999")
         val ex = assertThrows<HttpStatusCodeException> {
-            rest.postForEntity(url("category-id"), request, Any::class.java)
+            rest.postForEntity(url(), request, Any::class.java)
         }
 
         assertEquals(404, ex.rawStatusCode)
@@ -169,9 +180,9 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun notFound() {
-        val request = UpdateProductAttributeRequest("15000")
+        val request = UpdateProductAttributeRequest("price", "15000")
         val ex = assertThrows<HttpStatusCodeException> {
-            rest.postForEntity(url("price", 99999), request, Any::class.java)
+            rest.postForEntity(url(99999), request, Any::class.java)
         }
 
         assertEquals(404, ex.rawStatusCode)
@@ -182,9 +193,9 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun deleted() {
-        val request = UpdateProductAttributeRequest("15000")
+        val request = UpdateProductAttributeRequest("price", "15000")
         val ex = assertThrows<HttpStatusCodeException> {
-            rest.postForEntity(url("price", 900), request, Any::class.java)
+            rest.postForEntity(url(900), request, Any::class.java)
         }
 
         assertEquals(404, ex.rawStatusCode)
@@ -195,9 +206,9 @@ class UpdateProductAttributeControllerTest {
 
     @Test
     fun badAttribute() {
-        val request = UpdateProductAttributeRequest("15000")
+        val request = UpdateProductAttributeRequest("xx", "15000")
         val ex = assertThrows<HttpStatusCodeException> {
-            rest.postForEntity(url("xxxxx", 100), request, Any::class.java)
+            rest.postForEntity(url(100), request, Any::class.java)
         }
 
         assertEquals(400, ex.rawStatusCode)
@@ -206,6 +217,6 @@ class UpdateProductAttributeControllerTest {
         assertEquals(ErrorURN.ATTRIBUTE_NOT_VALID.urn, response.error.code)
     }
 
-    private fun url(name: String, productId: Long = 100L) =
-        "http://localhost:$port/v1/products/$productId/attributes/$name"
+    private fun url(productId: Long = 100L) =
+        "http://localhost:$port/v1/products/$productId/attributes"
 }

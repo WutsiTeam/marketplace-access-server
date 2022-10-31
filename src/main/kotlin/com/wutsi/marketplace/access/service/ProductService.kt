@@ -9,6 +9,7 @@ import com.wutsi.marketplace.access.dto.ProductSummary
 import com.wutsi.marketplace.access.dto.SearchProductRequest
 import com.wutsi.marketplace.access.dto.UpdateProductAttributeRequest
 import com.wutsi.marketplace.access.dto.UpdateProductStatusRequest
+import com.wutsi.marketplace.access.entity.PictureEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
 import com.wutsi.marketplace.access.enums.ProductSort
 import com.wutsi.marketplace.access.enums.ProductStatus
@@ -131,9 +132,13 @@ class ProductService(
         thumbnailUrl = product.thumbnail?.url
     )
 
-    fun updateAttribute(id: Long, name: String, request: UpdateProductAttributeRequest) {
+    fun updateAttribute(id: Long, request: UpdateProductAttributeRequest) {
         val product = findById(id)
-        when (name.lowercase()) {
+        updateAttribute(product, request)
+    }
+
+    fun updateAttribute(product: ProductEntity, request: UpdateProductAttributeRequest) {
+        when (request.name.lowercase()) {
             "title" -> product.title = toString(request.value) ?: "NO TITLE"
             "summary" -> product.summary = toString(request.value)
             "description" -> product.description = toString(request.value)
@@ -147,12 +152,17 @@ class ProductService(
                     code = ErrorURN.ATTRIBUTE_NOT_VALID.urn,
                     parameter = Parameter(
                         name = "name",
-                        value = name,
+                        value = request.name,
                         type = ParameterType.PARAMETER_TYPE_PAYLOAD
                     )
                 )
             )
         }
+        dao.save(product)
+    }
+
+    fun setThumbnail(product: ProductEntity, picture: PictureEntity?) {
+        product.thumbnail = picture
         dao.save(product)
     }
 
@@ -173,6 +183,8 @@ class ProductService(
 
         if (status != product.status) {
             dao.save(product)
+
+            storeService.updateProductCount(product.store)
         }
     }
 
