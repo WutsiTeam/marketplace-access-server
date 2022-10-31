@@ -15,8 +15,10 @@ class CreateStoreDelegate(
     @Transactional
     fun invoke(request: CreateStoreRequest): CreateStoreResponse {
         logger.add("request_account_id", request.accountId)
+        logger.add("request_currency", request.currency)
 
         val store = service.create(request)
+        logger.add("store_id", store.id)
         return CreateStoreResponse(
             storeId = store.id ?: -1
         )

@@ -14,6 +14,12 @@ class SearchCategoryDelegate(
     private val logger: KVLogger
 ) {
     fun invoke(request: SearchCategoryRequest): SearchCategoryResponse {
+        logger.add("request_top_categories", request.topCategories)
+        logger.add("request_keyword", request.keyword)
+        logger.add("request_category_ids", request.categoryIds)
+        logger.add("request_limit", request.limit)
+        logger.add("request_offset", request.offset)
+
         val language = httpRequest.getHeader("Accept-Language")
         logger.add("language", language)
 

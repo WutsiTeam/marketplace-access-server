@@ -63,5 +63,5 @@ class GetCategoryControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(ErrorURN.CATEGORY_NOT_FOUND.urn, response.error.code)
     }
 
-    fun url(id: Long) = "http://localhost:$port/v1/categories/$id"
+    private fun url(id: Long) = "http://localhost:$port/v1/categories/$id"
 }
