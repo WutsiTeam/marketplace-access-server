@@ -17,6 +17,7 @@ data class StoreEntity(
     val accountId: Long = -1,
     var productCount: Int = 0,
     var publishedProductCount: Int = 0,
+    val currency: String = "",
     var isDeleted: Boolean = false,
 
     val created: Date = Date(),

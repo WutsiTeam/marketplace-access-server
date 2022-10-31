@@ -27,7 +27,10 @@ class CreateStoreControllerTest {
 
     @Test
     fun create() {
-        val request = CreateStoreRequest(accountId = 555)
+        val request = CreateStoreRequest(
+            accountId = 555,
+            currency = "USD"
+        )
         val response = rest.postForEntity(url(), request, CreateStoreResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -35,6 +38,7 @@ class CreateStoreControllerTest {
         val store = dao.findById(response.body!!.storeId)
         assertTrue(store.isPresent)
         assertEquals(request.accountId, store.get().accountId)
+        assertEquals(request.currency, store.get().currency)
         assertEquals(0, store.get().productCount)
         assertEquals(0, store.get().publishedProductCount)
         assertNotNull(store.get().created)
@@ -42,7 +46,10 @@ class CreateStoreControllerTest {
 
     @Test
     fun duplicate() {
-        val request = CreateStoreRequest(accountId = 1)
+        val request = CreateStoreRequest(
+            accountId = 1,
+            currency = "USD"
+        )
         val response = rest.postForEntity(url(), request, CreateStoreResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)

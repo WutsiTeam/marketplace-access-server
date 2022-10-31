@@ -62,7 +62,8 @@ class StoreService(
         return if (stores.isEmpty()) {
             dao.save(
                 StoreEntity(
-                    accountId = request.accountId
+                    accountId = request.accountId,
+                    currency = request.currency
                 )
             )
         } else {
@@ -85,7 +86,8 @@ class StoreService(
         productCount = store.productCount,
         publishedProductCount = store.publishedProductCount,
         created = store.created.toInstant().atOffset(ZoneOffset.UTC),
-        updated = store.updated.toInstant().atOffset(ZoneOffset.UTC)
+        updated = store.updated.toInstant().atOffset(ZoneOffset.UTC),
+        currency = store.currency
     )
 
     fun toStoreSummary(store: StoreEntity) = StoreSummary(

@@ -1,0 +1,100 @@
+package com.wutsi.marketplace.access.endpoint
+
+import com.wutsi.marketplace.access.dao.PictureRepository
+import com.wutsi.marketplace.access.dao.ProductRepository
+import com.wutsi.marketplace.access.dto.CreateProductRequest
+import com.wutsi.marketplace.access.dto.CreateProductResponse
+import com.wutsi.marketplace.access.enums.ProductStatus
+import org.apache.commons.codec.digest.DigestUtils
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.http.HttpStatus
+import org.springframework.test.context.jdbc.Sql
+import org.springframework.web.client.RestTemplate
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(value = ["/db/clean.sql", "/db/CreateProductController.sql"])
+class CreateProductControllerTest {
+    @LocalServerPort
+    val port: Int = 0
+
+    @Autowired
+    private lateinit var dao: ProductRepository
+
+    @Autowired
+    private lateinit var pictureDao: PictureRepository
+
+    private val rest = RestTemplate()
+
+    @Test
+    fun create() {
+        // WHEN
+        val request = CreateProductRequest(
+            storeId = 1L,
+            pictureUrl = "httpS://img.com/the-product.png",
+            categoryId = 1110L,
+            title = "Ze product",
+            summary = "This is the summary",
+            price = 15000L
+        )
+        val response = rest.postForEntity(url(), request, CreateProductResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val productId = response.body!!.productId
+        val product = dao.findById(productId)
+        assertTrue(product.isPresent)
+        assertEquals(request.storeId, product.get().store.id)
+        assertEquals(request.categoryId, product.get().category?.id)
+        assertEquals(request.title, product.get().title)
+        assertEquals(request.summary, product.get().summary)
+        assertEquals(request.price, product.get().price)
+        assertEquals("XAF", product.get().currency)
+        assertEquals(ProductStatus.DRAFT, product.get().status)
+        assertNotNull(product.get().thumbnail)
+
+        val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)
+        assertTrue(thumbnail.isPresent)
+        assertEquals(request.pictureUrl.lowercase(), thumbnail.get().url)
+        assertEquals(DigestUtils.md5Hex(request.pictureUrl.lowercase()), thumbnail.get().hash)
+    }
+
+    @Test
+    fun createWithPictureOnly() {
+        // WHEN
+        val request = CreateProductRequest(
+            storeId = 1L,
+            pictureUrl = "httpS://img.com/the-product.png",
+        )
+        val response = rest.postForEntity(url(), request, CreateProductResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val productId = response.body!!.productId
+        val product = dao.findById(productId)
+        assertTrue(product.isPresent)
+        assertEquals(request.storeId, product.get().store.id)
+        assertNull(product.get().category)
+        assertNull(product.get().title)
+        assertNull(product.get().summary)
+        assertNull(product.get().price)
+        assertEquals("XAF", product.get().currency)
+        assertEquals(ProductStatus.DRAFT, product.get().status)
+        assertNotNull(product.get().thumbnail)
+
+        val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)
+        assertTrue(thumbnail.isPresent)
+        assertEquals(request.pictureUrl.lowercase(), thumbnail.get().url)
+        assertEquals(DigestUtils.md5Hex(request.pictureUrl.lowercase()), thumbnail.get().hash)
+    }
+
+    private fun url() = "http://localhost:$port/v1/products"
+}
