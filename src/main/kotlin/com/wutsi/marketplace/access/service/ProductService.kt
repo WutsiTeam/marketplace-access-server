@@ -28,6 +28,9 @@ class ProductService(
         )
 
         product.thumbnail = pictureService.create(product, request.pictureUrl)
-        return dao.save(product)
+        dao.save(product)
+
+        storeService.updateProductCount(store)
+        return product
     }
 }

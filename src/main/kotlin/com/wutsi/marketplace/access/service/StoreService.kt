@@ -1,11 +1,13 @@
 package com.wutsi.marketplace.access.service
 
+import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dao.StoreRepository
 import com.wutsi.marketplace.access.dto.CreateStoreRequest
 import com.wutsi.marketplace.access.dto.SearchStoreRequest
 import com.wutsi.marketplace.access.dto.Store
 import com.wutsi.marketplace.access.dto.StoreSummary
 import com.wutsi.marketplace.access.entity.StoreEntity
+import com.wutsi.marketplace.access.enums.ProductStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
@@ -18,7 +20,8 @@ import java.util.Date
 
 @Service
 class StoreService(
-    private val dao: StoreRepository
+    private val dao: StoreRepository,
+    private val productDao: ProductRepository
 ) {
     fun findById(id: Long): StoreEntity {
         val store = dao.findById(id)
@@ -98,4 +101,11 @@ class StoreService(
         created = store.created.toInstant().atOffset(ZoneOffset.UTC),
         updated = store.updated.toInstant().atOffset(ZoneOffset.UTC)
     )
+
+    fun updateProductCount(store: StoreEntity) {
+        store.productCount = productDao.countByStoreAndIsDeleted(store, false)
+        store.publishedProductCount =
+            productDao.countByStoreAndIsDeletedAndStatus(store, false, ProductStatus.PUBLISHED)
+        dao.save(store)
+    }
 }

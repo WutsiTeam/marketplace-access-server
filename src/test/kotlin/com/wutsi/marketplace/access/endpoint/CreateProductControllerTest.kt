@@ -2,6 +2,7 @@ package com.wutsi.marketplace.access.endpoint
 
 import com.wutsi.marketplace.access.dao.PictureRepository
 import com.wutsi.marketplace.access.dao.ProductRepository
+import com.wutsi.marketplace.access.dao.StoreRepository
 import com.wutsi.marketplace.access.dto.CreateProductRequest
 import com.wutsi.marketplace.access.dto.CreateProductResponse
 import com.wutsi.marketplace.access.enums.ProductStatus
@@ -29,6 +30,9 @@ class CreateProductControllerTest {
 
     @Autowired
     private lateinit var pictureDao: PictureRepository
+
+    @Autowired
+    private lateinit var storeDao: StoreRepository
 
     private val rest = RestTemplate()
 
@@ -64,14 +68,18 @@ class CreateProductControllerTest {
         assertTrue(thumbnail.isPresent)
         assertEquals(request.pictureUrl.lowercase(), thumbnail.get().url)
         assertEquals(DigestUtils.md5Hex(request.pictureUrl.lowercase()), thumbnail.get().hash)
+
+        val store = storeDao.findById(request.storeId)
+        assertEquals(1, store.get().productCount)
+        assertEquals(0, store.get().publishedProductCount)
     }
 
     @Test
     fun createWithPictureOnly() {
         // WHEN
         val request = CreateProductRequest(
-            storeId = 1L,
-            pictureUrl = "httpS://img.com/the-product.png",
+            storeId = 2L,
+            pictureUrl = "httpS://img.com/the-product.png"
         )
         val response = rest.postForEntity(url(), request, CreateProductResponse::class.java)
 
@@ -94,6 +102,10 @@ class CreateProductControllerTest {
         assertTrue(thumbnail.isPresent)
         assertEquals(request.pictureUrl.lowercase(), thumbnail.get().url)
         assertEquals(DigestUtils.md5Hex(request.pictureUrl.lowercase()), thumbnail.get().hash)
+
+        val store = storeDao.findById(request.storeId)
+        assertEquals(4, store.get().productCount)
+        assertEquals(1, store.get().publishedProductCount)
     }
 
     private fun url() = "http://localhost:$port/v1/products"

@@ -44,7 +44,7 @@ data class ProductEntity(
     var price: Long? = null,
     var comparablePrice: Long? = null,
     val currency: String = "",
-    var quantity: Int = 0,
+    var quantity: Int? = null,
 
     var isDeleted: Boolean = false,
     val created: OffsetDateTime = OffsetDateTime.now(),
