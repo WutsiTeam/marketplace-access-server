@@ -1,17 +1,24 @@
 package com.wutsi.marketplace.access.`delegate`
 
+import com.wutsi.marketplace.access.dto.UpdateProductAttributeRequest
+import com.wutsi.marketplace.access.service.ProductService
+import com.wutsi.platform.core.logging.KVLogger
 import org.springframework.stereotype.Service
-import kotlin.Any
-import kotlin.Long
-import kotlin.String
+import javax.transaction.Transactional
 
 @Service
-public class UpdateProductAttributeDelegate() {
-    public fun invoke(
+class UpdateProductAttributeDelegate(
+    private val service: ProductService,
+    private val logger: KVLogger
+) {
+    @Transactional
+    fun invoke(
         id: Long,
         name: String,
-        request: Any
+        request: UpdateProductAttributeRequest
     ) {
-        TODO()
+        logger.add("value", request.value)
+
+        service.updateAttribute(id, name, request)
     }
 }

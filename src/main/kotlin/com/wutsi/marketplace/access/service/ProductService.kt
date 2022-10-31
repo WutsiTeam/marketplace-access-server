@@ -5,23 +5,32 @@ import com.wutsi.marketplace.access.dto.CategorySummary
 import com.wutsi.marketplace.access.dto.CreateProductRequest
 import com.wutsi.marketplace.access.dto.PictureSummary
 import com.wutsi.marketplace.access.dto.Product
+import com.wutsi.marketplace.access.dto.ProductSummary
+import com.wutsi.marketplace.access.dto.SearchProductRequest
+import com.wutsi.marketplace.access.dto.UpdateProductAttributeRequest
+import com.wutsi.marketplace.access.dto.UpdateProductStatusRequest
 import com.wutsi.marketplace.access.entity.ProductEntity
+import com.wutsi.marketplace.access.enums.ProductSort
 import com.wutsi.marketplace.access.enums.ProductStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
+import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.time.ZoneOffset
 import java.util.Date
+import javax.persistence.EntityManager
+import javax.persistence.Query
 
 @Service
 class ProductService(
     private val dao: ProductRepository,
     private val categoryService: CategoryService,
     private val pictureService: PictureService,
-    private val storeService: StoreService
+    private val storeService: StoreService,
+    private val em: EntityManager
 ) {
     fun create(request: CreateProductRequest): ProductEntity {
         val store = storeService.findById(request.storeId)
@@ -105,4 +114,160 @@ class ProductService(
             .filter { !it.isDeleted }
             .map { pictureService.toPictureSummary(it) }
     )
+
+    fun toProductSummary(product: ProductEntity, language: String?) = ProductSummary(
+        id = product.id ?: -1,
+        title = product.title ?: "",
+        summary = product.summary,
+        price = product.price,
+        comparablePrice = product.comparablePrice,
+        currency = product.currency,
+        status = product.status.name,
+        storeId = product.store.id ?: -1,
+        categoryId = product.category?.id,
+        created = product.created.toInstant().atOffset(ZoneOffset.UTC),
+        updated = product.updated.toInstant().atOffset(ZoneOffset.UTC),
+        quantity = product.quantity,
+        thumbnailUrl = product.thumbnail?.url
+    )
+
+    fun updateAttribute(id: Long, name: String, request: UpdateProductAttributeRequest) {
+        val product = findById(id)
+        when (name.lowercase()) {
+            "title" -> product.title = toString(request.value) ?: "NO TITLE"
+            "summary" -> product.summary = toString(request.value)
+            "description" -> product.description = toString(request.value)
+            "price" -> product.price = toLong(request.value)
+            "comparable-price" -> product.comparablePrice = toLong(request.value)
+            "thumbnail-id" -> product.thumbnail = toLong(request.value)?.let { pictureService.findById(it) }
+            "category-id" -> product.category = toLong(request.value)?.let { categoryService.findById(it) }
+            "quantity" -> product.quantity = toInt(request.value) ?: 0
+            else -> throw BadRequestException(
+                error = Error(
+                    code = ErrorURN.ATTRIBUTE_NOT_VALID.urn,
+                    parameter = Parameter(
+                        name = "name",
+                        value = name,
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD
+                    )
+                )
+            )
+        }
+        dao.save(product)
+    }
+
+    fun updateStatus(id: Long, request: UpdateProductStatusRequest) {
+        val product = findById(id)
+        val status = product.status
+
+        when (request.status.uppercase()) {
+            ProductStatus.DRAFT.name -> if (product.status != ProductStatus.DRAFT) {
+                product.status = ProductStatus.DRAFT
+                product.published = null
+            }
+            ProductStatus.PUBLISHED.name -> if (product.status != ProductStatus.PUBLISHED) {
+                product.status = ProductStatus.PUBLISHED
+                product.published = Date()
+            }
+        }
+
+        if (status != product.status) {
+            dao.save(product)
+        }
+    }
+
+    fun search(request: SearchProductRequest): List<ProductEntity> {
+        val sql = sql(request)
+        val query = em.createQuery(sql)
+        parameters(request, query)
+        return query
+            .setFirstResult(request.offset)
+            .setMaxResults(request.limit)
+            .resultList as List<ProductEntity>
+    }
+
+    private fun sql(request: SearchProductRequest): String {
+        val select = select()
+        val where = where(request)
+        val orderBy = orderBy(request)
+        return if (where.isNullOrEmpty()) {
+            select
+        } else {
+            "$select WHERE $where ORDER BY $orderBy"
+        }
+    }
+
+    private fun select(): String =
+        "SELECT P FROM ProductEntity P"
+
+    private fun where(request: SearchProductRequest): String {
+        val criteria = mutableListOf("P.isDeleted=false") // Product not deleted
+        criteria.add("P.store.isDeleted=false") // Store not deleted
+
+        if (request.storeId != null) {
+            criteria.add("P.storeId = :storeId")
+        }
+
+        if (request.productIds.isNotEmpty()) {
+            criteria.add("P.id IN :product_ids")
+        }
+
+        if (request.categoryIds.isNotEmpty()) {
+            criteria.add("P.category.id IN :category_ids")
+        }
+
+        if (!request.status.isNullOrEmpty()) {
+            criteria.add("P.status=:status")
+        }
+
+        return criteria.joinToString(separator = " AND ")
+    }
+
+    private fun orderBy(request: SearchProductRequest): String =
+        if (ProductSort.PRICE_DESC.name.equals(request.sortBy, true)) {
+            "P.price DESC"
+        } else if (ProductSort.PRICE_ASC.name.equals(request.sortBy, true)) {
+            "P.price ASC"
+        } else {
+            "P.title"
+        }
+
+    private fun parameters(request: SearchProductRequest, query: Query) {
+        if (request.storeId != null) {
+            query.setParameter("store_id", request.storeId)
+        }
+
+        if (request.productIds.isNotEmpty()) {
+            query.setParameter("product_ids", request.productIds)
+        }
+
+        if (request.categoryIds.isNotEmpty()) {
+            query.setParameter("category_ids", request.categoryIds)
+        }
+
+        if (!request.status.isNullOrEmpty()) {
+            query.setParameter("status", ProductStatus.valueOf(request.status.uppercase()))
+        }
+    }
+
+    private fun toString(value: String?): String? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            value
+        }
+
+    private fun toLong(value: String?): Long? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            value.toLong()
+        }
+
+    private fun toInt(value: String?): Int? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            value.toInt()
+        }
 }
