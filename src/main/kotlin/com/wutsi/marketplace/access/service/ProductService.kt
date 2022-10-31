@@ -179,6 +179,16 @@ class ProductService(
                 product.status = ProductStatus.PUBLISHED
                 product.published = Date()
             }
+            else -> BadRequestException(
+                error = Error(
+                    code = ErrorURN.STATUS_NOT_VALID.urn,
+                    parameter = Parameter(
+                        name = "status",
+                        value = request.status,
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD
+                    )
+                )
+            )
         }
 
         if (status != product.status) {
