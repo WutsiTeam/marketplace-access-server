@@ -13,9 +13,6 @@ public class SearchCategoryController(
     public val `delegate`: SearchCategoryDelegate
 ) {
     @PostMapping("/v1/categories/search")
-    public fun invoke(
-        @Valid @RequestBody
-        request: SearchCategoryRequest
-    ): SearchCategoryResponse =
+    public fun invoke(@Valid @RequestBody request: SearchCategoryRequest): SearchCategoryResponse =
         delegate.invoke(request)
 }

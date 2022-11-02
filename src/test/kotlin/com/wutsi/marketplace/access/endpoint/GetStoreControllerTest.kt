@@ -2,6 +2,7 @@ package com.wutsi.marketplace.access.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.marketplace.access.dto.GetStoreResponse
+import com.wutsi.marketplace.access.enums.StoreStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.Test
@@ -34,8 +35,10 @@ class GetStoreControllerTest {
         assertEquals(100L, store.accountId)
         assertEquals(10, store.productCount)
         assertEquals(5, store.publishedProductCount)
+        assertEquals(StoreStatus.SUSPENDED.name, store.status)
         assertNotNull(store.created)
         assertNotNull(store.updated)
+        assertNotNull(store.suspended)
     }
 
     @Test
@@ -49,19 +52,6 @@ class GetStoreControllerTest {
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.STORE_NOT_FOUND.urn, response.error.code)
-    }
-
-    @Test
-    fun deleted() {
-        val ex = assertThrows<HttpClientErrorException> {
-            rest.getForEntity(url(199), GetStoreResponse::class.java)
-        }
-
-        // THEN
-        assertEquals(HttpStatus.NOT_FOUND, ex.statusCode)
-
-        val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
-        assertEquals(ErrorURN.STORE_DELETED.urn, response.error.code)
     }
 
     private fun url(id: Long) = "http://localhost:$port/v1/stores/$id"

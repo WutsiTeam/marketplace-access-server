@@ -13,6 +13,7 @@ import com.wutsi.marketplace.access.entity.PictureEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
 import com.wutsi.marketplace.access.enums.ProductSort
 import com.wutsi.marketplace.access.enums.ProductStatus
+import com.wutsi.marketplace.access.enums.StoreStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
@@ -168,18 +169,16 @@ class ProductService(
 
     fun updateStatus(id: Long, request: UpdateProductStatusRequest) {
         val product = findById(id)
-        val status = product.status
+        val status = ProductStatus.valueOf(request.status.uppercase())
+        if (status == product.status) {
+            return
+        }
 
-        when (request.status.uppercase()) {
-            ProductStatus.DRAFT.name -> if (product.status != ProductStatus.DRAFT) {
-                product.status = ProductStatus.DRAFT
-                product.published = null
-            }
-            ProductStatus.PUBLISHED.name -> if (product.status != ProductStatus.PUBLISHED) {
-                product.status = ProductStatus.PUBLISHED
-                product.published = Date()
-            }
-            else -> BadRequestException(
+        when (status) {
+            ProductStatus.DRAFT -> product.published = null
+            ProductStatus.PUBLISHED -> product.published = Date()
+
+            else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.STATUS_NOT_VALID.urn,
                     parameter = Parameter(
@@ -190,12 +189,9 @@ class ProductService(
                 )
             )
         }
-
-        if (status != product.status) {
-            dao.save(product)
-
-            storeService.updateProductCount(product.store)
-        }
+        product.status = status
+        dao.save(product)
+        storeService.updateProductCount(product.store)
     }
 
     fun search(request: SearchProductRequest): List<ProductEntity> {
@@ -224,7 +220,7 @@ class ProductService(
 
     private fun where(request: SearchProductRequest): String {
         val criteria = mutableListOf("P.isDeleted=false") // Product not deleted
-        criteria.add("P.store.isDeleted=false") // Store not deleted
+        criteria.add("P.store.status=:store_status") // Store status
 
         if (request.storeId != null) {
             criteria.add("P.storeId = :storeId")
@@ -255,6 +251,8 @@ class ProductService(
         }
 
     private fun parameters(request: SearchProductRequest, query: Query) {
+        query.setParameter("store_status", StoreStatus.ACTIVE)
+
         if (request.storeId != null) {
             query.setParameter("store_id", request.storeId)
         }

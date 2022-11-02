@@ -1,8 +1,9 @@
-INSERT INTO T_STORE(id, account_id, product_count, published_product_count, is_deleted, deleted, currency)
+INSERT INTO T_STORE(id, account_id, product_count, published_product_count, currency)
     VALUES
-        (1, 1, 0, 0, false, null, 'XAF'),
-        (2, 2, 3, 1, false, null, 'XAF')
+        (1, 1, 0, 0, 'XAF'),
+        (2, 2, 3, 1, 'XAF')
     ;
+
 
 INSERT INTO T_CATEGORY(id, parent_fk, title, title_french)
     VALUES

@@ -1,5 +1,6 @@
 package com.wutsi.marketplace.access.entity
 
+import com.wutsi.marketplace.access.enums.StoreStatus
 import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -18,9 +19,9 @@ data class StoreEntity(
     var productCount: Int = 0,
     var publishedProductCount: Int = 0,
     val currency: String = "",
-    var isDeleted: Boolean = false,
+    var status: StoreStatus = StoreStatus.UNKNOWN,
 
     val created: Date = Date(),
     val updated: Date = Date(),
-    var deleted: Date? = null
+    var suspended: Date? = null
 )

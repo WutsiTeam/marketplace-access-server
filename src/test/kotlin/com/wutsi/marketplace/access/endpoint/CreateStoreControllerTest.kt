@@ -3,6 +3,7 @@ package com.wutsi.marketplace.access.endpoint
 import com.wutsi.marketplace.access.dao.StoreRepository
 import com.wutsi.marketplace.access.dto.CreateStoreRequest
 import com.wutsi.marketplace.access.dto.CreateStoreResponse
+import com.wutsi.marketplace.access.enums.StoreStatus
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -39,6 +40,7 @@ class CreateStoreControllerTest {
         assertTrue(store.isPresent)
         assertEquals(request.accountId, store.get().accountId)
         assertEquals(request.currency, store.get().currency)
+        assertEquals(StoreStatus.ACTIVE, store.get().status)
         assertEquals(0, store.get().productCount)
         assertEquals(0, store.get().publishedProductCount)
         assertNotNull(store.get().created)

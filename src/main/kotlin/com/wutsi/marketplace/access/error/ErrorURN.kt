@@ -14,6 +14,5 @@ enum class ErrorURN(val urn: String) {
 
     STATUS_NOT_VALID("urn:wutsi:error:marketplace-access:status-not-valid"),
 
-    STORE_NOT_FOUND("urn:wutsi:error:marketplace-access:store-not-found"),
-    STORE_DELETED("urn:wutsi:error:marketplace-access:store-deleted")
+    STORE_NOT_FOUND("urn:wutsi:error:marketplace-access:store-not-found")
 }

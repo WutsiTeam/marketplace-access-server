@@ -1,5 +1,4 @@
-INSERT INTO T_STORE(id, account_id, product_count, published_product_count, is_deleted, deleted, currency)
+INSERT INTO T_STORE(id, account_id, product_count, published_product_count, currency)
     VALUES
-        (100, 1, 10, 5, false, null, 'XAF'),
-        (199, 1, 0, 0, true, now(), 'XAF')
+        (100, 1, 10, 5, 'XAF')
     ;

@@ -13,9 +13,6 @@ public class SearchProductsController(
     public val `delegate`: SearchProductsDelegate
 ) {
     @PostMapping("/v1/products/search")
-    public fun invoke(
-        @Valid @RequestBody
-        request: SearchProductRequest
-    ): SearchProductResponse =
+    public fun invoke(@Valid @RequestBody request: SearchProductRequest): SearchProductResponse =
         delegate.invoke(request)
 }

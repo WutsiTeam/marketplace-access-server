@@ -4,6 +4,7 @@ import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
 import kotlin.Int
 import kotlin.Long
+import kotlin.String
 
 public data class StoreSummary(
     public val id: Long = 0,
@@ -13,5 +14,8 @@ public data class StoreSummary(
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     public val created: OffsetDateTime = OffsetDateTime.now(),
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    public val updated: OffsetDateTime = OffsetDateTime.now()
+    public val updated: OffsetDateTime = OffsetDateTime.now(),
+    @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    public val suspended: OffsetDateTime? = null,
+    public val status: String = ""
 )

@@ -13,9 +13,6 @@ public class SearchPictureController(
     public val `delegate`: SearchPictureDelegate
 ) {
     @PostMapping("/v1/pictures/search")
-    public fun invoke(
-        @Valid @RequestBody
-        request: SearchPictureRequest
-    ): SearchPictureResponse =
+    public fun invoke(@Valid @RequestBody request: SearchPictureRequest): SearchPictureResponse =
         delegate.invoke(request)
 }

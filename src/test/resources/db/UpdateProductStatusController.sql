@@ -1,7 +1,7 @@
-INSERT INTO T_STORE(id, account_id, product_count, published_product_count, is_deleted, deleted, currency)
+INSERT INTO T_STORE(id, account_id, product_count, published_product_count, currency)
     VALUES
-        (1, 1, 2, 1, false, null, 'XAF'),
-        (2, 1, 4, 2, false, null, 'XAF')
+        (1, 1, 0, 0, 'XAF'),
+        (2, 2, 3, 1, 'XAF')
     ;
 
 INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, comparable_price, currency, quantity, published, deleted)
