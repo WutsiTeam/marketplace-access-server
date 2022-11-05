@@ -65,7 +65,6 @@ wutsi:
   platform:
     security:
       type: none
-      api-key: "----none----"
     tracing:
       client-id: ${wutsi.application.name}
       device-id-provider:
