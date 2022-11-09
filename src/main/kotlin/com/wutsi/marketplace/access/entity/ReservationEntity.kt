@@ -25,6 +25,7 @@ data class ReservationEntity(
     var items: List<ReservationItemEntity> = emptyList(),
 
     val created: Date = Date(),
+    val updated: Date = Date(),
     var cancelled: Date? = null,
     var confirmed: Date? = null
 )

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dao.ReservationItemRepository
 import com.wutsi.marketplace.access.dao.ReservationRepository
-import com.wutsi.marketplace.access.dto.CheckProductAvailabilityRequest
 import com.wutsi.marketplace.access.dto.CreateReservationRequest
 import com.wutsi.marketplace.access.dto.CreateReservationResponse
 import com.wutsi.marketplace.access.dto.ReservationItem
@@ -104,7 +103,8 @@ class CreateReservationControllerTest {
 
     @Test
     fun notAvailable() {
-        val request = CheckProductAvailabilityRequest(
+        val request = CreateReservationRequest(
+            orderId = "14390493",
             items = listOf(
                 ReservationItem(productId = 200, quantity = 5),
                 ReservationItem(productId = 201, quantity = 5)

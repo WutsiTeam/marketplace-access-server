@@ -4,13 +4,19 @@ import com.wutsi.marketplace.access.dao.ReservationItemRepository
 import com.wutsi.marketplace.access.dao.ReservationRepository
 import com.wutsi.marketplace.access.dto.CreateReservationRequest
 import com.wutsi.marketplace.access.dto.SearchProductRequest
+import com.wutsi.marketplace.access.dto.UpdateReservationStatusRequest
 import com.wutsi.marketplace.access.entity.ReservationEntity
 import com.wutsi.marketplace.access.entity.ReservationItemEntity
 import com.wutsi.marketplace.access.enums.ReservationStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
+import com.wutsi.platform.core.error.Parameter
+import com.wutsi.platform.core.error.ParameterType
+import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
+import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
+import java.util.Date
 
 @Service
 class ReservationService(
@@ -53,4 +59,44 @@ class ReservationService(
 
         return reservation
     }
+
+    fun updateStatus(id: Long, request: UpdateReservationStatusRequest) {
+        val reservation = findById(id)
+        val status = ReservationStatus.valueOf(request.status.uppercase())
+        if (status == reservation.status) {
+            return
+        }
+
+        reservation.status = status
+        when (status) {
+            ReservationStatus.CANCELLED -> reservation.cancelled = Date()
+            ReservationStatus.CONFIRMED -> reservation.confirmed = Date()
+            else -> throw BadRequestException(
+                error = Error(
+                    code = ErrorURN.STATUS_NOT_VALID.urn,
+                    parameter = Parameter(
+                        name = "status",
+                        value = request.status,
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD
+                    )
+                )
+            )
+        }
+        dao.save(reservation)
+    }
+
+    fun findById(id: Long): ReservationEntity =
+        dao.findById(id)
+            .orElseThrow {
+                NotFoundException(
+                    error = Error(
+                        code = ErrorURN.RESERVATION_NOT_FOUND.urn,
+                        parameter = Parameter(
+                            name = "id",
+                            value = id,
+                            type = ParameterType.PARAMETER_TYPE_PATH
+                        )
+                    )
+                )
+            }
 }

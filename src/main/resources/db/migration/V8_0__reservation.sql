@@ -5,6 +5,7 @@ CREATE TABLE T_RESERVATION(
 
     status          INT NOT NULL DEFAULT 0,
     created         DATETIME NOT NULL DEFAULT now(),
+    updated         DATETIME NOT NULL DEFAULT now() ON UPDATE now(),
     cancelled       DATETIME,
     confirmed       DATETIME,
 
