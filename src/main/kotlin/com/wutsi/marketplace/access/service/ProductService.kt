@@ -12,6 +12,7 @@ import com.wutsi.marketplace.access.dto.UpdateProductAttributeRequest
 import com.wutsi.marketplace.access.dto.UpdateProductStatusRequest
 import com.wutsi.marketplace.access.entity.PictureEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
+import com.wutsi.marketplace.access.entity.ReservationEntity
 import com.wutsi.marketplace.access.enums.ProductSort
 import com.wutsi.marketplace.access.enums.ProductStatus
 import com.wutsi.marketplace.access.enums.StoreStatus
@@ -197,29 +198,51 @@ class ProductService(
     }
 
     fun checkAvailability(request: CheckProductAvailabilityRequest) {
-        val availaiblityMap = search(
+        val productMap = search(
             request = SearchProductRequest(
-                productIds = request.products.map { it.productId },
-                limit = request.products.size
+                productIds = request.items.map { it.productId },
+                limit = request.items.size
             )
-        ).associate { it.id to it.quantity }
+        ).associateBy { it.id }
 
-        val quantities = mutableMapOf<String, Int>()
-        request.products.forEach {
-            val available = availaiblityMap[it.productId]
-            if (available != null && available < it.quantity) {
-                quantities[it.productId.toString()] = available
+        request.items.forEach {
+            val product = productMap[it.productId]
+                ?: throw availabilityException(it.productId)
+
+            if (product.quantity != null && product.quantity!! < it.quantity) {
+                throw availabilityException(it.productId, product.quantity)
             }
         }
-        if (quantities.isNotEmpty()) {
-            throw ConflictException(
-                error = Error(
-                    code = ErrorURN.PRODUCT_NOT_AVAILABLE.urn,
-                    data = quantities
-                )
-            )
+    }
+
+    fun updateQuantities(reservation: ReservationEntity) {
+        val products = mutableListOf<ProductEntity>()
+        reservation.items.forEach {
+            val product = it.product
+            if (product.quantity != null) {
+                product.quantity = product.quantity!! - it.quantity
+                if (product.quantity!! < 0) {
+                    throw availabilityException(product.id!!, product.quantity)
+                } else {
+                    products.add(product)
+                }
+            }
+        }
+
+        if (products.isNotEmpty()) {
+            dao.saveAll(products)
         }
     }
+
+    private fun availabilityException(productId: Long, quantity: Int? = null) = ConflictException(
+        error = Error(
+            code = ErrorURN.PRODUCT_NOT_AVAILABLE.urn,
+            data = mapOf(
+                "product-id" to productId,
+                "quantity" to (quantity ?: "")
+            )
+        )
+    )
 
     fun search(request: SearchProductRequest): List<ProductEntity> {
         val sql = sql(request)
