@@ -2,6 +2,7 @@ package com.wutsi.marketplace.access.service
 
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dto.CategorySummary
+import com.wutsi.marketplace.access.dto.CheckProductAvailabilityRequest
 import com.wutsi.marketplace.access.dto.CreateProductRequest
 import com.wutsi.marketplace.access.dto.PictureSummary
 import com.wutsi.marketplace.access.dto.Product
@@ -19,6 +20,7 @@ import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
 import com.wutsi.platform.core.error.exception.BadRequestException
+import com.wutsi.platform.core.error.exception.ConflictException
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.time.ZoneOffset
@@ -192,6 +194,31 @@ class ProductService(
         product.status = status
         dao.save(product)
         storeService.updateProductCount(product.store)
+    }
+
+    fun checkAvailability(request: CheckProductAvailabilityRequest) {
+        val availaiblityMap = search(
+            request = SearchProductRequest(
+                productIds = request.products.map { it.productId },
+                limit = request.products.size
+            )
+        ).associate { it.id to it.quantity }
+
+        val quantities = mutableMapOf<String, Int>()
+        request.products.forEach {
+            val available = availaiblityMap[it.productId]
+            if (available != null && available < it.quantity) {
+                quantities[it.productId.toString()] = available
+            }
+        }
+        if (quantities.isNotEmpty()) {
+            throw ConflictException(
+                error = Error(
+                    code = ErrorURN.PRODUCT_NOT_AVAILABLE.urn,
+                    data = quantities
+                )
+            )
+        }
     }
 
     fun search(request: SearchProductRequest): List<ProductEntity> {
