@@ -39,12 +39,12 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals("XAF", product.currency)
         assertEquals(200000L, product.comparablePrice)
 
-        assertEquals(1110L, product.category.id)
-        assertEquals("Computers", product.category.title)
-        assertEquals(1100L, product.category.parentId)
+        assertEquals(1110L, product.category?.id)
+        assertEquals("Computers", product.category?.title)
+        assertEquals(1100L, product.category?.parentId)
 
-        assertEquals(101, product.thumbnail.id)
-        assertEquals("https://www.img.com/101.png", product.thumbnail.url)
+        assertEquals(101, product.thumbnail?.id)
+        assertEquals("https://www.img.com/101.png", product.thumbnail?.url)
 
         assertEquals(2, product.pictures.size)
         assertEquals(101, product.pictures[0].id)

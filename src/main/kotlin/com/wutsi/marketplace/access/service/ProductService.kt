@@ -1,10 +1,8 @@
 package com.wutsi.marketplace.access.service
 
 import com.wutsi.marketplace.access.dao.ProductRepository
-import com.wutsi.marketplace.access.dto.CategorySummary
 import com.wutsi.marketplace.access.dto.CheckProductAvailabilityRequest
 import com.wutsi.marketplace.access.dto.CreateProductRequest
-import com.wutsi.marketplace.access.dto.PictureSummary
 import com.wutsi.marketplace.access.dto.Product
 import com.wutsi.marketplace.access.dto.ProductSummary
 import com.wutsi.marketplace.access.dto.SearchProductRequest
@@ -107,14 +105,13 @@ class ProductService(
         currency = product.currency,
         status = product.status.name,
         storeId = product.store.id ?: -1,
-        category = product.category?.let { categoryService.toCategorySummary(it, language) }
-            ?: CategorySummary(id = -1),
+        category = product.category?.let { categoryService.toCategorySummary(it, language) },
         created = product.created.toInstant().atOffset(ZoneOffset.UTC),
         updated = product.updated.toInstant().atOffset(ZoneOffset.UTC),
         published = product.published?.toInstant()?.atOffset(ZoneOffset.UTC),
         description = product.description,
         quantity = product.quantity,
-        thumbnail = product.thumbnail?.let { pictureService.toPictureSummary(it) } ?: PictureSummary(id = -1),
+        thumbnail = product.thumbnail?.let { pictureService.toPictureSummary(it) },
         pictures = product.pictures
             .filter { !it.isDeleted }
             .map { pictureService.toPictureSummary(it) }
