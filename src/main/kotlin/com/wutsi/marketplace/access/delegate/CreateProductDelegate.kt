@@ -19,6 +19,7 @@ class CreateProductDelegate(
         logger.add("request_summary", request.summary)
         logger.add("request_price", request.price)
         logger.add("request_category_id", request.categoryId)
+        logger.add("request_store_id", request.storeId)
 
         // Create product
         val product = service.create(request)
