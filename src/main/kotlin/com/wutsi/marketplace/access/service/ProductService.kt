@@ -45,12 +45,15 @@ class ProductService(
                 price = request.price,
                 category = request.categoryId?.let { categoryService.findById(it) },
                 store = store,
-                currency = store.currency
+                currency = store.currency,
+                quantity = request.quantity
             )
         )
 
-        product.thumbnail = pictureService.create(product, request.pictureUrl)
-        dao.save(product)
+        if (!request.pictureUrl.isNullOrEmpty()) {
+            product.thumbnail = pictureService.create(product, request.pictureUrl)
+            dao.save(product)
+        }
 
         storeService.updateProductCount(store)
         return product

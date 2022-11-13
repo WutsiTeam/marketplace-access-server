@@ -1,15 +1,17 @@
 package com.wutsi.marketplace.access.dto
 
 import javax.validation.constraints.NotBlank
+import kotlin.Int
 import kotlin.Long
 import kotlin.String
 
 public data class CreateProductRequest(
     public val storeId: Long = 0,
-    @get:NotBlank
-    public val pictureUrl: String = "",
+    public val pictureUrl: String? = null,
     public val categoryId: Long? = null,
-    public val title: String? = null,
+    @get:NotBlank
+    public val title: String = "",
     public val summary: String? = null,
-    public val price: Long? = null
+    public val price: Long? = null,
+    public val quantity: Int? = null
 )

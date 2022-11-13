@@ -20,7 +20,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/clean.sql", "/db/CreateProductController.sql"])
 class CreateProductControllerTest {
     @LocalServerPort
     val port: Int = 0
@@ -37,11 +36,56 @@ class CreateProductControllerTest {
     private val rest = RestTemplate()
 
     @Test
+    @Sql(value = ["/db/clean.sql", "/db/CreateProductController.sql"])
     fun create() {
         // WHEN
         val request = CreateProductRequest(
             storeId = 1L,
             pictureUrl = "httpS://img.com/the-product.png",
+            categoryId = 1110L,
+            title = "Ze product",
+            summary = "This is the summary",
+            price = 15000L,
+            quantity = 100
+        )
+        val response = rest.postForEntity(url(), request, CreateProductResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val productId = response.body!!.productId
+        val product = dao.findById(productId)
+        assertTrue(product.isPresent)
+        assertEquals(request.storeId, product.get().store.id)
+        assertEquals(request.categoryId, product.get().category?.id)
+        assertEquals(request.title, product.get().title)
+        assertEquals(request.summary, product.get().summary)
+        assertEquals(request.price, product.get().price)
+        assertEquals(request.quantity, product.get().quantity)
+        assertEquals("XAF", product.get().currency)
+        assertEquals(ProductStatus.DRAFT, product.get().status)
+        assertNotNull(product.get().created)
+        assertNotNull(product.get().updated)
+        assertNull(product.get().deleted)
+        assertNull(product.get().published)
+        assertNotNull(product.get().thumbnail)
+
+        val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)
+        assertTrue(thumbnail.isPresent)
+        assertEquals(request.pictureUrl?.lowercase(), thumbnail.get().url)
+        assertEquals(DigestUtils.md5Hex(request.pictureUrl?.lowercase()), thumbnail.get().hash)
+
+        val store = storeDao.findById(request.storeId)
+        assertEquals(1, store.get().productCount)
+        assertEquals(0, store.get().publishedProductCount)
+    }
+
+    @Test
+    @Sql(value = ["/db/clean.sql", "/db/CreateProductController.sql"])
+    fun createWithoutPicture() {
+        // WHEN
+        val request = CreateProductRequest(
+            storeId = 2L,
             categoryId = 1110L,
             title = "Ze product",
             summary = "This is the summary",
@@ -66,50 +110,7 @@ class CreateProductControllerTest {
         assertNotNull(product.get().updated)
         assertNull(product.get().deleted)
         assertNull(product.get().published)
-        assertNotNull(product.get().thumbnail)
-
-        val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)
-        assertTrue(thumbnail.isPresent)
-        assertEquals(request.pictureUrl.lowercase(), thumbnail.get().url)
-        assertEquals(DigestUtils.md5Hex(request.pictureUrl.lowercase()), thumbnail.get().hash)
-
-        val store = storeDao.findById(request.storeId)
-        assertEquals(1, store.get().productCount)
-        assertEquals(0, store.get().publishedProductCount)
-    }
-
-    @Test
-    fun createWithPictureOnly() {
-        // WHEN
-        val request = CreateProductRequest(
-            storeId = 2L,
-            pictureUrl = "httpS://img.com/the-product.png"
-        )
-        val response = rest.postForEntity(url(), request, CreateProductResponse::class.java)
-
-        // THEN
-        assertEquals(HttpStatus.OK, response.statusCode)
-
-        val productId = response.body!!.productId
-        val product = dao.findById(productId)
-        assertTrue(product.isPresent)
-        assertEquals(request.storeId, product.get().store.id)
-        assertNull(product.get().category)
-        assertNull(product.get().title)
-        assertNull(product.get().summary)
-        assertNull(product.get().price)
-        assertEquals("XAF", product.get().currency)
-        assertEquals(ProductStatus.DRAFT, product.get().status)
-        assertNotNull(product.get().created)
-        assertNotNull(product.get().updated)
-        assertNull(product.get().deleted)
-        assertNull(product.get().published)
-        assertNotNull(product.get().thumbnail)
-
-        val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)
-        assertTrue(thumbnail.isPresent)
-        assertEquals(request.pictureUrl.lowercase(), thumbnail.get().url)
-        assertEquals(DigestUtils.md5Hex(request.pictureUrl.lowercase()), thumbnail.get().hash)
+        assertNull(product.get().thumbnail)
 
         val store = storeDao.findById(request.storeId)
         assertEquals(4, store.get().productCount)
