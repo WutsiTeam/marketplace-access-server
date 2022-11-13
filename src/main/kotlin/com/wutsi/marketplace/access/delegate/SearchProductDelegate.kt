@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 import javax.servlet.http.HttpServletRequest
 
 @Service
-class SearchProductsDelegate(
+class SearchProductDelegate(
     private val service: ProductService,
     private val httpRequest: HttpServletRequest,
     private val logger: KVLogger
