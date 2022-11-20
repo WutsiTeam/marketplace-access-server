@@ -273,7 +273,7 @@ class ProductService(
         criteria.add("P.store.status=:store_status") // Store status
 
         if (request.storeId != null) {
-            criteria.add("P.storeId = :storeId")
+            criteria.add("P.store.id = :store_id")
         }
 
         if (request.productIds.isNotEmpty()) {
