@@ -1,14 +1,18 @@
 package com.wutsi.marketplace.access.dto
 
-import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.collections.List
 
 public data class Product(
     public val id: Long = 0,
     public val storeId: Long = 0,
-    public val thumbnail: PictureSummary? = null,
+    public val thumbnail: PictureSummary = PictureSummary(),
     public val pictures: List<PictureSummary> = emptyList(),
-    public val category: CategorySummary? = null,
+    public val category: CategorySummary = CategorySummary(),
     public val title: String = "",
     public val summary: String? = null,
     public val description: String? = null,
