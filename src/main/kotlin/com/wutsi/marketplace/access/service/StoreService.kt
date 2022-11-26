@@ -1,5 +1,7 @@
 package com.wutsi.marketplace.access.service
 
+import com.wutsi.enums.ProductStatus
+import com.wutsi.enums.StoreStatus
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dao.StoreRepository
 import com.wutsi.marketplace.access.dto.CreateStoreRequest
@@ -8,8 +10,6 @@ import com.wutsi.marketplace.access.dto.Store
 import com.wutsi.marketplace.access.dto.StoreSummary
 import com.wutsi.marketplace.access.dto.UpdateStoreStatusRequest
 import com.wutsi.marketplace.access.entity.StoreEntity
-import com.wutsi.marketplace.access.enums.ProductStatus
-import com.wutsi.marketplace.access.enums.StoreStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter

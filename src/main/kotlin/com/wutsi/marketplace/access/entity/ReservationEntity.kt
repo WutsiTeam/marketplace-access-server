@@ -1,6 +1,6 @@
 package com.wutsi.marketplace.access.entity
 
-import com.wutsi.marketplace.access.enums.ReservationStatus
+import com.wutsi.enums.ReservationStatus
 import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.FetchType

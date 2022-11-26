@@ -1,9 +1,9 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.enums.ProductStatus
 import com.wutsi.marketplace.access.dto.GetCategoryResponse
 import com.wutsi.marketplace.access.dto.GetProductResponse
-import com.wutsi.marketplace.access.enums.ProductStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.Test

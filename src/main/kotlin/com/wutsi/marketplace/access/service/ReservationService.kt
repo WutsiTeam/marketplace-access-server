@@ -1,5 +1,6 @@
 package com.wutsi.marketplace.access.service
 
+import com.wutsi.enums.ReservationStatus
 import com.wutsi.marketplace.access.dao.ReservationItemRepository
 import com.wutsi.marketplace.access.dao.ReservationRepository
 import com.wutsi.marketplace.access.dto.CreateReservationRequest
@@ -7,7 +8,6 @@ import com.wutsi.marketplace.access.dto.SearchProductRequest
 import com.wutsi.marketplace.access.dto.UpdateReservationStatusRequest
 import com.wutsi.marketplace.access.entity.ReservationEntity
 import com.wutsi.marketplace.access.entity.ReservationItemEntity
-import com.wutsi.marketplace.access.enums.ReservationStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter

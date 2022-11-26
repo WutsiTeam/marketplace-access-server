@@ -1,8 +1,8 @@
 package com.wutsi.marketplace.access.dao
 
+import com.wutsi.enums.ProductStatus
 import com.wutsi.marketplace.access.entity.ProductEntity
 import com.wutsi.marketplace.access.entity.StoreEntity
-import com.wutsi.marketplace.access.enums.ProductStatus
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

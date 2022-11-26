@@ -33,6 +33,8 @@
     <hikari-cp.version>5.0.1</hikari-cp.version>
     <mysql.version>8.0.31</mysql.version>
     <flyway.version>9.3.0</flyway.version>
+
+    <wutsi-enums.version>1.0.2</wutsi-enums.version>
     <wutsi-platform-core.version>0.0.190</wutsi-platform-core.version>
   </properties>
 
@@ -42,6 +44,12 @@
       <artifactId>wutsi-platform-core</artifactId>
       <version>${wutsi-platform-core.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.wutsi</groupId>
+      <artifactId>wutsi-enums</artifactId>
+      <version>${wutsi-enums.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib</artifactId>

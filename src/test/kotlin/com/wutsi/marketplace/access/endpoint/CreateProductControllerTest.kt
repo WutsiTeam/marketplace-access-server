@@ -1,11 +1,11 @@
 package com.wutsi.marketplace.access.endpoint
 
+import com.wutsi.enums.ProductStatus
 import com.wutsi.marketplace.access.dao.PictureRepository
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dao.StoreRepository
 import com.wutsi.marketplace.access.dto.CreateProductRequest
 import com.wutsi.marketplace.access.dto.CreateProductResponse
-import com.wutsi.marketplace.access.enums.ProductStatus
 import org.apache.commons.codec.digest.DigestUtils
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

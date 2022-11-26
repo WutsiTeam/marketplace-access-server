@@ -1,9 +1,9 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.enums.ReservationStatus
 import com.wutsi.marketplace.access.dao.ReservationRepository
 import com.wutsi.marketplace.access.dto.UpdateReservationStatusRequest
-import com.wutsi.marketplace.access.enums.ReservationStatus
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
 import org.junit.jupiter.api.Test

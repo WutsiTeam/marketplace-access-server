@@ -1,9 +1,9 @@
 package com.wutsi.marketplace.access.endpoint
 
+import com.wutsi.enums.ProductSort
+import com.wutsi.enums.ProductStatus
 import com.wutsi.marketplace.access.dto.SearchProductRequest
 import com.wutsi.marketplace.access.dto.SearchProductResponse
-import com.wutsi.marketplace.access.enums.ProductSort
-import com.wutsi.marketplace.access.enums.ProductStatus
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort

@@ -1,9 +1,9 @@
 package com.wutsi.marketplace.access.endpoint
 
+import com.wutsi.enums.StoreStatus
 import com.wutsi.marketplace.access.dao.StoreRepository
 import com.wutsi.marketplace.access.dto.CreateStoreRequest
 import com.wutsi.marketplace.access.dto.CreateStoreResponse
-import com.wutsi.marketplace.access.enums.StoreStatus
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
