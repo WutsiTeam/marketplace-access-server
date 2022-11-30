@@ -29,7 +29,7 @@ class ReservationService(
         val reservation = dao.save(
             ReservationEntity(
                 orderId = request.orderId,
-                status = ReservationStatus.PENDING
+                status = ReservationStatus.ACTIVE
             )
         )
 
@@ -70,7 +70,7 @@ class ReservationService(
         reservation.status = status
         when (status) {
             ReservationStatus.CANCELLED -> reservation.cancelled = Date()
-            ReservationStatus.CONFIRMED -> reservation.confirmed = Date()
+            ReservationStatus.ACTIVE -> {}
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.STATUS_NOT_VALID.urn,

@@ -1,6 +1,7 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.enums.ReservationStatus
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dao.ReservationItemRepository
 import com.wutsi.marketplace.access.dao.ReservationRepository
@@ -57,8 +58,8 @@ class CreateReservationControllerTest {
         val reservation = dao.findById(id)
         assertTrue(reservation.isPresent)
         assertEquals(request.orderId, reservation.get().orderId)
+        assertEquals(ReservationStatus.ACTIVE, reservation.get().status)
         assertNull(reservation.get().cancelled)
-        assertNull(reservation.get().confirmed)
 
         val items = itemDao.findByReservation(reservation.get())
         assertEquals(request.items.size, items.size)
@@ -91,7 +92,6 @@ class CreateReservationControllerTest {
         assertTrue(reservation.isPresent)
         assertEquals(request.orderId, reservation.get().orderId)
         assertNull(reservation.get().cancelled)
-        assertNull(reservation.get().confirmed)
 
         val items = itemDao.findByReservation(reservation.get())
         assertEquals(request.items.size, items.size)

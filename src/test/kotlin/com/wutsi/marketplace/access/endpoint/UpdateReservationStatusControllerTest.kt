@@ -46,17 +46,16 @@ class UpdateReservationStatusControllerTest {
     }
 
     @Test
-    fun confirm() {
+    fun active() {
         val request = UpdateReservationStatusRequest(
-            status = ReservationStatus.CONFIRMED.name
+            status = ReservationStatus.ACTIVE.name
         )
         val response = rest.postForEntity(url(101L), request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val store = dao.findById(101).get()
-        assertEquals(ReservationStatus.CONFIRMED, store.status)
-        assertNotNull(store.confirmed)
+        assertEquals(ReservationStatus.ACTIVE, store.status)
     }
 
     @Test
@@ -65,7 +64,7 @@ class UpdateReservationStatusControllerTest {
 
         Thread.sleep(2000)
         val request = UpdateReservationStatusRequest(
-            status = ReservationStatus.CONFIRMED.name
+            status = ReservationStatus.ACTIVE.name
         )
         val response = rest.postForEntity(url(102), request, Any::class.java)
 
@@ -81,7 +80,7 @@ class UpdateReservationStatusControllerTest {
             status = ReservationStatus.UNKNOWN.name
         )
         val ex = assertThrows<HttpClientErrorException> {
-            rest.postForEntity(url(103), request, Any::class.java)
+            rest.postForEntity(url(101), request, Any::class.java)
         }
 
         // THEN
@@ -94,7 +93,7 @@ class UpdateReservationStatusControllerTest {
     @Test
     fun notFound() {
         val request = UpdateReservationStatusRequest(
-            status = ReservationStatus.CONFIRMED.name
+            status = ReservationStatus.ACTIVE.name
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(9999), request, Any::class.java)
