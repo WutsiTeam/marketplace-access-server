@@ -5,6 +5,7 @@ import com.wutsi.marketplace.access.dao.ReservationItemRepository
 import com.wutsi.marketplace.access.dao.ReservationRepository
 import com.wutsi.marketplace.access.dto.CreateReservationRequest
 import com.wutsi.marketplace.access.dto.SearchProductRequest
+import com.wutsi.marketplace.access.dto.SearchReservationRequest
 import com.wutsi.marketplace.access.dto.UpdateReservationStatusRequest
 import com.wutsi.marketplace.access.entity.ReservationEntity
 import com.wutsi.marketplace.access.entity.ReservationItemEntity
@@ -17,12 +18,15 @@ import com.wutsi.platform.core.error.exception.ConflictException
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.util.Date
+import javax.persistence.EntityManager
+import javax.persistence.Query
 
 @Service
 class ReservationService(
     private val dao: ReservationRepository,
     private val itemDao: ReservationItemRepository,
-    private val productService: ProductService
+    private val productService: ProductService,
+    private val em: EntityManager
 ) {
     fun create(request: CreateReservationRequest): ReservationEntity {
         // Reservation
@@ -99,4 +103,42 @@ class ReservationService(
                     )
                 )
             }
+
+    fun search(request: SearchReservationRequest): List<ReservationEntity> {
+        val sql = sql(request)
+        val query = em.createQuery(sql)
+        parameters(request, query)
+        return query
+            .setFirstResult(request.offset)
+            .setMaxResults(request.limit)
+            .resultList as List<ReservationEntity>
+    }
+
+    private fun sql(request: SearchReservationRequest): String {
+        val select = select()
+        val where = where(request)
+        return if (where.isNullOrEmpty()) {
+            select
+        } else {
+            "$select WHERE $where"
+        }
+    }
+
+    private fun select(): String =
+        "SELECT P FROM ReservationEntity P"
+
+    private fun where(request: SearchReservationRequest): String {
+        val criteria = mutableListOf<String>()
+        if (!request.orderId.isNullOrEmpty()) {
+            criteria.add("P.orderId = :order_id")
+        }
+
+        return criteria.joinToString(separator = " AND ")
+    }
+
+    private fun parameters(request: SearchReservationRequest, query: Query) {
+        if (!request.orderId.isNullOrEmpty()) {
+            query.setParameter("order_id", request.orderId)
+        }
+    }
 }
