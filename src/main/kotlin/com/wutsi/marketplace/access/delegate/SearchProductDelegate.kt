@@ -26,6 +26,7 @@ class SearchProductDelegate(
         logger.add("language", language)
 
         val products = service.search(request)
+        logger.add("response_count", products.size)
         return SearchProductResponse(
             products = products.map { service.toProductSummary(it, language) }
         )

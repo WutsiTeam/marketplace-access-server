@@ -18,7 +18,7 @@ public class SearchReservationDelegate(
         logger.add("request_offset", request.offset)
 
         val reservations = service.search(request)
-        logger.add("response_count", reservations)
+        logger.add("response_count", reservations.size)
         return SearchReservationResponse(
             reservations = reservations.map {
                 ReservationSummary(
