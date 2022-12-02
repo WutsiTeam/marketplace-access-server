@@ -107,7 +107,7 @@ class ProductService(
         comparablePrice = product.comparablePrice,
         currency = product.currency,
         status = product.status.name,
-        storeId = product.store.id ?: -1,
+        store = storeService.toStoreSummary(product.store),
         category = product.category?.let { categoryService.toCategorySummary(it, language) },
         created = product.created.toInstant().atOffset(ZoneOffset.UTC),
         updated = product.updated.toInstant().atOffset(ZoneOffset.UTC),
@@ -130,8 +130,6 @@ class ProductService(
         status = product.status.name,
         storeId = product.store.id ?: -1,
         categoryId = product.category?.id,
-        created = product.created.toInstant().atOffset(ZoneOffset.UTC),
-        updated = product.updated.toInstant().atOffset(ZoneOffset.UTC),
         quantity = product.quantity,
         thumbnailUrl = product.thumbnail?.url
     )

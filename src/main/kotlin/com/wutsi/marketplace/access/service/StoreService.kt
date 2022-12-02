@@ -144,11 +144,7 @@ class StoreService(
     fun toStoreSummary(store: StoreEntity) = StoreSummary(
         id = store.id ?: -1,
         accountId = store.accountId,
-        productCount = store.productCount,
-        publishedProductCount = store.publishedProductCount,
-        created = store.created.toInstant().atOffset(ZoneOffset.UTC),
-        updated = store.updated.toInstant().atOffset(ZoneOffset.UTC),
-        suspended = store.suspended?.toInstant()?.atOffset(ZoneOffset.UTC),
+        currency = store.currency,
         status = store.status.name
     )
 

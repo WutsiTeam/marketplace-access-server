@@ -5,7 +5,6 @@ import java.time.OffsetDateTime
 
 public data class Product(
     public val id: Long = 0,
-    public val storeId: Long = 0,
     public val thumbnail: PictureSummary? = null,
     public val pictures: List<PictureSummary> = emptyList(),
     public val category: CategorySummary? = null,
@@ -22,5 +21,6 @@ public data class Product(
     public val updated: OffsetDateTime = OffsetDateTime.now(),
     public val status: String = "",
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    public val published: OffsetDateTime? = null
+    public val published: OffsetDateTime? = null,
+    public val store: StoreSummary = StoreSummary()
 )

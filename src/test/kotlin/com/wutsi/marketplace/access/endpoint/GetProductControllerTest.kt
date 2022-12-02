@@ -28,7 +28,9 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val product = response.body!!.product
-        assertEquals(1L, product.storeId)
+        assertEquals(1L, product.store.id)
+        assertEquals(11L, product.store.accountId)
+        assertEquals("XAF", product.store.currency)
         assertEquals("TV", product.title)
         assertEquals("summary of TV", product.summary)
         assertEquals("description of TV", product.description)
