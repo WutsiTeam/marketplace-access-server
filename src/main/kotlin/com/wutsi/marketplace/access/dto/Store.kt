@@ -1,7 +1,10 @@
 package com.wutsi.marketplace.access.dto
 
-import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
 
 public data class Store(
     public val id: Long = 0,
