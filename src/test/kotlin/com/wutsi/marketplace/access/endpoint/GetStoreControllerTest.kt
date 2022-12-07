@@ -35,10 +35,10 @@ class GetStoreControllerTest {
         assertEquals(100L, store.accountId)
         assertEquals(10, store.productCount)
         assertEquals(5, store.publishedProductCount)
-        assertEquals(StoreStatus.SUSPENDED.name, store.status)
+        assertEquals(StoreStatus.INACTIVE.name, store.status)
         assertNotNull(store.created)
         assertNotNull(store.updated)
-        assertNotNull(store.suspended)
+        assertNotNull(store.deactivated)
     }
 
     @Test

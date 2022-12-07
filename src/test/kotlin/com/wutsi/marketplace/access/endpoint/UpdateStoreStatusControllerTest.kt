@@ -36,15 +36,15 @@ class UpdateStoreStatusControllerTest {
     @Test
     fun suspend() {
         val request = UpdateStoreStatusRequest(
-            status = StoreStatus.SUSPENDED.name
+            status = StoreStatus.INACTIVE.name
         )
         val response = rest.postForEntity(url(100L), request, Any::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val store = dao.findById(100).get()
-        assertEquals(StoreStatus.SUSPENDED, store.status)
-        assertNotNull(store.suspended)
+        assertEquals(StoreStatus.INACTIVE, store.status)
+        assertNotNull(store.deactivated)
     }
 
     @Test
@@ -58,7 +58,7 @@ class UpdateStoreStatusControllerTest {
 
         val store = dao.findById(101).get()
         assertEquals(StoreStatus.UNDER_REVIEW, store.status)
-        assertNull(store.suspended)
+        assertNull(store.deactivated)
     }
 
     @Test
@@ -72,7 +72,7 @@ class UpdateStoreStatusControllerTest {
 
         val store = dao.findById(102).get()
         assertEquals(StoreStatus.ACTIVE, store.status)
-        assertNull(store.suspended)
+        assertNull(store.deactivated)
     }
 
     @Test
@@ -81,7 +81,7 @@ class UpdateStoreStatusControllerTest {
 
         Thread.sleep(2000)
         val request = UpdateProductStatusRequest(
-            status = StoreStatus.SUSPENDED.name
+            status = StoreStatus.INACTIVE.name
         )
         val response = rest.postForEntity(url(300), request, Any::class.java)
 

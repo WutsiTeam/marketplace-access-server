@@ -44,7 +44,7 @@ class StoreService(
             }
 
     fun create(request: CreateStoreRequest): StoreEntity {
-        val stores = dao.findByAccountIdAndStatusNot(request.accountId, StoreStatus.SUSPENDED)
+        val stores = dao.findByAccountIdAndStatusNot(request.accountId, StoreStatus.INACTIVE)
         return if (stores.isEmpty()) {
             dao.save(
                 StoreEntity(
@@ -67,9 +67,9 @@ class StoreService(
 
         store.status = status
         when (status) {
-            StoreStatus.SUSPENDED -> store.suspended = Date()
-            StoreStatus.UNDER_REVIEW -> store.suspended = null
-            StoreStatus.ACTIVE -> store.suspended = null
+            StoreStatus.INACTIVE -> store.deactivated = Date()
+            StoreStatus.UNDER_REVIEW -> store.deactivated = null
+            StoreStatus.ACTIVE -> store.deactivated = null
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.STATUS_NOT_VALID.urn,
@@ -136,7 +136,7 @@ class StoreService(
         publishedProductCount = store.publishedProductCount,
         created = store.created.toInstant().atOffset(ZoneOffset.UTC),
         updated = store.updated.toInstant().atOffset(ZoneOffset.UTC),
-        suspended = store.suspended?.toInstant()?.atOffset(ZoneOffset.UTC),
+        deactivated = store.deactivated?.toInstant()?.atOffset(ZoneOffset.UTC),
         currency = store.currency,
         status = store.status.name
     )
@@ -145,7 +145,8 @@ class StoreService(
         id = store.id ?: -1,
         accountId = store.accountId,
         currency = store.currency,
-        status = store.status.name
+        status = store.status.name,
+        created = store.created.toInstant().atOffset(ZoneOffset.UTC)
     )
 
     fun updateProductCount(store: StoreEntity) {

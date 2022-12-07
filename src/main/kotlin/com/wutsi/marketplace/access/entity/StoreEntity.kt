@@ -23,5 +23,5 @@ data class StoreEntity(
 
     val created: Date = Date(),
     val updated: Date = Date(),
-    var suspended: Date? = null
+    var deactivated: Date? = null
 )
