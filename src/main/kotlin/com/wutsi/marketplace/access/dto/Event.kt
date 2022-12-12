@@ -1,7 +1,8 @@
 package com.wutsi.marketplace.access.dto
 
-import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
+import kotlin.String
 
 public data class Event(
     public val provider: String = "",

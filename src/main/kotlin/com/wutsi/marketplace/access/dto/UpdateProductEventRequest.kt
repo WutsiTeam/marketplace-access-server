@@ -1,12 +1,12 @@
 package com.wutsi.marketplace.access.dto
 
-import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.format.`annotation`.DateTimeFormat
 import java.time.OffsetDateTime
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
+import kotlin.String
 
 public data class UpdateProductEventRequest(
-    @get:NotBlank
     public val provider: String = "",
     @get:NotBlank
     public val meetingId: String = "",
