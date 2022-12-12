@@ -1,15 +1,19 @@
 package com.wutsi.marketplace.access.service
 
+import com.wutsi.enums.EventProvider
 import com.wutsi.enums.ProductSort
 import com.wutsi.enums.ProductStatus
+import com.wutsi.enums.ProductType
 import com.wutsi.enums.StoreStatus
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dto.CheckProductAvailabilityRequest
 import com.wutsi.marketplace.access.dto.CreateProductRequest
+import com.wutsi.marketplace.access.dto.Event
 import com.wutsi.marketplace.access.dto.Product
 import com.wutsi.marketplace.access.dto.ProductSummary
 import com.wutsi.marketplace.access.dto.SearchProductRequest
 import com.wutsi.marketplace.access.dto.UpdateProductAttributeRequest
+import com.wutsi.marketplace.access.dto.UpdateProductEventRequest
 import com.wutsi.marketplace.access.dto.UpdateProductStatusRequest
 import com.wutsi.marketplace.access.entity.PictureEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
@@ -22,8 +26,10 @@ import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
 import java.time.ZoneOffset
 import java.util.Date
+import java.util.TimeZone
 import javax.persistence.EntityManager
 import javax.persistence.Query
 
@@ -46,7 +52,8 @@ class ProductService(
                 category = request.categoryId?.let { categoryService.findById(it) },
                 store = store,
                 currency = store.currency,
-                quantity = request.quantity
+                quantity = request.quantity,
+                type = ProductType.valueOf(request.type)
             )
         )
 
@@ -114,6 +121,8 @@ class ProductService(
         published = product.published?.toInstant()?.atOffset(ZoneOffset.UTC),
         description = product.description,
         quantity = product.quantity,
+        type = product.type.name,
+        event = toEvent(product),
         thumbnail = product.thumbnail?.let { pictureService.toPictureSummary(it) },
         pictures = product.pictures
             .filter { !it.isDeleted }
@@ -131,12 +140,37 @@ class ProductService(
         storeId = product.store.id ?: -1,
         categoryId = product.category?.id,
         quantity = product.quantity,
-        thumbnailUrl = product.thumbnail?.url
+        thumbnailUrl = product.thumbnail?.url,
+        type = product.type.name,
+        event = toEvent(product)
     )
+
+    private fun toEvent(product: ProductEntity): Event? {
+        if (product.type != ProductType.EVENT) {
+            return null
+        }
+
+        return Event(
+            meetingId = product.eventMeetingId ?: "",
+            meetingPassword = product.eventMeetingPassword,
+            provider = product.eventProvider.name,
+            ends = product.eventEnds?.toInstant()?.atOffset(ZoneOffset.UTC),
+            starts = product.eventStarts?.toInstant()?.atOffset(ZoneOffset.UTC)
+        )
+    }
 
     fun updateAttribute(id: Long, request: UpdateProductAttributeRequest) {
         val product = findById(id)
         updateAttribute(product, request)
+    }
+
+    fun updateEvent(product: ProductEntity, request: UpdateProductEventRequest) {
+        product.eventStarts = Date(request.starts.toInstant().toEpochMilli())
+        product.eventEnds = Date(request.ends.toInstant().toEpochMilli())
+        product.eventMeetingId = request.meetingId
+        product.eventMeetingPassword = request.meetingPassword
+        product.eventProvider = EventProvider.valueOf(request.provider.uppercase())
+        dao.save(product)
     }
 
     fun updateAttribute(product: ProductEntity, request: UpdateProductAttributeRequest) {
@@ -149,6 +183,9 @@ class ProductService(
             "thumbnail-id" -> product.thumbnail = toLong(request.value)?.let { pictureService.findById(it) }
             "category-id" -> product.category = toLong(request.value)?.let { categoryService.findById(it) }
             "quantity" -> product.quantity = toInt(request.value) ?: 0
+            "type" -> product.type = toString(request.value)
+                ?.let { ProductType.valueOf(it.uppercase()) }
+                ?: ProductType.PHYSICAL_PRODUCT
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_NOT_VALID.urn,
@@ -323,6 +360,15 @@ class ProductService(
             null
         } else {
             value
+        }
+
+    private fun toDateTime(value: String?): Date? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm")
+            fmt.timeZone = TimeZone.getTimeZone("UTC")
+            fmt.parse(value)
         }
 
     private fun toLong(value: String?): Long? =

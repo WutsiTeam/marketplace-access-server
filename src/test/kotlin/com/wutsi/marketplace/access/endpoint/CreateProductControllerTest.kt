@@ -1,6 +1,7 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.wutsi.enums.ProductStatus
+import com.wutsi.enums.ProductType
 import com.wutsi.marketplace.access.dao.PictureRepository
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dao.StoreRepository
@@ -46,7 +47,8 @@ class CreateProductControllerTest {
             title = "Ze product",
             summary = "This is the summary",
             price = 15000L,
-            quantity = 100
+            quantity = 100,
+            type = ProductType.DIGITAL_DOWNLOAD.name
         )
         val response = rest.postForEntity(url(), request, CreateProductResponse::class.java)
 
@@ -69,6 +71,7 @@ class CreateProductControllerTest {
         assertNull(product.get().deleted)
         assertNull(product.get().published)
         assertNotNull(product.get().thumbnail)
+        assertEquals(ProductType.DIGITAL_DOWNLOAD, product.get().type)
 
         val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)
         assertTrue(thumbnail.isPresent)

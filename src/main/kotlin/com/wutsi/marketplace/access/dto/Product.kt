@@ -22,5 +22,7 @@ public data class Product(
     public val status: String = "",
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     public val published: OffsetDateTime? = null,
-    public val store: StoreSummary = StoreSummary()
+    public val store: StoreSummary = StoreSummary(),
+    public val type: String = "",
+    public val event: Event? = null
 )

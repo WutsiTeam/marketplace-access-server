@@ -10,11 +10,16 @@ INSERT INTO T_CATEGORY(id, parent_fk, title, title_french)
         (1110, 1100, 'Computers', 'Ordinateurs')
     ;
 
-INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, comparable_price, currency, quantity, published, deleted)
+INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, comparable_price, currency, quantity, published, deleted, type)
     VALUES
-        (100, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null),
-        (199, 1, 1110, 1, true, 'TV', 'Sample TV', 'Long description', 50000, null, 'XAF', null, null, now())
+        (100, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null, 1),
+        (200, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null, 2),
+        (199, 1, 1110, 1, true, 'TV', 'Sample TV', 'Long description', 50000, null, 'XAF', null, null, now(), 1)
     ;
+
+UPDATE T_PRODUCT
+    SET event_provider=1, event_meeting_id='1234567890', event_meeting_password='123456', event_starts='2020-10-01 10:30', event_starts='2020-10-01 12:00'
+    WHERE id=200;
 
 INSERT INTO T_PICTURE(id, product_fk, url, hash, is_deleted, deleted)
     VALUES

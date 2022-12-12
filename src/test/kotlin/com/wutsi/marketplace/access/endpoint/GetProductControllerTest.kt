@@ -1,11 +1,14 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.enums.EventProvider
 import com.wutsi.enums.ProductStatus
+import com.wutsi.enums.ProductType
 import com.wutsi.marketplace.access.dto.GetCategoryResponse
 import com.wutsi.marketplace.access.dto.GetProductResponse
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.ErrorResponse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
@@ -22,7 +25,7 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
     val port: Int = 0
 
     @Test
-    fun get() {
+    fun physicalProduct() {
         val response = rest.getForEntity(url(100), GetProductResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -40,6 +43,8 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(10, product.quantity)
         assertEquals("XAF", product.currency)
         assertEquals(200000L, product.comparablePrice)
+        assertEquals(ProductType.PHYSICAL_PRODUCT.name, product.type)
+        assertNull(product.event)
 
         assertEquals(1110L, product.category?.id)
         assertEquals("Computers", product.category?.title)
@@ -54,6 +59,36 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
 
         assertEquals(102, product.pictures[1].id)
         assertEquals("https://www.img.com/102.png", product.pictures[1].url)
+    }
+
+    @Test
+    fun event() {
+        val response = rest.getForEntity(url(200), GetProductResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val product = response.body!!.product
+        assertEquals(1L, product.store.id)
+        assertEquals(11L, product.store.accountId)
+        assertEquals("XAF", product.store.currency)
+        assertEquals("TV", product.title)
+        assertEquals("summary of TV", product.summary)
+        assertEquals("description of TV", product.description)
+        assertEquals(ProductStatus.PUBLISHED.name, product.status)
+        assertEquals(150000L, product.price)
+        assertEquals(200000L, product.comparablePrice)
+        assertEquals(10, product.quantity)
+        assertEquals("XAF", product.currency)
+        assertEquals(200000L, product.comparablePrice)
+        assertEquals(ProductType.EVENT.name, product.type)
+
+        assertEquals("1234567890", product.event?.meetingId)
+        assertEquals("123456", product.event?.meetingPassword)
+        assertEquals(EventProvider.ZOOM.name, product.event?.provider)
+
+        assertEquals(1110L, product.category?.id)
+        assertEquals("Computers", product.category?.title)
+        assertEquals(1100L, product.category?.parentId)
     }
 
     @Test

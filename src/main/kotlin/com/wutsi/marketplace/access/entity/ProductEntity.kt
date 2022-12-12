@@ -1,6 +1,8 @@
 package com.wutsi.marketplace.access.entity
 
+import com.wutsi.enums.EventProvider
 import com.wutsi.enums.ProductStatus
+import com.wutsi.enums.ProductType
 import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.Enumerated
@@ -50,5 +52,14 @@ data class ProductEntity(
     val created: Date = Date(),
     val updated: Date = Date(),
     var published: Date? = null,
-    var deleted: Date? = null
+    var deleted: Date? = null,
+
+    var type: ProductType = ProductType.UNKNOWN,
+
+    // Webminar fields
+    var eventProvider: EventProvider = EventProvider.UNKNOWN,
+    var eventMeetingId: String? = null,
+    var eventMeetingPassword: String? = null,
+    var eventStarts: Date? = null,
+    var eventEnds: Date? = null
 )

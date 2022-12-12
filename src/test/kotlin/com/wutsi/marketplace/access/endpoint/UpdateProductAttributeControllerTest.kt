@@ -1,6 +1,7 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.enums.ProductType
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dto.UpdateProductAttributeRequest
 import com.wutsi.marketplace.access.error.ErrorURN
@@ -176,6 +177,17 @@ class UpdateProductAttributeControllerTest {
 
         val response = ObjectMapper().readValue(ex.responseBodyAsString, ErrorResponse::class.java)
         assertEquals(ErrorURN.CATEGORY_NOT_FOUND.urn, response.error.code)
+    }
+
+    @Test
+    fun type() {
+        val request = UpdateProductAttributeRequest("type", ProductType.EVENT.name)
+        val response = rest.postForEntity(url(), request, Any::class.java)
+
+        assertEquals(200, response.statusCodeValue)
+
+        val product = dao.findById(PRODUCT_ID).get()
+        assertEquals(request.value, product.type.name)
     }
 
     @Test

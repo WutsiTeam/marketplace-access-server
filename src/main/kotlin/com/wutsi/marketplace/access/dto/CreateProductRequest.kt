@@ -13,5 +13,7 @@ public data class CreateProductRequest(
     public val title: String = "",
     public val summary: String? = null,
     public val price: Long? = null,
-    public val quantity: Int? = null
+    public val quantity: Int? = null,
+    @get:NotBlank
+    public val type: String = "PHYSICAL_PRODUCT"
 )
