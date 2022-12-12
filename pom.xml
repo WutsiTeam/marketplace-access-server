@@ -35,7 +35,7 @@
     <flyway.version>9.3.0</flyway.version>
 
     <wutsi-platform-core.version>0.0.191</wutsi-platform-core.version>
-    <wutsi-enums.version>1.0.16-SNAPSHOT</wutsi-enums.version>
+    <wutsi-enums.version>1.0.16</wutsi-enums.version>
   </properties>
 
   <dependencies>
