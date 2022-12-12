@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull
 import kotlin.String
 
 public data class UpdateProductEventRequest(
+    @get:NotBlank
     public val provider: String = "",
     @get:NotBlank
     public val meetingId: String = "",
