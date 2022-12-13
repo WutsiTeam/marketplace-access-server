@@ -1,9 +1,9 @@
 package com.wutsi.marketplace.access.endpoint
 
-import com.wutsi.marketplace.access.delegate.SearchMeetingProviderDelegate
+import com.wutsi.marketplace.access.`delegate`.SearchMeetingProviderDelegate
 import com.wutsi.marketplace.access.dto.SearchMeetingProviderResponse
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.`annotation`.PostMapping
+import org.springframework.web.bind.`annotation`.RestController
 
 @RestController
 public class SearchMeetingProviderController(

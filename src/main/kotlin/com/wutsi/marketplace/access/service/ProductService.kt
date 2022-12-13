@@ -141,7 +141,8 @@ class ProductService(
         categoryId = product.category?.id,
         quantity = product.quantity,
         thumbnailUrl = product.thumbnail?.url,
-        type = product.type.name
+        type = product.type.name,
+        event = toEvent(product)
     )
 
     private fun toEvent(product: ProductEntity): Event? {
