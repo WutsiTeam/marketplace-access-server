@@ -6,6 +6,8 @@ enum class ErrorURN(val urn: String) {
     CATEGORY_NOT_FOUND("urn:wutsi:error:marketplace-access:category-not-found"),
     PARENT_CATEGORY_NOT_FOUND("urn:wutsi:error:marketplace-access:parent-category-not-found"),
 
+    MEETING_PROVIDER_NOT_FOUND("urn:wutsi:error:marketplace-access:meeting-provider-not-found"),
+
     PICTURE_NOT_FOUND("urn:wutsi:error:marketplace-access:picture-not-found"),
     PICTURE_DELETED("urn:wutsi:error:marketplace-access:picture-deleted"),
 

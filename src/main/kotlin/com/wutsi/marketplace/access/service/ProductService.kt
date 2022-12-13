@@ -1,6 +1,6 @@
 package com.wutsi.marketplace.access.service
 
-import com.wutsi.enums.EventProvider
+import com.wutsi.enums.MeetingProviderType
 import com.wutsi.enums.ProductSort
 import com.wutsi.enums.ProductStatus
 import com.wutsi.enums.ProductType
@@ -9,6 +9,7 @@ import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dto.CheckProductAvailabilityRequest
 import com.wutsi.marketplace.access.dto.CreateProductRequest
 import com.wutsi.marketplace.access.dto.Event
+import com.wutsi.marketplace.access.dto.MeetingProviderSummary
 import com.wutsi.marketplace.access.dto.Product
 import com.wutsi.marketplace.access.dto.ProductSummary
 import com.wutsi.marketplace.access.dto.SearchProductRequest
@@ -26,10 +27,8 @@ import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
-import java.text.SimpleDateFormat
 import java.time.ZoneOffset
 import java.util.Date
-import java.util.TimeZone
 import javax.persistence.EntityManager
 import javax.persistence.Query
 
@@ -39,6 +38,7 @@ class ProductService(
     private val categoryService: CategoryService,
     private val pictureService: PictureService,
     private val storeService: StoreService,
+    private val meetingProviderService: MeetingProviderService,
     private val em: EntityManager
 ) {
     fun create(request: CreateProductRequest): ProductEntity {
@@ -141,8 +141,7 @@ class ProductService(
         categoryId = product.category?.id,
         quantity = product.quantity,
         thumbnailUrl = product.thumbnail?.url,
-        type = product.type.name,
-        event = toEvent(product)
+        type = product.type.name
     )
 
     private fun toEvent(product: ProductEntity): Event? {
@@ -151,11 +150,15 @@ class ProductService(
         }
 
         return Event(
+            online = product.eventOnline,
             meetingId = product.eventMeetingId ?: "",
             meetingPassword = product.eventMeetingPassword,
-            provider = product.eventProvider.name,
             ends = product.eventEnds?.toInstant()?.atOffset(ZoneOffset.UTC),
-            starts = product.eventStarts?.toInstant()?.atOffset(ZoneOffset.UTC)
+            starts = product.eventStarts?.toInstant()?.atOffset(ZoneOffset.UTC),
+            meetingJoinUrl = meetingProviderService.toJoinUrl(product),
+            meetingProvider = product.eventMeetingProvider?.let {
+                meetingProviderService.toMeetingProviderSummary(it)
+            } ?: MeetingProviderSummary(type = MeetingProviderType.UNKNOWN.name)
         )
     }
 
@@ -165,11 +168,14 @@ class ProductService(
     }
 
     fun updateEvent(product: ProductEntity, request: UpdateProductEventRequest) {
-        product.eventStarts = Date(request.starts.toInstant().toEpochMilli())
-        product.eventEnds = Date(request.ends.toInstant().toEpochMilli())
+        product.eventOnline = request.online
+        product.eventStarts = request.starts?.let { Date(it.toInstant().toEpochMilli()) }
+        product.eventEnds = request.ends?.let { Date(it.toInstant().toEpochMilli()) }
         product.eventMeetingId = request.meetingId
         product.eventMeetingPassword = request.meetingPassword
-        product.eventProvider = EventProvider.valueOf(request.provider.uppercase())
+        product.eventMeetingProvider = request.meetingProviderId?.let {
+            meetingProviderService.findById(it)
+        }
         dao.save(product)
     }
 
@@ -360,15 +366,6 @@ class ProductService(
             null
         } else {
             value
-        }
-
-    private fun toDateTime(value: String?): Date? =
-        if (value.isNullOrEmpty()) {
-            null
-        } else {
-            val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm")
-            fmt.timeZone = TimeZone.getTimeZone("UTC")
-            fmt.parse(value)
         }
 
     private fun toLong(value: String?): Long? =

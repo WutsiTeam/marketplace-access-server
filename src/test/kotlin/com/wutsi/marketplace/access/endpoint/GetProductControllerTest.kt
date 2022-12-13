@@ -1,7 +1,7 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.wutsi.enums.EventProvider
+import com.wutsi.enums.MeetingProviderType
 import com.wutsi.enums.ProductStatus
 import com.wutsi.enums.ProductType
 import com.wutsi.marketplace.access.dto.GetCategoryResponse
@@ -84,7 +84,9 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
 
         assertEquals("1234567890", product.event?.meetingId)
         assertEquals("123456", product.event?.meetingPassword)
-        assertEquals(EventProvider.ZOOM.name, product.event?.provider)
+        assertEquals(MeetingProviderType.ZOOM.name, product.event?.meetingProvider?.type)
+        assertEquals("https://us04web.zoom.us/meeting/1234567890", product.event?.meetingJoinUrl)
+        assertEquals(true, product.event?.online)
 
         assertEquals(1110L, product.category?.id)
         assertEquals("Computers", product.category?.title)

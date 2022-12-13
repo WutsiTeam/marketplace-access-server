@@ -1,6 +1,5 @@
 package com.wutsi.marketplace.access.entity
 
-import com.wutsi.enums.EventProvider
 import com.wutsi.enums.ProductStatus
 import com.wutsi.enums.ProductType
 import java.util.Date
@@ -56,8 +55,12 @@ data class ProductEntity(
 
     var type: ProductType = ProductType.UNKNOWN,
 
-    // Webminar fields
-    var eventProvider: EventProvider = EventProvider.UNKNOWN,
+    // Event fields
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_meeting_provider_fk")
+    var eventMeetingProvider: MeetingProviderEntity? = null,
+
+    var eventOnline: Boolean = false,
     var eventMeetingId: String? = null,
     var eventMeetingPassword: String? = null,
     var eventStarts: Date? = null,

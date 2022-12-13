@@ -18,7 +18,7 @@ INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summ
     ;
 
 UPDATE T_PRODUCT
-    SET event_provider=1, event_meeting_id='1234567890', event_meeting_password='123456', event_starts='2020-10-01 10:30', event_starts='2020-10-01 12:00'
+    SET event_meeting_provider_fk=1000, event_meeting_id='1234567890', event_meeting_password='123456', event_starts='2020-10-01 10:30', event_starts='2020-10-01 12:00', event_online=true
     WHERE id=200;
 
 INSERT INTO T_PICTURE(id, product_fk, url, hash, is_deleted, deleted)

@@ -1,6 +1,5 @@
 package com.wutsi.marketplace.access.endpoint
 
-import com.wutsi.enums.EventProvider
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dto.UpdateProductEventRequest
 import org.junit.jupiter.api.Test
@@ -34,11 +33,12 @@ public class UpdateProductEventControllerTest {
     public fun invoke() {
         // WHEN
         val request = UpdateProductEventRequest(
-            provider = EventProvider.ZOOM.name,
+            meetingProviderId = 1000L,
             meetingId = "1111111",
             meetingPassword = "12345",
             starts = OffsetDateTime.of(2020, 1, 1, 8, 0, 0, 0, ZoneOffset.UTC),
-            ends = OffsetDateTime.of(2020, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC)
+            ends = OffsetDateTime.of(2020, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC),
+            online = true
         )
         val response = rest.postForEntity(url(100), request, Any::class.java)
 
@@ -46,11 +46,12 @@ public class UpdateProductEventControllerTest {
         assertEquals(HttpStatus.OK, response.statusCode)
 
         val product = dao.findById(100).get()
-        assertEquals(EventProvider.ZOOM, product.eventProvider)
+        assertEquals(request.meetingProviderId, product.eventMeetingProvider?.id)
         assertEquals(request.meetingId, product.eventMeetingId)
         assertEquals(request.meetingPassword, product.eventMeetingPassword)
-        assertEquals(Date(request.starts.toInstant().toEpochMilli()), product.eventStarts)
-        assertEquals(Date(request.ends.toInstant().toEpochMilli()), product.eventEnds)
+        assertEquals(Date(request.starts!!.toInstant().toEpochMilli()), product.eventStarts)
+        assertEquals(Date(request.ends!!.toInstant().toEpochMilli()), product.eventEnds)
+        assertEquals(request.online, product.eventOnline)
     }
 
     private fun url(productId: Long = 100L) =
