@@ -1,6 +1,5 @@
 package com.wutsi.marketplace.access.service
 
-import com.wutsi.enums.MeetingProviderType
 import com.wutsi.enums.ProductSort
 import com.wutsi.enums.ProductStatus
 import com.wutsi.enums.ProductType
@@ -9,7 +8,6 @@ import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dto.CheckProductAvailabilityRequest
 import com.wutsi.marketplace.access.dto.CreateProductRequest
 import com.wutsi.marketplace.access.dto.Event
-import com.wutsi.marketplace.access.dto.MeetingProviderSummary
 import com.wutsi.marketplace.access.dto.Product
 import com.wutsi.marketplace.access.dto.ProductSummary
 import com.wutsi.marketplace.access.dto.SearchProductRequest
@@ -159,7 +157,7 @@ class ProductService(
             meetingJoinUrl = meetingProviderService.toJoinUrl(product),
             meetingProvider = product.eventMeetingProvider?.let {
                 meetingProviderService.toMeetingProviderSummary(it)
-            } ?: MeetingProviderSummary(type = MeetingProviderType.UNKNOWN.name)
+            }
         )
     }
 
