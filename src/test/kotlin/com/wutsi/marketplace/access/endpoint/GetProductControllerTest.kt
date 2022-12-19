@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/GetProductController.sql"])
@@ -45,6 +46,7 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(200000L, product.comparablePrice)
         assertEquals(ProductType.PHYSICAL_PRODUCT.name, product.type)
         assertNull(product.event)
+        assertTrue(product.files.isEmpty())
 
         assertEquals(1110L, product.category?.id)
         assertEquals("Computers", product.category?.title)
@@ -87,6 +89,48 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(MeetingProviderType.ZOOM.name, product.event?.meetingProvider?.type)
         assertEquals("https://us04web.zoom.us/meeting/1234567890", product.event?.meetingJoinUrl)
         assertEquals(true, product.event?.online)
+
+        assertTrue(product.files.isEmpty())
+
+        assertEquals(1110L, product.category?.id)
+        assertEquals("Computers", product.category?.title)
+        assertEquals(1100L, product.category?.parentId)
+    }
+
+    @Test
+    fun file() {
+        val response = rest.getForEntity(url(300), GetProductResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val product = response.body!!.product
+        assertEquals(1L, product.store.id)
+        assertEquals(11L, product.store.accountId)
+        assertEquals("XAF", product.store.currency)
+        assertEquals("TV", product.title)
+        assertEquals("summary of TV", product.summary)
+        assertEquals("description of TV", product.description)
+        assertEquals(ProductStatus.PUBLISHED.name, product.status)
+        assertEquals(150000L, product.price)
+        assertEquals(200000L, product.comparablePrice)
+        assertEquals(10, product.quantity)
+        assertEquals("XAF", product.currency)
+        assertEquals(200000L, product.comparablePrice)
+        assertEquals(ProductType.DIGITAL_DOWNLOAD.name, product.type)
+        assertNull(product.event)
+
+        assertEquals(2, product.files.size)
+        assertEquals(301, product.files[0].id)
+        assertEquals("File-301", product.files[0].name)
+        assertEquals("https://www.img.com/301.png", product.files[0].url)
+        assertEquals("image/png", product.files[0].contentType)
+        assertEquals(10240, product.files[0].contentSize)
+
+        assertEquals(302, product.files[1].id)
+        assertEquals("File-302", product.files[1].name)
+        assertEquals("https://www.img.com/302.pdf", product.files[1].url)
+        assertEquals("application/pdf", product.files[1].contentType)
+        assertEquals(35000, product.files[1].contentSize)
 
         assertEquals(1110L, product.category?.id)
         assertEquals("Computers", product.category?.title)

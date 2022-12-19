@@ -14,12 +14,20 @@ INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summ
     VALUES
         (100, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null, 1),
         (200, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null, 2),
+        (300, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null, 3),
         (199, 1, 1110, 1, true, 'TV', 'Sample TV', 'Long description', 50000, null, 'XAF', null, null, now(), 1)
     ;
 
 UPDATE T_PRODUCT
     SET event_meeting_provider_fk=1000, event_meeting_id='1234567890', event_meeting_password='123456', event_starts='2020-10-01 10:30', event_starts='2020-10-01 12:00', event_online=true
     WHERE id=200;
+
+INSERT INTO T_FILE(id, product_fk, name, url, content_type, content_size, is_deleted, deleted)
+    VALUES
+        (301, 300, 'File-301', 'https://www.img.com/301.png', 'image/png', 10240, false, null),
+        (302, 300, 'File-302', 'https://www.img.com/302.pdf', 'application/pdf', 35000, false, null),
+        (303, 300, '303', 'https://www.img.com/303.png', 'image/png', 1024, true, now())
+    ;
 
 INSERT INTO T_PICTURE(id, product_fk, url, hash, is_deleted, deleted)
     VALUES

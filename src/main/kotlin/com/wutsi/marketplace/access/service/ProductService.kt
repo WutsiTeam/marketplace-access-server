@@ -37,6 +37,7 @@ class ProductService(
     private val pictureService: PictureService,
     private val storeService: StoreService,
     private val meetingProviderService: MeetingProviderService,
+    private val fileService: FileService,
     private val em: EntityManager
 ) {
     fun create(request: CreateProductRequest): ProductEntity {
@@ -124,7 +125,14 @@ class ProductService(
         thumbnail = product.thumbnail?.let { pictureService.toPictureSummary(it) },
         pictures = product.pictures
             .filter { !it.isDeleted }
-            .map { pictureService.toPictureSummary(it) }
+            .map { pictureService.toPictureSummary(it) },
+        files = if (product.type == ProductType.DIGITAL_DOWNLOAD) {
+            product.files
+                .filter { !it.isDeleted }
+                .map { fileService.toFileSummary(it) }
+        } else {
+            emptyList()
+        }
     )
 
     fun toProductSummary(product: ProductEntity, language: String?) = ProductSummary(

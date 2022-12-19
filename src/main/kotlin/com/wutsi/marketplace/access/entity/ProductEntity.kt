@@ -64,5 +64,8 @@ data class ProductEntity(
     var eventMeetingId: String? = null,
     var eventMeetingPassword: String? = null,
     var eventStarts: Date? = null,
-    var eventEnds: Date? = null
+    var eventEnds: Date? = null,
+
+    @OneToMany(mappedBy = "product")
+    val files: List<FileEntity> = emptyList()
 )
