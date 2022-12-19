@@ -11,8 +11,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/clean.sql", "/db/RemoveProductFileController.sql"])
-public class RemoveProductFileControllerTest {
+@Sql(value = ["/db/clean.sql", "/db/DeleteFileController.sql"])
+public class DeleteFileControllerTest {
     @LocalServerPort
     public val port: Int = 0
 
@@ -39,5 +39,5 @@ public class RemoveProductFileControllerTest {
         assertNotNull(file.get().deleted)
     }
 
-    private fun url(id: Long) = "http://localhost:$port/v1/products/files/$id"
+    private fun url(id: Long) = "http://localhost:$port/v1/files/$id"
 }

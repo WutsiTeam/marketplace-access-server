@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-public class RemoveProductFileDelegate(private val service: FileService) {
+public class DeleteFileDelegate(private val service: FileService) {
     @Transactional
     public fun invoke(id: Long) {
         service.delete(id)

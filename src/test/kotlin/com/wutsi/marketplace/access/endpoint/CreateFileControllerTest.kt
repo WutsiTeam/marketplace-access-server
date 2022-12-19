@@ -1,8 +1,8 @@
 package com.wutsi.marketplace.access.endpoint
 
 import com.wutsi.marketplace.access.dao.FileRepository
-import com.wutsi.marketplace.access.dto.AddProductFileRequest
-import com.wutsi.marketplace.access.dto.AddProductFileResponse
+import com.wutsi.marketplace.access.dto.CreateFileRequest
+import com.wutsi.marketplace.access.dto.CreateFileResponse
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,8 +14,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/clean.sql", "/db/AddProductFileController.sql"])
-public class AddProductFileControllerTest {
+@Sql(value = ["/db/clean.sql", "/db/CreateFileController.sql"])
+public class CreateFileControllerTest {
     @LocalServerPort
     public val port: Int = 0
 
@@ -28,12 +28,13 @@ public class AddProductFileControllerTest {
 
     @Test
     fun add() {
-        val request = AddProductFileRequest(
+        val request = CreateFileRequest(
+            productId = productId,
             url = "https://img.com/2/4/Image-100.png",
             contentSize = 1024,
             contentType = "image/png"
         )
-        val response = rest.postForEntity(url(), request, AddProductFileResponse::class.java)
+        val response = rest.postForEntity(url(), request, CreateFileResponse::class.java)
 
         assertEquals(HttpStatus.OK, response.statusCode)
 
@@ -47,5 +48,5 @@ public class AddProductFileControllerTest {
         assertEquals(request.contentSize, file.get().contentSize)
     }
 
-    private fun url() = "http://localhost:$port/v1/products/$productId/files"
+    private fun url() = "http://localhost:$port/v1/files"
 }

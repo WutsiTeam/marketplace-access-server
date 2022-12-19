@@ -1,10 +1,10 @@
 package com.wutsi.marketplace.access.service
 
 import com.wutsi.marketplace.access.dao.FileRepository
-import com.wutsi.marketplace.access.dto.AddProductFileRequest
+import com.wutsi.marketplace.access.dao.ProductRepository
+import com.wutsi.marketplace.access.dto.CreateFileRequest
 import com.wutsi.marketplace.access.dto.FileSummary
 import com.wutsi.marketplace.access.entity.FileEntity
-import com.wutsi.marketplace.access.entity.ProductEntity
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
@@ -17,7 +17,8 @@ import java.util.Date
 
 @Service
 public class FileService(
-    private val dao: FileRepository
+    private val dao: FileRepository,
+    private val productDao: ProductRepository
 ) {
     fun findById(id: Long): FileEntity {
         val file = dao.findById(id)
@@ -48,7 +49,7 @@ public class FileService(
         return file
     }
 
-    fun add(product: ProductEntity, request: AddProductFileRequest): FileEntity {
+    fun add(request: CreateFileRequest): FileEntity {
         val url = URL(request.url)
         val i = url.file.lastIndexOf("/")
         val filename = if (i > 0) {
@@ -59,7 +60,7 @@ public class FileService(
 
         return dao.save(
             FileEntity(
-                product = product,
+                product = productDao.findById(request.productId).get(),
                 url = request.url.lowercase(),
                 name = filename,
                 created = Date(),
