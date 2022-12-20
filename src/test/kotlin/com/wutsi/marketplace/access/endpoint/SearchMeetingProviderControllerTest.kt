@@ -29,7 +29,7 @@ class SearchMeetingProviderControllerTest {
         assertEquals("Zoom", providers[0].name)
         assertEquals(MeetingProviderType.ZOOM.name, providers[0].type)
         assertEquals(
-            "https://prod-wutsi.s3.amazonaws.com/static/marketplace-access-server/meeting-providers/zoom.png",
+            "https://prod-wutsi.s3.amazonaws.com/static/wutsi-assets/images/meeting-providers/zoom.png",
             providers[0].logoUrl,
         )
 
@@ -37,7 +37,7 @@ class SearchMeetingProviderControllerTest {
         assertEquals("Meet", providers[1].name)
         assertEquals(MeetingProviderType.MEET.name, providers[1].type)
         assertEquals(
-            "https://prod-wutsi.s3.amazonaws.com/static/marketplace-access-server/meeting-providers/meet.png",
+            "https://prod-wutsi.s3.amazonaws.com/static/wutsi-assets/images/meeting-providers/meet.png",
             providers[1].logoUrl,
         )
     }
