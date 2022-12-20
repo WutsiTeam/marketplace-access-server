@@ -67,5 +67,5 @@ data class ProductEntity(
     var eventEnds: Date? = null,
 
     @OneToMany(mappedBy = "product")
-    val files: List<FileEntity> = emptyList()
+    val files: List<FileEntity> = emptyList(),
 )

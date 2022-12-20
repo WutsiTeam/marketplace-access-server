@@ -11,13 +11,13 @@ import kotlin.Long
 
 @RestController
 public class SaveCategoryController(
-    public val `delegate`: SaveCategoryDelegate
+    public val `delegate`: SaveCategoryDelegate,
 ) {
     @PostMapping("/v1/categories/{id}")
     public fun invoke(
         @PathVariable(name = "id") id: Long,
         @Valid @RequestBody
-        request: SaveCategoryRequest
+        request: SaveCategoryRequest,
     ) {
         delegate.invoke(id, request)
     }

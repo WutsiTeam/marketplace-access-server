@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.SearchCategoryRequest
 import com.wutsi.marketplace.access.dto.SearchCategoryResponse
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest
 class SearchCategoryDelegate(
     private val service: CategoryService,
     private val httpRequest: HttpServletRequest,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     fun invoke(request: SearchCategoryRequest): SearchCategoryResponse {
         logger.add("request_top_categories", request.topCategories)
@@ -27,7 +27,7 @@ class SearchCategoryDelegate(
         logger.add("count", categories.size)
         return SearchCategoryResponse(
             categories = categories.map { service.toCategorySummary(it, language) }
-                .sortedBy { it.title }
+                .sortedBy { it.title },
         )
     }
 }

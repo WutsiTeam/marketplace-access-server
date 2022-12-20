@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.GetCategoryResponse
 import com.wutsi.marketplace.access.service.CategoryService
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest
 class GetCategoryDelegate(
     private val service: CategoryService,
     private val request: HttpServletRequest,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     fun invoke(id: Long): GetCategoryResponse {
         val language = request.getHeader("Accept-Language")
@@ -18,7 +18,7 @@ class GetCategoryDelegate(
 
         val category = service.findById(id)
         return GetCategoryResponse(
-            category = service.toCategory(category, language)
+            category = service.toCategory(category, language),
         )
     }
 }

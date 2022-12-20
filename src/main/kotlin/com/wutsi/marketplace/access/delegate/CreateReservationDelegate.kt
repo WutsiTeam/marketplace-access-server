@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.CreateReservationRequest
 import com.wutsi.marketplace.access.dto.CreateReservationResponse
@@ -12,7 +12,7 @@ import javax.transaction.Transactional
 class CreateReservationDelegate(
     private val service: ReservationService,
     private val productService: ProductService,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     @Transactional
     fun invoke(request: CreateReservationRequest): CreateReservationResponse {
@@ -23,7 +23,7 @@ class CreateReservationDelegate(
 
         logger.add("reservation_id", reservation.id)
         return CreateReservationResponse(
-            reservationId = reservation.id!!
+            reservationId = reservation.id!!,
         )
     }
 

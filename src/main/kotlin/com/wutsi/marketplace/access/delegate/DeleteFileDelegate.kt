@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.service.FileService
 import org.springframework.stereotype.Service

@@ -37,7 +37,7 @@ class UpdateProductStatusControllerTest {
     @Test
     fun publish() {
         val request = UpdateProductStatusRequest(
-            status = ProductStatus.PUBLISHED.name
+            status = ProductStatus.PUBLISHED.name,
         )
         val response = rest.postForEntity(url(100), request, Any::class.java)
 
@@ -55,7 +55,7 @@ class UpdateProductStatusControllerTest {
     @Test
     fun unpublish() {
         val request = UpdateProductStatusRequest(
-            status = ProductStatus.DRAFT.name
+            status = ProductStatus.DRAFT.name,
         )
         val response = rest.postForEntity(url(200), request, Any::class.java)
 
@@ -73,7 +73,7 @@ class UpdateProductStatusControllerTest {
     @Test
     fun badStatus() {
         val request = UpdateProductStatusRequest(
-            status = ProductStatus.UNKNOWN.name
+            status = ProductStatus.UNKNOWN.name,
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(100), request, Any::class.java)

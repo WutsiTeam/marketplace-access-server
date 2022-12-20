@@ -19,15 +19,15 @@ import javax.persistence.Query
 @Service
 class PictureService(
     private val dao: PictureRepository,
-    private val em: EntityManager
+    private val em: EntityManager,
 ) {
     fun create(product: ProductEntity, url: String): PictureEntity =
         dao.save(
             PictureEntity(
                 product = product,
                 url = url.lowercase(),
-                hash = hash(url)
-            )
+                hash = hash(url),
+            ),
         )
 
     fun create(product: ProductEntity, request: CreatePictureRequest): PictureEntity =
@@ -48,9 +48,9 @@ class PictureService(
                         code = ErrorURN.PICTURE_NOT_FOUND.urn,
                         parameter = Parameter(
                             name = "id",
-                            value = id
-                        )
-                    )
+                            value = id,
+                        ),
+                    ),
                 )
             }
         if (picture.isDeleted) {
@@ -59,9 +59,9 @@ class PictureService(
                     code = ErrorURN.PICTURE_DELETED.urn,
                     parameter = Parameter(
                         name = "id",
-                        value = id
-                    )
-                )
+                        value = id,
+                    ),
+                ),
             )
         }
         return picture
@@ -69,7 +69,7 @@ class PictureService(
 
     fun toPictureSummary(picture: PictureEntity) = PictureSummary(
         id = picture.id ?: -1,
-        url = picture.url
+        url = picture.url,
     )
 
     fun search(request: SearchPictureRequest): List<PictureEntity> {

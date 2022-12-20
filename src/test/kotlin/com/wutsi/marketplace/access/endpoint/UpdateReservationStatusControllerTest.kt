@@ -34,7 +34,7 @@ class UpdateReservationStatusControllerTest {
     @Test
     fun cancel() {
         val request = UpdateReservationStatusRequest(
-            status = ReservationStatus.CANCELLED.name
+            status = ReservationStatus.CANCELLED.name,
         )
         val response = rest.postForEntity(url(100L), request, Any::class.java)
 
@@ -48,7 +48,7 @@ class UpdateReservationStatusControllerTest {
     @Test
     fun active() {
         val request = UpdateReservationStatusRequest(
-            status = ReservationStatus.ACTIVE.name
+            status = ReservationStatus.ACTIVE.name,
         )
         val response = rest.postForEntity(url(101L), request, Any::class.java)
 
@@ -64,7 +64,7 @@ class UpdateReservationStatusControllerTest {
 
         Thread.sleep(2000)
         val request = UpdateReservationStatusRequest(
-            status = ReservationStatus.ACTIVE.name
+            status = ReservationStatus.ACTIVE.name,
         )
         val response = rest.postForEntity(url(102), request, Any::class.java)
 
@@ -77,7 +77,7 @@ class UpdateReservationStatusControllerTest {
     @Test
     fun badStatus() {
         val request = UpdateReservationStatusRequest(
-            status = ReservationStatus.UNKNOWN.name
+            status = ReservationStatus.UNKNOWN.name,
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(101), request, Any::class.java)
@@ -93,7 +93,7 @@ class UpdateReservationStatusControllerTest {
     @Test
     fun notFound() {
         val request = UpdateReservationStatusRequest(
-            status = ReservationStatus.ACTIVE.name
+            status = ReservationStatus.ACTIVE.name,
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(9999), request, Any::class.java)

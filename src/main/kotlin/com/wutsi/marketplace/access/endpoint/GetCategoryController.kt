@@ -9,7 +9,7 @@ import kotlin.Long
 
 @RestController
 public class GetCategoryController(
-    public val `delegate`: GetCategoryDelegate
+    public val `delegate`: GetCategoryDelegate,
 ) {
     @GetMapping("/v1/categories/{id}")
     public fun invoke(@PathVariable(name = "id") id: Long): GetCategoryResponse = delegate.invoke(id)

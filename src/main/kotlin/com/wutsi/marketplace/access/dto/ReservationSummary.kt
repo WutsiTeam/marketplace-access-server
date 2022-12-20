@@ -5,5 +5,5 @@ import kotlin.String
 
 public data class ReservationSummary(
     public val id: Long = 0,
-    public val orderId: String = ""
+    public val orderId: String = "",
 )

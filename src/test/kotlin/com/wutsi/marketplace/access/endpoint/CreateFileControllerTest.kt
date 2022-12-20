@@ -32,7 +32,7 @@ public class CreateFileControllerTest {
             productId = productId,
             url = "https://img.com/2/4/Image-100.png",
             contentSize = 1024,
-            contentType = "image/png"
+            contentType = "image/png",
         )
         val response = rest.postForEntity(url(), request, CreateFileResponse::class.java)
 

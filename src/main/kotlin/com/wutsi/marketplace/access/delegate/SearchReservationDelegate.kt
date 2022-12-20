@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.ReservationSummary
 import com.wutsi.marketplace.access.dto.SearchReservationRequest
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 public class SearchReservationDelegate(
     private val logger: KVLogger,
-    private val service: ReservationService
+    private val service: ReservationService,
 ) {
     public fun invoke(request: SearchReservationRequest): SearchReservationResponse {
         logger.add("request_order_id", request.orderId)
@@ -23,9 +23,9 @@ public class SearchReservationDelegate(
             reservations = reservations.map {
                 ReservationSummary(
                     id = it.id ?: -1,
-                    orderId = it.orderId
+                    orderId = it.orderId,
                 )
-            }
+            },
         )
     }
 }

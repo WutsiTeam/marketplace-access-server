@@ -10,9 +10,12 @@ import javax.validation.Valid
 
 @RestController
 public class CreateFileController(
-    public val `delegate`: CreateFileDelegate
+    public val `delegate`: CreateFileDelegate,
 ) {
     @PostMapping("/v1/files")
-    public fun invoke(@Valid @RequestBody request: CreateFileRequest): CreateFileResponse =
+    public fun invoke(
+        @Valid @RequestBody
+        request: CreateFileRequest,
+    ): CreateFileResponse =
         delegate.invoke(request)
 }

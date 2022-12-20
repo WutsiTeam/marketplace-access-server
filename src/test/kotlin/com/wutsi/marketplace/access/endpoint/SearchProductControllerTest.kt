@@ -24,7 +24,7 @@ class SearchProductControllerTest {
     fun published() {
         // GIVEN
         val request = SearchProductRequest(
-            status = ProductStatus.PUBLISHED.name
+            status = ProductStatus.PUBLISHED.name,
         )
         val response = rest.postForEntity(url(), request, SearchProductResponse::class.java)
 
@@ -41,7 +41,7 @@ class SearchProductControllerTest {
         // GIVEN
         val request = SearchProductRequest(
             categoryIds = listOf(1120L),
-            sortBy = ProductSort.PRICE_ASC.name
+            sortBy = ProductSort.PRICE_ASC.name,
         )
         val response = rest.postForEntity(url(), request, SearchProductResponse::class.java)
 
@@ -58,7 +58,7 @@ class SearchProductControllerTest {
         // GIVEN
         val request = SearchProductRequest(
             productIds = listOf(100L, 101L, 199L, 201L),
-            sortBy = ProductSort.PRICE_DESC.name
+            sortBy = ProductSort.PRICE_DESC.name,
         )
         val response = rest.postForEntity(url(), request, SearchProductResponse::class.java)
 
@@ -74,7 +74,7 @@ class SearchProductControllerTest {
     fun byStoreId() {
         // GIVEN
         val request = SearchProductRequest(
-            storeId = 1L
+            storeId = 1L,
         )
         val response = rest.postForEntity(url(), request, SearchProductResponse::class.java)
 

@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.UpdateProductAttributeRequest
 import com.wutsi.marketplace.access.service.ProductService
@@ -9,12 +9,12 @@ import javax.transaction.Transactional
 @Service
 class UpdateProductAttributeDelegate(
     private val service: ProductService,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     @Transactional
     fun invoke(
         id: Long,
-        request: UpdateProductAttributeRequest
+        request: UpdateProductAttributeRequest,
     ) {
         logger.add("request_value", request.name)
         logger.add("request_value", request.value)

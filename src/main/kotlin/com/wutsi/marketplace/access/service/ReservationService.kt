@@ -26,23 +26,23 @@ class ReservationService(
     private val dao: ReservationRepository,
     private val itemDao: ReservationItemRepository,
     private val productService: ProductService,
-    private val em: EntityManager
+    private val em: EntityManager,
 ) {
     fun create(request: CreateReservationRequest): ReservationEntity {
         // Reservation
         val reservation = dao.save(
             ReservationEntity(
                 orderId = request.orderId,
-                status = ReservationStatus.ACTIVE
-            )
+                status = ReservationStatus.ACTIVE,
+            ),
         )
 
         // Items
         val productMap = productService.search(
             request = SearchProductRequest(
                 productIds = request.items.map { it.productId },
-                limit = request.items.size
-            )
+                limit = request.items.size,
+            ),
         ).associateBy { it.id }
         reservation.items = request.items.map {
             ReservationItemEntity(
@@ -53,10 +53,10 @@ class ReservationService(
                         error = Error(
                             code = ErrorURN.PRODUCT_NOT_AVAILABLE.urn,
                             data = mapOf(
-                                "product-id" to it.productId
-                            )
-                        )
-                    )
+                                "product-id" to it.productId,
+                            ),
+                        ),
+                    ),
             )
         }
         itemDao.saveAll(reservation.items)
@@ -81,9 +81,9 @@ class ReservationService(
                     parameter = Parameter(
                         name = "status",
                         value = request.status,
-                        type = ParameterType.PARAMETER_TYPE_PAYLOAD
-                    )
-                )
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD,
+                    ),
+                ),
             )
         }
         dao.save(reservation)
@@ -98,9 +98,9 @@ class ReservationService(
                         parameter = Parameter(
                             name = "id",
                             value = id,
-                            type = ParameterType.PARAMETER_TYPE_PATH
-                        )
-                    )
+                            type = ParameterType.PARAMETER_TYPE_PATH,
+                        ),
+                    ),
                 )
             }
 

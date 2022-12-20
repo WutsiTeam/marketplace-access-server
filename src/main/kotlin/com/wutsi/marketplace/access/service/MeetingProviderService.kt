@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class MeetingProviderService(
-    private val dao: MeetingProviderRepository
+    private val dao: MeetingProviderRepository,
 ) {
     fun search(): List<MeetingProviderEntity> =
         dao.findAll().toList()
@@ -21,8 +21,8 @@ class MeetingProviderService(
         dao.findById(id).orElseThrow {
             NotFoundException(
                 error = Error(
-                    code = ErrorURN.MEETING_PROVIDER_NOT_FOUND.urn
-                )
+                    code = ErrorURN.MEETING_PROVIDER_NOT_FOUND.urn,
+                ),
             )
         }
 
@@ -30,7 +30,7 @@ class MeetingProviderService(
         id = provider.id ?: -1,
         name = provider.name,
         type = provider.type.name,
-        logoUrl = provider.logoUrl
+        logoUrl = provider.logoUrl,
     )
 
     fun toJoinUrl(product: ProductEntity): String? =

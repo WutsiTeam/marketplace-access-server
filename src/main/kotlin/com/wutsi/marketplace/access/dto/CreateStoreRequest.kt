@@ -10,7 +10,7 @@ public data class CreateStoreRequest(
     @get:NotBlank
     @get:Size(
         min = 3,
-        max = 3
+        max = 3,
     )
-    public val currency: String = ""
+    public val currency: String = "",
 )

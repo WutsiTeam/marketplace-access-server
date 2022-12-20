@@ -26,7 +26,7 @@ import javax.persistence.Query
 class StoreService(
     private val dao: StoreRepository,
     private val productDao: ProductRepository,
-    private val em: EntityManager
+    private val em: EntityManager,
 ) {
     fun findById(id: Long): StoreEntity =
         dao.findById(id)
@@ -37,9 +37,9 @@ class StoreService(
                         parameter = Parameter(
                             name = "id",
                             value = id,
-                            type = ParameterType.PARAMETER_TYPE_PATH
-                        )
-                    )
+                            type = ParameterType.PARAMETER_TYPE_PATH,
+                        ),
+                    ),
                 )
             }
 
@@ -50,8 +50,8 @@ class StoreService(
                 StoreEntity(
                     accountId = request.accountId,
                     currency = request.currency,
-                    status = StoreStatus.ACTIVE
-                )
+                    status = StoreStatus.ACTIVE,
+                ),
             )
         } else {
             stores[0]
@@ -76,9 +76,9 @@ class StoreService(
                     parameter = Parameter(
                         name = "status",
                         value = request.status,
-                        type = ParameterType.PARAMETER_TYPE_PAYLOAD
-                    )
-                )
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD,
+                    ),
+                ),
             )
         }
         dao.save(store)
@@ -138,7 +138,7 @@ class StoreService(
         updated = store.updated.toInstant().atOffset(ZoneOffset.UTC),
         deactivated = store.deactivated?.toInstant()?.atOffset(ZoneOffset.UTC),
         currency = store.currency,
-        status = store.status.name
+        status = store.status.name,
     )
 
     fun toStoreSummary(store: StoreEntity) = StoreSummary(
@@ -146,7 +146,7 @@ class StoreService(
         accountId = store.accountId,
         currency = store.currency,
         status = store.status.name,
-        created = store.created.toInstant().atOffset(ZoneOffset.UTC)
+        created = store.created.toInstant().atOffset(ZoneOffset.UTC),
     )
 
     fun updateProductCount(store: StoreEntity) {

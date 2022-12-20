@@ -22,7 +22,7 @@ public class SearchReservationControllerTest {
     fun search() {
         // WHEN
         val request = SearchReservationRequest(
-            orderId = "100"
+            orderId = "100",
         )
         val response = rest.postForEntity(url(), request, SearchReservationResponse::class.java)
 

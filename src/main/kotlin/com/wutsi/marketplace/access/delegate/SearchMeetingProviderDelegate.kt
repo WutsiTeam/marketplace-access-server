@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.SearchMeetingProviderResponse
 import com.wutsi.marketplace.access.service.MeetingProviderService
@@ -11,7 +11,7 @@ public class SearchMeetingProviderDelegate(private val service: MeetingProviderS
         return SearchMeetingProviderResponse(
             meetingProviders = providers.map {
                 service.toMeetingProviderSummary(it)
-            }
+            },
         )
     }
 }

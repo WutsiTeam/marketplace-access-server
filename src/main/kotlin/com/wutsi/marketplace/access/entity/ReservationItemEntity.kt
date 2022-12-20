@@ -24,5 +24,5 @@ data class ReservationItemEntity(
     @JoinColumn(name = "reservation_fk")
     val reservation: ReservationEntity = ReservationEntity(),
 
-    val quantity: Int = 0
+    val quantity: Int = 0,
 )

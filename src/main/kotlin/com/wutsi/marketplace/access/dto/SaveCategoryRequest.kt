@@ -7,5 +7,5 @@ import kotlin.String
 public data class SaveCategoryRequest(
     public val parentId: Long? = null,
     @get:NotBlank
-    public val title: String = ""
+    public val title: String = "",
 )

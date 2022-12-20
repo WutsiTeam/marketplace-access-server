@@ -12,5 +12,5 @@ public data class SearchProductRequest(
     public val status: String? = null,
     public val limit: Int = 100,
     public val offset: Int = 0,
-    public val sortBy: String? = null
+    public val sortBy: String? = null,
 )

@@ -19,5 +19,5 @@ data class CategoryEntity(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_fk")
-    var parent: CategoryEntity? = null
+    var parent: CategoryEntity? = null,
 )

@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.GetStoreResponse
 import com.wutsi.marketplace.access.service.StoreService
@@ -9,7 +9,7 @@ class GetStoreDelegate(private val service: StoreService) {
     fun invoke(id: Long): GetStoreResponse {
         val store = service.findById(id)
         return GetStoreResponse(
-            store = service.toStore(store)
+            store = service.toStore(store),
         )
     }
 }

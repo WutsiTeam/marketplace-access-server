@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.CreateProductRequest
 import com.wutsi.marketplace.access.dto.CreateProductResponse
@@ -10,7 +10,7 @@ import javax.transaction.Transactional
 @Service
 class CreateProductDelegate(
     private val service: ProductService,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     @Transactional
     public fun invoke(request: CreateProductRequest): CreateProductResponse {
@@ -26,7 +26,7 @@ class CreateProductDelegate(
         logger.add("product_id", product.id)
 
         return CreateProductResponse(
-            productId = product.id ?: -1
+            productId = product.id ?: -1,
         )
     }
 }

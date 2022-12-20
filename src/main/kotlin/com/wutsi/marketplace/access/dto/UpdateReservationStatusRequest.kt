@@ -5,5 +5,5 @@ import kotlin.String
 
 public data class UpdateReservationStatusRequest(
     @get:NotBlank
-    public val status: String = ""
+    public val status: String = "",
 )

@@ -18,7 +18,7 @@ import java.util.Date
 @Service
 public class FileService(
     private val dao: FileRepository,
-    private val productDao: ProductRepository
+    private val productDao: ProductRepository,
 ) {
     fun findById(id: Long): FileEntity {
         val file = dao.findById(id)
@@ -29,9 +29,9 @@ public class FileService(
                         parameter = Parameter(
                             name = "id",
                             value = id,
-                            type = ParameterType.PARAMETER_TYPE_PATH
-                        )
-                    )
+                            type = ParameterType.PARAMETER_TYPE_PATH,
+                        ),
+                    ),
                 )
             }
         if (file.isDeleted) {
@@ -41,9 +41,9 @@ public class FileService(
                     parameter = Parameter(
                         name = "id",
                         value = id,
-                        type = ParameterType.PARAMETER_TYPE_PATH
-                    )
-                )
+                        type = ParameterType.PARAMETER_TYPE_PATH,
+                    ),
+                ),
             )
         }
         return file
@@ -65,8 +65,8 @@ public class FileService(
                 name = filename,
                 created = Date(),
                 contentType = request.contentType,
-                contentSize = request.contentSize
-            )
+                contentSize = request.contentSize,
+            ),
         )
     }
 
@@ -86,6 +86,6 @@ public class FileService(
         name = file.name,
         contentType = file.contentType,
         contentSize = file.contentSize,
-        created = file.created.toInstant().atOffset(ZoneOffset.UTC)
+        created = file.created.toInstant().atOffset(ZoneOffset.UTC),
     )
 }

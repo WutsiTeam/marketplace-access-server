@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.SearchPictureRequest
 import com.wutsi.marketplace.access.dto.SearchPictureResponse
@@ -10,7 +10,7 @@ class SearchPictureDelegate(private val service: PictureService) {
     fun invoke(request: SearchPictureRequest): SearchPictureResponse {
         val pictures = service.search(request)
         return SearchPictureResponse(
-            pictures = pictures.map { service.toPictureSummary(it) }
+            pictures = pictures.map { service.toPictureSummary(it) },
         )
     }
 }

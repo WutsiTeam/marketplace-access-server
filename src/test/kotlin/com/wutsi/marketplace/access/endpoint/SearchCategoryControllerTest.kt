@@ -19,7 +19,7 @@ class SearchCategoryControllerTest : AbstractLanguageAwareControllerTest() {
     fun topCategories() {
         // WHEN
         val request = SearchCategoryRequest(
-            topCategories = true
+            topCategories = true,
         )
         val response = rest.postForEntity(url(), request, SearchCategoryResponse::class.java)
 
@@ -35,7 +35,7 @@ class SearchCategoryControllerTest : AbstractLanguageAwareControllerTest() {
         // WHEN
         val url = "http://localhost:$port/v1/categories/search"
         val request = SearchCategoryRequest(
-            keyword = "el"
+            keyword = "el",
         )
         val response = rest.postForEntity(url, request, SearchCategoryResponse::class.java)
 
@@ -55,7 +55,7 @@ class SearchCategoryControllerTest : AbstractLanguageAwareControllerTest() {
         // WHEN
         val url = "http://localhost:$port/v1/categories/search"
         val request = SearchCategoryRequest(
-            keyword = "e"
+            keyword = "e",
         )
         val response = rest.postForEntity(url, request, SearchCategoryResponse::class.java)
 

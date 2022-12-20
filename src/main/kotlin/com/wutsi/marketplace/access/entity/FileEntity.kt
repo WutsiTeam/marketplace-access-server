@@ -26,5 +26,5 @@ data class FileEntity(
     val contentSize: Int = 0,
     var isDeleted: Boolean = false,
     val created: Date = Date(),
-    var deleted: Date? = null
+    var deleted: Date? = null,
 )

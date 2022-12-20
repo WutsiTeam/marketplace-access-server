@@ -20,7 +20,7 @@ abstract class AbstractLanguageAwareControllerTest : ClientHttpRequestIntercepto
     override fun intercept(
         request: HttpRequest,
         body: ByteArray,
-        execution: ClientHttpRequestExecution
+        execution: ClientHttpRequestExecution,
     ): ClientHttpResponse {
         if (language != null) {
             request.headers.add("Accept-Language", language)

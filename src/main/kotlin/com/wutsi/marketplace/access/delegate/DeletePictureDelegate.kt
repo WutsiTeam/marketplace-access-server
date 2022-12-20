@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.service.PictureService
 import com.wutsi.marketplace.access.service.ProductService
@@ -8,7 +8,7 @@ import javax.transaction.Transactional
 @Service
 class DeletePictureDelegate(
     private val service: PictureService,
-    private val productService: ProductService
+    private val productService: ProductService,
 ) {
     @Transactional
     fun invoke(id: Long) {

@@ -10,9 +10,12 @@ import javax.validation.Valid
 
 @RestController
 public class CreateStoreController(
-    public val `delegate`: CreateStoreDelegate
+    public val `delegate`: CreateStoreDelegate,
 ) {
     @PostMapping("/v1/stores")
-    public fun invoke(@Valid @RequestBody request: CreateStoreRequest): CreateStoreResponse =
+    public fun invoke(
+        @Valid @RequestBody
+        request: CreateStoreRequest,
+    ): CreateStoreResponse =
         delegate.invoke(request)
 }

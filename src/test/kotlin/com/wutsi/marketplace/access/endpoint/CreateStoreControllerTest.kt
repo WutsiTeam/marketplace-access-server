@@ -30,7 +30,7 @@ class CreateStoreControllerTest {
     fun create() {
         val request = CreateStoreRequest(
             accountId = 555,
-            currency = "USD"
+            currency = "USD",
         )
         val response = rest.postForEntity(url(), request, CreateStoreResponse::class.java)
 
@@ -50,7 +50,7 @@ class CreateStoreControllerTest {
     fun duplicate() {
         val request = CreateStoreRequest(
             accountId = 1,
-            currency = "USD"
+            currency = "USD",
         )
         val response = rest.postForEntity(url(), request, CreateStoreResponse::class.java)
 

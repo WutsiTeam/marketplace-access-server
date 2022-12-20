@@ -10,9 +10,12 @@ import javax.validation.Valid
 
 @RestController
 public class SearchReservationController(
-    public val `delegate`: SearchReservationDelegate
+    public val `delegate`: SearchReservationDelegate,
 ) {
     @PostMapping("/v1/reservations/search")
-    public fun invoke(@Valid @RequestBody request: SearchReservationRequest):
+    public fun invoke(
+        @Valid @RequestBody
+        request: SearchReservationRequest,
+    ):
         SearchReservationResponse = delegate.invoke(request)
 }

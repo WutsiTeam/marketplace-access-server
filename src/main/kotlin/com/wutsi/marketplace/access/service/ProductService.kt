@@ -38,7 +38,7 @@ class ProductService(
     private val storeService: StoreService,
     private val meetingProviderService: MeetingProviderService,
     private val fileService: FileService,
-    private val em: EntityManager
+    private val em: EntityManager,
 ) {
     fun create(request: CreateProductRequest): ProductEntity {
         val store = storeService.findById(request.storeId)
@@ -52,8 +52,8 @@ class ProductService(
                 store = store,
                 currency = store.currency,
                 quantity = request.quantity,
-                type = ProductType.valueOf(request.type)
-            )
+                type = ProductType.valueOf(request.type),
+            ),
         )
 
         if (!request.pictureUrl.isNullOrEmpty()) {
@@ -83,9 +83,9 @@ class ProductService(
                         parameter = Parameter(
                             name = "id",
                             value = id,
-                            type = ParameterType.PARAMETER_TYPE_PATH
-                        )
-                    )
+                            type = ParameterType.PARAMETER_TYPE_PATH,
+                        ),
+                    ),
                 )
             }
 
@@ -96,9 +96,9 @@ class ProductService(
                     parameter = Parameter(
                         name = "id",
                         value = id,
-                        type = ParameterType.PARAMETER_TYPE_PATH
-                    )
-                )
+                        type = ParameterType.PARAMETER_TYPE_PATH,
+                    ),
+                ),
             )
         }
 
@@ -132,7 +132,7 @@ class ProductService(
                 .map { fileService.toFileSummary(it) }
         } else {
             emptyList()
-        }
+        },
     )
 
     fun toProductSummary(product: ProductEntity, language: String?) = ProductSummary(
@@ -148,7 +148,7 @@ class ProductService(
         quantity = product.quantity,
         thumbnailUrl = product.thumbnail?.url,
         type = product.type.name,
-        event = toEvent(product)
+        event = toEvent(product),
     )
 
     private fun toEvent(product: ProductEntity): Event? {
@@ -165,7 +165,7 @@ class ProductService(
             meetingJoinUrl = meetingProviderService.toJoinUrl(product),
             meetingProvider = product.eventMeetingProvider?.let {
                 meetingProviderService.toMeetingProviderSummary(it)
-            }
+            },
         )
     }
 
@@ -205,9 +205,9 @@ class ProductService(
                     parameter = Parameter(
                         name = "name",
                         value = request.name,
-                        type = ParameterType.PARAMETER_TYPE_PAYLOAD
-                    )
-                )
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD,
+                    ),
+                ),
             )
         }
         dao.save(product)
@@ -235,9 +235,9 @@ class ProductService(
                     parameter = Parameter(
                         name = "status",
                         value = request.status,
-                        type = ParameterType.PARAMETER_TYPE_PAYLOAD
-                    )
-                )
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD,
+                    ),
+                ),
             )
         }
         product.status = status
@@ -249,8 +249,8 @@ class ProductService(
         val productMap = search(
             request = SearchProductRequest(
                 productIds = request.items.map { it.productId },
-                limit = request.items.size
-            )
+                limit = request.items.size,
+            ),
         ).associateBy { it.id }
 
         request.items.forEach {
@@ -287,9 +287,9 @@ class ProductService(
             code = ErrorURN.PRODUCT_NOT_AVAILABLE.urn,
             data = mapOf(
                 "product-id" to productId,
-                "quantity" to (quantity ?: "")
-            )
-        )
+                "quantity" to (quantity ?: ""),
+            ),
+        ),
     )
 
     fun search(request: SearchProductRequest): List<ProductEntity> {

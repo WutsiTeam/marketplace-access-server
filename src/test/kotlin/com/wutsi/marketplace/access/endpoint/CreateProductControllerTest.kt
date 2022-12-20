@@ -48,7 +48,7 @@ class CreateProductControllerTest {
             summary = "This is the summary",
             price = 15000L,
             quantity = 100,
-            type = ProductType.DIGITAL_DOWNLOAD.name
+            type = ProductType.DIGITAL_DOWNLOAD.name,
         )
         val response = rest.postForEntity(url(), request, CreateProductResponse::class.java)
 
@@ -92,7 +92,7 @@ class CreateProductControllerTest {
             categoryId = 1110L,
             title = "Ze product",
             summary = "This is the summary",
-            price = 15000L
+            price = 15000L,
         )
         val response = rest.postForEntity(url(), request, CreateProductResponse::class.java)
 

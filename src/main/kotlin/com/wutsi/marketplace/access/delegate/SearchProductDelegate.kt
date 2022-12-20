@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.SearchProductRequest
 import com.wutsi.marketplace.access.dto.SearchProductResponse
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest
 class SearchProductDelegate(
     private val service: ProductService,
     private val httpRequest: HttpServletRequest,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     fun invoke(request: SearchProductRequest): SearchProductResponse {
         logger.add("request_offset", request.offset)
@@ -28,7 +28,7 @@ class SearchProductDelegate(
         val products = service.search(request)
         logger.add("response_count", products.size)
         return SearchProductResponse(
-            products = products.map { service.toProductSummary(it, language) }
+            products = products.map { service.toProductSummary(it, language) },
         )
     }
 }

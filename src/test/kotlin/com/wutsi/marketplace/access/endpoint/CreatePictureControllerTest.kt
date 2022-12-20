@@ -33,7 +33,7 @@ class CreatePictureControllerTest {
     fun create() {
         val request = CreatePictureRequest(
             productId = 100,
-            url = "https://img.com/image-100.png"
+            url = "https://img.com/image-100.png",
         )
         val response = rest.postForEntity(url(), request, CreatePictureResponse::class.java)
 
@@ -54,7 +54,7 @@ class CreatePictureControllerTest {
     fun createAndResetThumbnail() {
         val request = CreatePictureRequest(
             productId = 200L,
-            url = "https://img.com/ImAge-200.png"
+            url = "https://img.com/ImAge-200.png",
         )
         val response = rest.postForEntity(url(), request, CreatePictureResponse::class.java)
 

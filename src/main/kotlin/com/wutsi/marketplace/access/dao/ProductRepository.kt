@@ -12,6 +12,6 @@ interface ProductRepository : CrudRepository<ProductEntity, Long> {
     fun countByStoreAndIsDeletedAndStatus(
         store: StoreEntity,
         isDeleted: Boolean,
-        status: ProductStatus
+        status: ProductStatus,
     ): Int
 }

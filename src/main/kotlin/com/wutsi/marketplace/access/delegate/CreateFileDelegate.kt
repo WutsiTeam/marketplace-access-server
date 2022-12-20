@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.CreateFileRequest
 import com.wutsi.marketplace.access.dto.CreateFileResponse
@@ -10,7 +10,7 @@ import javax.transaction.Transactional
 @Service
 public class CreateFileDelegate(
     private val logger: KVLogger,
-    private val service: FileService
+    private val service: FileService,
 ) {
     @Transactional
     public fun invoke(request: CreateFileRequest): CreateFileResponse {
@@ -23,7 +23,7 @@ public class CreateFileDelegate(
         logger.add("response_file_id", file.id)
 
         return CreateFileResponse(
-            fileId = file.id ?: -1
+            fileId = file.id ?: -1,
         )
     }
 }

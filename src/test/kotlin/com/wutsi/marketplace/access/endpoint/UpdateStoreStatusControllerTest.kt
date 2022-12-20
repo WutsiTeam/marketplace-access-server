@@ -36,7 +36,7 @@ class UpdateStoreStatusControllerTest {
     @Test
     fun suspend() {
         val request = UpdateStoreStatusRequest(
-            status = StoreStatus.INACTIVE.name
+            status = StoreStatus.INACTIVE.name,
         )
         val response = rest.postForEntity(url(100L), request, Any::class.java)
 
@@ -50,7 +50,7 @@ class UpdateStoreStatusControllerTest {
     @Test
     fun review() {
         val request = UpdateStoreStatusRequest(
-            status = StoreStatus.UNDER_REVIEW.name
+            status = StoreStatus.UNDER_REVIEW.name,
         )
         val response = rest.postForEntity(url(101L), request, Any::class.java)
 
@@ -64,7 +64,7 @@ class UpdateStoreStatusControllerTest {
     @Test
     fun activate() {
         val request = UpdateStoreStatusRequest(
-            status = StoreStatus.ACTIVE.name
+            status = StoreStatus.ACTIVE.name,
         )
         val response = rest.postForEntity(url(102L), request, Any::class.java)
 
@@ -81,7 +81,7 @@ class UpdateStoreStatusControllerTest {
 
         Thread.sleep(2000)
         val request = UpdateProductStatusRequest(
-            status = StoreStatus.INACTIVE.name
+            status = StoreStatus.INACTIVE.name,
         )
         val response = rest.postForEntity(url(300), request, Any::class.java)
 
@@ -94,7 +94,7 @@ class UpdateStoreStatusControllerTest {
     @Test
     fun badStatus() {
         val request = UpdateProductStatusRequest(
-            status = StoreStatus.UNKNOWN.name
+            status = StoreStatus.UNKNOWN.name,
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(100), request, Any::class.java)

@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.SaveCategoryRequest
 import com.wutsi.marketplace.access.service.CategoryService
@@ -11,7 +11,7 @@ import javax.transaction.Transactional
 class SaveCategoryDelegate(
     private val service: CategoryService,
     private val httpRequest: HttpServletRequest,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     @Transactional
     fun invoke(id: Long, request: SaveCategoryRequest) {

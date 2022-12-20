@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.CheckProductAvailabilityRequest
 import com.wutsi.marketplace.access.service.ProductService
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class CheckProductAvailabilityDelegate(
     private val service: ProductService,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     fun invoke(request: CheckProductAvailabilityRequest) {
         log(request)

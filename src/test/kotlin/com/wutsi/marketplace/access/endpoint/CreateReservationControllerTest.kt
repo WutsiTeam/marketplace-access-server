@@ -47,8 +47,8 @@ class CreateReservationControllerTest {
             items = listOf(
                 ReservationItem(productId = 100, quantity = 1),
                 ReservationItem(productId = 102, quantity = 1),
-                ReservationItem(productId = 103, quantity = 5)
-            )
+                ReservationItem(productId = 103, quantity = 5),
+            ),
         )
         val response = rest.postForEntity(url(), request, CreateReservationResponse::class.java)
 
@@ -80,8 +80,8 @@ class CreateReservationControllerTest {
         val request = CreateReservationRequest(
             orderId = "9999",
             items = listOf(
-                ReservationItem(productId = 101, quantity = 10000)
-            )
+                ReservationItem(productId = 101, quantity = 10000),
+            ),
         )
         val response = rest.postForEntity(url(), request, CreateReservationResponse::class.java)
 
@@ -107,8 +107,8 @@ class CreateReservationControllerTest {
             orderId = "14390493",
             items = listOf(
                 ReservationItem(productId = 200, quantity = 5),
-                ReservationItem(productId = 201, quantity = 5)
-            )
+                ReservationItem(productId = 201, quantity = 5),
+            ),
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(), request, Any::class.java)
@@ -129,8 +129,8 @@ class CreateReservationControllerTest {
         val request = CreateReservationRequest(
             orderId = "21093209",
             items = listOf(
-                ReservationItem(productId = 199, quantity = 1)
-            )
+                ReservationItem(productId = 199, quantity = 1),
+            ),
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(), request, Any::class.java)

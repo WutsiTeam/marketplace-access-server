@@ -11,13 +11,13 @@ import kotlin.Long
 
 @RestController
 public class UpdateStoreStatusController(
-    public val `delegate`: UpdateStoreStatusDelegate
+    public val `delegate`: UpdateStoreStatusDelegate,
 ) {
     @PostMapping("/v1/stores/{id}/status")
     public fun invoke(
         @PathVariable(name = "id") id: Long,
         @Valid @RequestBody
-        request: UpdateStoreStatusRequest
+        request: UpdateStoreStatusRequest,
     ) {
         delegate.invoke(id, request)
     }

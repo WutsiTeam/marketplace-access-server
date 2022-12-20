@@ -36,7 +36,7 @@ class SearchStoreControllerTest {
     fun storeIds() {
         // WHEN
         val request = SearchStoreRequest(
-            storeIds = listOf(100L, 199L)
+            storeIds = listOf(100L, 199L),
         )
         val response = rest.postForEntity(url(), request, SearchStoreResponse::class.java)
 

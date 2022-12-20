@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.CreatePictureRequest
 import com.wutsi.marketplace.access.dto.CreatePictureResponse
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 class CreatePictureDelegate(
     private val service: PictureService,
     private val productService: ProductService,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     fun invoke(request: CreatePictureRequest): CreatePictureResponse {
         logger.add("request_product_id", request.productId)
@@ -26,7 +26,7 @@ class CreatePictureDelegate(
             productService.setThumbnail(product, picture)
         }
         return CreatePictureResponse(
-            pictureId = picture.id ?: -1
+            pictureId = picture.id ?: -1,
         )
     }
 }

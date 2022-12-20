@@ -24,5 +24,5 @@ data class PictureEntity(
     val hash: String = "",
     var isDeleted: Boolean = false,
     val created: Date = Date(),
-    var deleted: Date? = null
+    var deleted: Date? = null,
 )

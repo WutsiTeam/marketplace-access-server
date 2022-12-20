@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.SearchStoreRequest
 import com.wutsi.marketplace.access.dto.SearchStoreResponse
@@ -10,7 +10,7 @@ class SearchStoreDelegate(private val service: StoreService) {
     fun invoke(request: SearchStoreRequest): SearchStoreResponse {
         val stores = service.search(request)
         return SearchStoreResponse(
-            stores = stores.map { service.toStoreSummary(it) }
+            stores = stores.map { service.toStoreSummary(it) },
         )
     }
 }

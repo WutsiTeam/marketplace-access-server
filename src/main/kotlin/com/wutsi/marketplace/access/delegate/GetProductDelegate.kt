@@ -1,4 +1,4 @@
-package com.wutsi.marketplace.access.`delegate`
+package com.wutsi.marketplace.access.delegate
 
 import com.wutsi.marketplace.access.dto.GetProductResponse
 import com.wutsi.marketplace.access.service.ProductService
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest
 class GetProductDelegate(
     private val service: ProductService,
     private val httpRequest: HttpServletRequest,
-    private val logger: KVLogger
+    private val logger: KVLogger,
 ) {
     fun invoke(id: Long): GetProductResponse {
         val language = httpRequest.getHeader("Accept-Language")
@@ -18,7 +18,7 @@ class GetProductDelegate(
 
         val product = service.findById(id)
         return GetProductResponse(
-            product = service.toProduct(product, language)
+            product = service.toProduct(product, language),
         )
     }
 }

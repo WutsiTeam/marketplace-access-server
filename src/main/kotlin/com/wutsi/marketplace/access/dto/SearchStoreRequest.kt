@@ -9,5 +9,5 @@ public data class SearchStoreRequest(
     public val storeIds: List<Long> = emptyList(),
     public val status: String? = null,
     public val limit: Int = 100,
-    public val offset: Int = 0
+    public val offset: Int = 0,
 )

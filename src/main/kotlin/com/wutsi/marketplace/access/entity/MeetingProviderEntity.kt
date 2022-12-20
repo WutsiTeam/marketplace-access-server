@@ -13,5 +13,5 @@ data class MeetingProviderEntity(
 
     val name: String = "",
     var logoUrl: String = "",
-    val type: MeetingProviderType = MeetingProviderType.ZOOM
+    val type: MeetingProviderType = MeetingProviderType.ZOOM,
 )

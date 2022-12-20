@@ -26,5 +26,5 @@ data class ReservationEntity(
 
     val created: Date = Date(),
     val updated: Date = Date(),
-    var cancelled: Date? = null
+    var cancelled: Date? = null,
 )

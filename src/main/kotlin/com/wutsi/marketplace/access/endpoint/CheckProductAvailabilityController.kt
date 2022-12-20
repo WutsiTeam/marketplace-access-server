@@ -9,10 +9,13 @@ import javax.validation.Valid
 
 @RestController
 public class CheckProductAvailabilityController(
-    public val `delegate`: CheckProductAvailabilityDelegate
+    public val `delegate`: CheckProductAvailabilityDelegate,
 ) {
     @PostMapping("/v1/products/availability")
-    public fun invoke(@Valid @RequestBody request: CheckProductAvailabilityRequest) {
+    public fun invoke(
+        @Valid @RequestBody
+        request: CheckProductAvailabilityRequest,
+    ) {
         delegate.invoke(request)
     }
 }

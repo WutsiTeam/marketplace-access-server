@@ -38,7 +38,7 @@ public class UpdateProductEventControllerTest {
             meetingPassword = "12345",
             starts = OffsetDateTime.of(2020, 1, 1, 8, 0, 0, 0, ZoneOffset.UTC),
             ends = OffsetDateTime.of(2020, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC),
-            online = true
+            online = true,
         )
         val response = rest.postForEntity(url(100), request, Any::class.java)
 

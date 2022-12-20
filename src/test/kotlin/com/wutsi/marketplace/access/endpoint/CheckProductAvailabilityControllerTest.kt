@@ -29,8 +29,8 @@ class CheckProductAvailabilityControllerTest {
             items = listOf(
                 ReservationItem(productId = 100, quantity = 1),
                 ReservationItem(productId = 102, quantity = 1),
-                ReservationItem(productId = 103, quantity = 5)
-            )
+                ReservationItem(productId = 103, quantity = 5),
+            ),
         )
         val response = rest.postForEntity(url(), request, Any::class.java)
 
@@ -41,8 +41,8 @@ class CheckProductAvailabilityControllerTest {
     fun noLimit() {
         val request = CheckProductAvailabilityRequest(
             items = listOf(
-                ReservationItem(productId = 101, quantity = 100)
-            )
+                ReservationItem(productId = 101, quantity = 100),
+            ),
         )
         val response = rest.postForEntity(url(), request, Any::class.java)
 
@@ -56,8 +56,8 @@ class CheckProductAvailabilityControllerTest {
                 ReservationItem(productId = 100, quantity = 1),
                 ReservationItem(productId = 101, quantity = 100),
                 ReservationItem(productId = 102, quantity = 100),
-                ReservationItem(productId = 103, quantity = 500)
-            )
+                ReservationItem(productId = 103, quantity = 500),
+            ),
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(), request, Any::class.java)
@@ -74,8 +74,8 @@ class CheckProductAvailabilityControllerTest {
     fun notFound() {
         val request = CheckProductAvailabilityRequest(
             items = listOf(
-                ReservationItem(productId = 199, quantity = 1)
-            )
+                ReservationItem(productId = 199, quantity = 1),
+            ),
         )
         val ex = assertThrows<HttpClientErrorException> {
             rest.postForEntity(url(), request, Any::class.java)
