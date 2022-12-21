@@ -61,7 +61,7 @@ public class FileService(
         return dao.save(
             FileEntity(
                 product = productDao.findById(request.productId).get(),
-                url = request.url.lowercase(),
+                url = request.url,
                 name = filename,
                 created = Date(),
                 contentType = request.contentType,

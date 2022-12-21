@@ -42,7 +42,7 @@ public class CreateFileControllerTest {
         val file = dao.findById(fileId)
         assertTrue(file.isPresent)
         assertEquals(productId, file.get().product.id)
-        assertEquals(request.url.lowercase(), file.get().url)
+        assertEquals(request.url, file.get().url)
         assertEquals("Image-100.png", file.get().name)
         assertEquals(request.contentType, file.get().contentType)
         assertEquals(request.contentSize, file.get().contentSize)
