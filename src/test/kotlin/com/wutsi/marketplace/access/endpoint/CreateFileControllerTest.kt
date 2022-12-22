@@ -33,6 +33,7 @@ public class CreateFileControllerTest {
             url = "https://img.com/2/4/Image-100.png",
             contentSize = 1024,
             contentType = "image/png",
+            name = "Image 100.png",
         )
         val response = rest.postForEntity(url(), request, CreateFileResponse::class.java)
 
@@ -43,7 +44,7 @@ public class CreateFileControllerTest {
         assertTrue(file.isPresent)
         assertEquals(productId, file.get().product.id)
         assertEquals(request.url, file.get().url)
-        assertEquals("Image-100.png", file.get().name)
+        assertEquals(request.name, file.get().name)
         assertEquals(request.contentType, file.get().contentType)
         assertEquals(request.contentSize, file.get().contentSize)
     }

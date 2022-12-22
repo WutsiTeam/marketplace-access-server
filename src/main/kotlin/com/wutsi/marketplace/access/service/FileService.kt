@@ -11,7 +11,6 @@ import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
-import java.net.URL
 import java.time.ZoneOffset
 import java.util.Date
 
@@ -49,26 +48,17 @@ public class FileService(
         return file
     }
 
-    fun add(request: CreateFileRequest): FileEntity {
-        val url = URL(request.url)
-        val i = url.file.lastIndexOf("/")
-        val filename = if (i > 0) {
-            url.file.substring(i + 1)
-        } else {
-            "no-name"
-        }
-
-        return dao.save(
+    fun add(request: CreateFileRequest): FileEntity =
+        dao.save(
             FileEntity(
                 product = productDao.findById(request.productId).get(),
                 url = request.url,
-                name = filename,
+                name = request.name,
                 created = Date(),
                 contentType = request.contentType,
                 contentSize = request.contentSize,
             ),
         )
-    }
 
     fun delete(id: Long) {
         val opt = dao.findById(id)
