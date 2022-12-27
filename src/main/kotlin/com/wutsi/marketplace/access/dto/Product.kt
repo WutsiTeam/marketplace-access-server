@@ -26,4 +26,7 @@ public data class Product(
     public val type: String = "",
     public val event: Event? = null,
     public val files: List<FileSummary> = emptyList(),
+    public val totalOrders: Long = 0,
+    public val totalUnits: Long = 0,
+    public val totalSales: Long = 0,
 )

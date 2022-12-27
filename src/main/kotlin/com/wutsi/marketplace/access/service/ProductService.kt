@@ -24,9 +24,18 @@ import com.wutsi.platform.core.error.ParameterType
 import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
 import com.wutsi.platform.core.error.exception.NotFoundException
+import com.wutsi.platform.core.storage.StorageService
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
+import org.apache.commons.csv.CSVRecord
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.io.File
+import java.io.FileOutputStream
+import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.Date
+import java.util.UUID
 import javax.persistence.EntityManager
 import javax.persistence.Query
 
@@ -39,7 +48,12 @@ class ProductService(
     private val meetingProviderService: MeetingProviderService,
     private val fileService: FileService,
     private val em: EntityManager,
+    private val storage: StorageService,
 ) {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(ProductService::class.java)
+    }
+
     fun create(request: CreateProductRequest): ProductEntity {
         val store = storeService.findById(request.storeId)
         val product = dao.save(
@@ -133,6 +147,9 @@ class ProductService(
         } else {
             emptyList()
         },
+        totalSales = product.totalSales,
+        totalOrders = product.totalOrders,
+        totalUnits = product.totalUnits,
     )
 
     fun toProductSummary(product: ProductEntity, language: String?) = ProductSummary(
@@ -282,16 +299,6 @@ class ProductService(
         }
     }
 
-    private fun availabilityException(productId: Long, quantity: Int? = null) = ConflictException(
-        error = Error(
-            code = ErrorURN.PRODUCT_NOT_AVAILABLE.urn,
-            data = mapOf(
-                "product-id" to productId,
-                "quantity" to (quantity ?: ""),
-            ),
-        ),
-    )
-
     fun search(request: SearchProductRequest): List<ProductEntity> {
         val sql = sql(request)
         val query = em.createQuery(sql)
@@ -302,11 +309,61 @@ class ProductService(
             .resultList as List<ProductEntity>
     }
 
+    fun importSalesKpi(date: LocalDate): Long {
+        val file = File.createTempFile(UUID.randomUUID().toString(), "csv")
+        try {
+            // Download KPIs
+            val path = "kpi/${date.year}/${date.monthValue}/${date.dayOfMonth}/sales.csv"
+            val out = FileOutputStream(file)
+            out.use {
+                storage.get(storage.toURL(path), out)
+            }
+
+            // Import
+            return importSalesKpi(file)
+        } finally {
+            file.delete()
+        }
+    }
+
+    private fun importSalesKpi(file: File): Long {
+        var result = 0L
+        val parser = CSVParser.parse(
+            file.toPath(),
+            Charsets.UTF_8,
+            CSVFormat.Builder.create()
+                .setSkipHeaderRecord(true)
+                .setDelimiter(",")
+                .setHeader("business_id", "product_id", "total_orders", "total_units", "total_sale")
+                .build(),
+        )
+        parser.use {
+            for (record in parser) {
+                try {
+                    updateSales(record)
+                    result++
+                } catch (ex: Exception) {
+                    LOGGER.warn("Unable to line $record", ex)
+                }
+            }
+            return result
+        }
+    }
+
+    private fun updateSales(record: CSVRecord) {
+        val productId = record.get(1).toLong()
+        val product = findById(productId)
+        product.totalOrders = record.get(2).toLong()
+        product.totalUnits = record.get(3).toLong()
+        product.totalSales = record.get(4).toLong()
+        dao.save(product)
+    }
+
     private fun sql(request: SearchProductRequest): String {
         val select = select()
         val where = where(request)
         val orderBy = orderBy(request)
-        return if (where.isNullOrEmpty()) {
+        return if (where.isEmpty()) {
             select
         } else {
             "$select WHERE $where ORDER BY $orderBy"
@@ -367,6 +424,16 @@ class ProductService(
             query.setParameter("status", ProductStatus.valueOf(request.status.uppercase()))
         }
     }
+
+    private fun availabilityException(productId: Long, quantity: Int? = null) = ConflictException(
+        error = Error(
+            code = ErrorURN.PRODUCT_NOT_AVAILABLE.urn,
+            data = mapOf(
+                "product-id" to productId,
+                "quantity" to (quantity ?: ""),
+            ),
+        ),
+    )
 
     private fun toString(value: String?): String? =
         if (value.isNullOrEmpty()) {

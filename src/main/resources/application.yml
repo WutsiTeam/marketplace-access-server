@@ -39,7 +39,7 @@ spring:
     clean-disabled: false
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: none
       dialect: org.hibernate.dialect.MySQL5Dialect
@@ -62,12 +62,19 @@ wutsi:
   client-id: marketplace-access
   application:
     name: marketplace-access
+    jobs:
+      import-sales-kpi:
+        cron: "0 15 * * * *"  # Runs every hour at *:15
   platform:
     cache:
       name: ${wutsi.application.name}
       type: local
     security:
       type: none
+    storage:
+      type: local
+      local:
+        directory: "${user:home}/wutsi/storage}"
     tracing:
       client-id: ${wutsi.application.name}
       device-id-provider:

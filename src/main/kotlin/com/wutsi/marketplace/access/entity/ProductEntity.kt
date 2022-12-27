@@ -68,4 +68,8 @@ data class ProductEntity(
 
     @OneToMany(mappedBy = "product")
     val files: List<FileEntity> = emptyList(),
+
+    var totalSales: Long = 0,
+    var totalOrders: Long = 0,
+    var totalUnits: Long = 0,
 )

@@ -83,6 +83,9 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals("XAF", product.currency)
         assertEquals(200000L, product.comparablePrice)
         assertEquals(ProductType.EVENT.name, product.type)
+        assertEquals(100, product.totalOrders)
+        assertEquals(150, product.totalUnits)
+        assertEquals(1500000, product.totalSales)
 
         assertEquals("1234567890", product.event?.meetingId)
         assertEquals("123456", product.event?.meetingPassword)
