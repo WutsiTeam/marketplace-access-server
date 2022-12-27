@@ -280,7 +280,7 @@ class ProductService(
         }
     }
 
-    fun updateQuantities(reservation: ReservationEntity) {
+    fun decrementStock(reservation: ReservationEntity) {
         val products = mutableListOf<ProductEntity>()
         reservation.items.forEach {
             val product = it.product
@@ -291,6 +291,21 @@ class ProductService(
                 } else {
                     products.add(product)
                 }
+            }
+        }
+
+        if (products.isNotEmpty()) {
+            dao.saveAll(products)
+        }
+    }
+
+    fun incrementStock(reservation: ReservationEntity) {
+        val products = mutableListOf<ProductEntity>()
+        reservation.items.forEach {
+            val product = it.product
+            if (product.quantity != null) {
+                product.quantity = product.quantity!! + it.quantity
+                products.add(product)
             }
         }
 

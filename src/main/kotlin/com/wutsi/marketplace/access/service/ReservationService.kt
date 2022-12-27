@@ -16,6 +16,7 @@ import com.wutsi.platform.core.error.ParameterType
 import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.ConflictException
 import com.wutsi.platform.core.error.exception.NotFoundException
+import com.wutsi.platform.core.logging.KVLogger
 import org.springframework.stereotype.Service
 import java.util.Date
 import javax.persistence.EntityManager
@@ -27,6 +28,7 @@ class ReservationService(
     private val itemDao: ReservationItemRepository,
     private val productService: ProductService,
     private val em: EntityManager,
+    private val logger: KVLogger,
 ) {
     fun create(request: CreateReservationRequest): ReservationEntity {
         // Reservation
@@ -73,7 +75,10 @@ class ReservationService(
 
         reservation.status = status
         when (status) {
-            ReservationStatus.CANCELLED -> reservation.cancelled = Date()
+            ReservationStatus.CANCELLED -> {
+                reservation.cancelled = Date()
+                productService.incrementStock(reservation)
+            }
             ReservationStatus.ACTIVE -> {}
             else -> throw BadRequestException(
                 error = Error(

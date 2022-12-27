@@ -2,6 +2,7 @@ package com.wutsi.marketplace.access.endpoint
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.enums.ReservationStatus
+import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dao.ReservationRepository
 import com.wutsi.marketplace.access.dto.UpdateReservationStatusRequest
 import com.wutsi.marketplace.access.error.ErrorURN
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate
 import java.util.Date
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,6 +33,9 @@ class UpdateReservationStatusControllerTest {
     @Autowired
     private lateinit var dao: ReservationRepository
 
+    @Autowired
+    private lateinit var productDao: ProductRepository
+
     @Test
     fun cancel() {
         val request = UpdateReservationStatusRequest(
@@ -43,6 +48,10 @@ class UpdateReservationStatusControllerTest {
         val store = dao.findById(100).get()
         assertEquals(ReservationStatus.CANCELLED, store.status)
         assertNotNull(store.cancelled)
+
+        assertEquals(11, productDao.findById(100L).get().quantity)
+        assertNull(productDao.findById(101L).get().quantity)
+        assertEquals(4, productDao.findById(102L).get().quantity)
     }
 
     @Test

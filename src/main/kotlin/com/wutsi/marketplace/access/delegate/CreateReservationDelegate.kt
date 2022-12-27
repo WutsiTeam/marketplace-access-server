@@ -19,7 +19,7 @@ class CreateReservationDelegate(
         log(request)
 
         val reservation = service.create(request)
-        productService.updateQuantities(reservation)
+        productService.decrementStock(reservation)
 
         logger.add("reservation_id", reservation.id)
         return CreateReservationResponse(
