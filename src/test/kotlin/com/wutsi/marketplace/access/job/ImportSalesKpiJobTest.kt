@@ -27,11 +27,11 @@ internal class ImportSalesKpiJobTest : AbstractLanguageAwareControllerTest() {
     fun run() {
         // GIVEN
         val csv = """
-            business_id,product_id,total_orders,total_units,total_value
-            1,100,3,6,9000
-            1,101,1,1,500
-            2,200,1,1,1500
-            9,9999,1,1,1500
+            business_id,product_id,total_orders,total_units,total_value,total_views
+            1,100,3,6,9000,10
+            1,101,1,1,500,11
+            2,200,1,1,1500,20
+            9,9999,1,1,1500,999
         """.trimIndent()
         val date = LocalDate.now()
         val path = "kpi/${date.year}/${date.monthValue}/${date.dayOfMonth}/sales.csv"
@@ -41,18 +41,19 @@ internal class ImportSalesKpiJobTest : AbstractLanguageAwareControllerTest() {
         job.run()
 
         // THEN
-        assertKpi(100, 3, 6, 9000)
-        assertKpi(101, 1, 1, 500)
-        assertKpi(102, 0, 0, 0)
-        assertKpi(103, 0, 0, 0)
-        assertKpi(199, 0, 0, 0)
-        assertKpi(200, 1, 1, 1500)
+        assertKpi(100, 3, 6, 9000, 10)
+        assertKpi(101, 1, 1, 500, 11)
+        assertKpi(102, 0, 0, 0, 0)
+        assertKpi(103, 0, 0, 0, 0)
+        assertKpi(199, 0, 0, 0, 0)
+        assertKpi(200, 1, 1, 1500, 20)
     }
 
-    private fun assertKpi(id: Long, totalOrders: Long, totalUnits: Long, totalSales: Long) {
+    private fun assertKpi(id: Long, totalOrders: Long, totalUnits: Long, totalSales: Long, totalViews: Long) {
         val product = dao.findById(id).get()
         assertEquals(totalOrders, product.totalOrders)
         assertEquals(totalUnits, product.totalUnits)
         assertEquals(totalSales, product.totalSales)
+        assertEquals(totalViews, product.totalViews)
     }
 }

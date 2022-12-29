@@ -29,4 +29,5 @@ public data class Product(
     public val totalOrders: Long = 0,
     public val totalUnits: Long = 0,
     public val totalSales: Long = 0,
+    public val totalViews: Long = 0,
 )

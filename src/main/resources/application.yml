@@ -65,6 +65,8 @@ wutsi:
     jobs:
       import-sales-kpi:
         cron: "0 15 * * * *"  # Runs every hour at *:15
+      import-views-kpi:
+        cron: "0 15 * * * *"  # Runs every hour at *:15
   platform:
     cache:
       name: ${wutsi.application.name}

@@ -86,6 +86,7 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(100, product.totalOrders)
         assertEquals(150, product.totalUnits)
         assertEquals(1500000, product.totalSales)
+        assertEquals(2000000, product.totalViews)
 
         assertEquals("1234567890", product.event?.meetingId)
         assertEquals("123456", product.event?.meetingPassword)

@@ -150,6 +150,7 @@ class ProductService(
         totalSales = product.totalSales,
         totalOrders = product.totalOrders,
         totalUnits = product.totalUnits,
+        totalViews = product.totalViews,
     )
 
     fun toProductSummary(product: ProductEntity, language: String?) = ProductSummary(
@@ -325,20 +326,22 @@ class ProductService(
     }
 
     fun importSalesKpi(date: LocalDate): Long {
-        val file = File.createTempFile(UUID.randomUUID().toString(), "csv")
+        val path = "kpi/${date.year}/${date.monthValue}/${date.dayOfMonth}/sales.csv"
+        val file = downloadFromStorage(path)
         try {
-            // Download KPIs
-            val path = "kpi/${date.year}/${date.monthValue}/${date.dayOfMonth}/sales.csv"
-            val out = FileOutputStream(file)
-            out.use {
-                storage.get(storage.toURL(path), out)
-            }
-
-            // Import
             return importSalesKpi(file)
         } finally {
             file.delete()
         }
+    }
+
+    private fun downloadFromStorage(path: String): File {
+        val file = File.createTempFile(UUID.randomUUID().toString(), "csv")
+        val out = FileOutputStream(file)
+        out.use {
+            storage.get(storage.toURL(path), out)
+        }
+        return file
     }
 
     private fun importSalesKpi(file: File): Long {
@@ -349,7 +352,7 @@ class ProductService(
             CSVFormat.Builder.create()
                 .setSkipHeaderRecord(true)
                 .setDelimiter(",")
-                .setHeader("business_id", "product_id", "total_orders", "total_units", "total_sale")
+                .setHeader("business_id", "product_id", "total_orders", "total_units", "total_sale", "total_views")
                 .build(),
         )
         parser.use {
@@ -371,6 +374,7 @@ class ProductService(
         product.totalOrders = record.get(2).toLong()
         product.totalUnits = record.get(3).toLong()
         product.totalSales = record.get(4).toLong()
+        product.totalViews = record.get(5).toLong()
         dao.save(product)
     }
 

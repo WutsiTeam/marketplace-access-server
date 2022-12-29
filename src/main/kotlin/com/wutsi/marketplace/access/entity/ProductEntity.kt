@@ -72,4 +72,5 @@ data class ProductEntity(
     var totalSales: Long = 0,
     var totalOrders: Long = 0,
     var totalUnits: Long = 0,
+    var totalViews: Long = 0,
 )

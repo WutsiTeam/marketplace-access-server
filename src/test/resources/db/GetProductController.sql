@@ -28,7 +28,8 @@ UPDATE T_PRODUCT
         event_online=true,
         total_orders=100,
         total_sales=1500000,
-        total_units=150
+        total_units=150,
+        total_views=2000000
     WHERE id=200;
 
 INSERT INTO T_FILE(id, product_fk, name, url, content_type, content_size, is_deleted, deleted)
