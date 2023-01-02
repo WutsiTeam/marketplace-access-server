@@ -35,7 +35,7 @@ class UpdateDiscountControllerTest {
         rate = 50,
         starts = LocalDate.now().plusDays(10),
         ends = LocalDate.now().plusDays(30),
-        allProducts = false
+        allProducts = false,
     )
 
     @Test

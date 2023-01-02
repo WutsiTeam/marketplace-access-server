@@ -34,7 +34,7 @@ data class DiscountEntity(
     @JoinTable(
         name = "T_DISCOUNT_PRODUCT",
         joinColumns = arrayOf(JoinColumn(name = "discount_fk")),
-        inverseJoinColumns = arrayOf(JoinColumn(name = "product_fk"))
+        inverseJoinColumns = arrayOf(JoinColumn(name = "product_fk")),
     )
     val products: List<ProductEntity> = emptyList(),
 

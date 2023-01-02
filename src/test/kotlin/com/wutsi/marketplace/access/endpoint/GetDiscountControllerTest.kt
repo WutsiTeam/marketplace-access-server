@@ -64,5 +64,4 @@ class GetDiscountControllerTest {
     }
 
     private fun url(id: Long) = "http://localhost:$port/v1/discounts/$id"
-
 }
