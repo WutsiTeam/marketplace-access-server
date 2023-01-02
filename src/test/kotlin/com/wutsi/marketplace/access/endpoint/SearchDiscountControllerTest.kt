@@ -19,11 +19,10 @@ class SearchDiscountControllerTest {
 
     private val rest = RestTemplate()
 
-
     @Test
     public fun searchByStore() {
         val request = SearchDiscountRequest(
-            storeId = 2L
+            storeId = 2L,
         )
         val response = rest.postForEntity(url(), request, SearchDiscountResponse::class.java)
 
@@ -37,7 +36,7 @@ class SearchDiscountControllerTest {
     public fun searchByDate() {
         val request = SearchDiscountRequest(
             storeId = 1L,
-            date = LocalDate.of(2020, 1, 6)
+            date = LocalDate.of(2020, 1, 6),
         )
         val response = rest.postForEntity(url(), request, SearchDiscountResponse::class.java)
 
@@ -51,7 +50,7 @@ class SearchDiscountControllerTest {
     public fun searchByProduct() {
         val request = SearchDiscountRequest(
             storeId = 1L,
-            productIds = listOf(100)
+            productIds = listOf(100),
         )
         val response = rest.postForEntity(url(), request, SearchDiscountResponse::class.java)
 

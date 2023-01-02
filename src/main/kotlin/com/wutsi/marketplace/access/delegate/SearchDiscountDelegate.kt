@@ -22,7 +22,7 @@ public class SearchDiscountDelegate(
         logger.add("response_count", discounts.size)
 
         return SearchDiscountResponse(
-            discounts = discounts.map { service.toDiscountSummary(it) }
+            discounts = discounts.map { service.toDiscountSummary(it) },
         )
     }
 }
