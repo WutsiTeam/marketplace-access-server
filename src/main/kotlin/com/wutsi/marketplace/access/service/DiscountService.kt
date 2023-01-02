@@ -24,6 +24,7 @@ import javax.persistence.Query
 class DiscountService(
     private val dao: DiscountRepository,
     private val storeService: StoreService,
+    private val productService: ProductService,
     private val em: EntityManager,
 ) {
     fun create(request: CreateDiscountRequest): DiscountEntity =
@@ -114,6 +115,23 @@ class DiscountService(
         rate = discount.rate,
         created = OffsetDateTime.ofInstant(discount.created.toInstant(), ZoneId.of("UTC")),
     )
+
+    fun addProduct(discountId: Long, productId: Long) {
+        val discount = findById(discountId)
+        val product = productService.findById(productId)
+        if (!discount.products.contains(product)) {
+            discount.products.add(product)
+            dao.save(discount)
+        }
+    }
+
+    fun removeProduct(discountId: Long, productId: Long) {
+        val discount = findById(discountId)
+        val product = productService.findById(productId)
+        if (discount.products.remove(product)) {
+            dao.save(discount)
+        }
+    }
 
     fun search(request: SearchDiscountRequest): List<DiscountEntity> {
         val sql = sql(request)

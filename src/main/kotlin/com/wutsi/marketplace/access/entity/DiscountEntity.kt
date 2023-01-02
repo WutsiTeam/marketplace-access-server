@@ -36,7 +36,7 @@ data class DiscountEntity(
         joinColumns = arrayOf(JoinColumn(name = "discount_fk")),
         inverseJoinColumns = arrayOf(JoinColumn(name = "product_fk")),
     )
-    val products: List<ProductEntity> = emptyList(),
+    val products: MutableList<ProductEntity> = mutableListOf(),
 
     val created: Date = Date(),
     var updated: Date = Date(),
