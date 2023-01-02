@@ -8,6 +8,7 @@ import com.wutsi.marketplace.access.entity.DiscountEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.ZoneId
 
 @Service
 class PriceService(
@@ -18,17 +19,22 @@ class PriceService(
         // Search products
         val products = productService.search(
             request = SearchProductRequest(
+                storeId = request.storeId,
                 productIds = request.productIds,
                 limit = request.productIds.size,
             ),
         )
+        if (products.isEmpty()) {
+            return emptyList()
+        }
 
         // Search discounts
         val discounts = discountService.search(
             request = SearchDiscountRequest(
+                storeId = request.storeId,
                 productIds = request.productIds,
                 date = LocalDate.now(),
-                limit = request.productIds.size,
+                limit = 100,
             ),
         )
 
@@ -81,6 +87,7 @@ class PriceService(
             savingsPercentage = (savings * 100L / price).toInt(),
             referencePrice = price,
             price = price - savings,
+            expires = LocalDate.ofInstant(discount.ends.toInstant(), ZoneId.of("UTC")),
         )
     }
 }
