@@ -110,17 +110,6 @@ class UpdateProductAttributeControllerTest {
     }
 
     @Test
-    fun comparablePrice() {
-        val request = UpdateProductAttributeRequest("comparable-price", "55555")
-        val response = rest.postForEntity(url(), request, Any::class.java)
-
-        assertEquals(200, response.statusCodeValue)
-
-        val product = dao.findById(PRODUCT_ID).get()
-        assertEquals(request.value?.toLong(), product.comparablePrice)
-    }
-
-    @Test
     fun thumbnailId() {
         val request = UpdateProductAttributeRequest("thumbnail-id", "102")
         val response = rest.postForEntity(url(), request, Any::class.java)

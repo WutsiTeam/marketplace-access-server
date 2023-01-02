@@ -10,12 +10,12 @@ INSERT INTO T_CATEGORY(id, parent_fk, title, title_french)
         (1110, 1100, 'Computers', 'Ordinateurs')
     ;
 
-INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, comparable_price, currency, quantity, published, deleted, type)
+INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, currency, quantity, published, deleted, type)
     VALUES
-        (100, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null, 1),
-        (200, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null, 2),
-        (300, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null, 3),
-        (199, 1, 1110, 1, true, 'TV', 'Sample TV', 'Long description', 50000, null, 'XAF', null, null, now(), 1)
+        (100, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null, 1),
+        (200, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null, 2),
+        (300, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null, 3),
+        (199, 1, 1110, 1, true, 'TV', 'Sample TV', 'Long description', 50000, 'XAF', null, null, now(), 1)
     ;
 
 UPDATE T_PRODUCT

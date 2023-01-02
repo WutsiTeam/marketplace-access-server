@@ -124,7 +124,6 @@ class ProductService(
         title = product.title ?: "",
         summary = product.summary,
         price = product.price,
-        comparablePrice = product.comparablePrice,
         currency = product.currency,
         status = product.status.name,
         store = storeService.toStoreSummary(product.store),
@@ -158,7 +157,6 @@ class ProductService(
         title = product.title ?: "",
         summary = product.summary,
         price = product.price,
-        comparablePrice = product.comparablePrice,
         currency = product.currency,
         status = product.status.name,
         storeId = product.store.id ?: -1,
@@ -210,7 +208,6 @@ class ProductService(
             "summary" -> product.summary = toString(request.value)
             "description" -> product.description = toString(request.value)
             "price" -> product.price = toLong(request.value)
-            "comparable-price" -> product.comparablePrice = toLong(request.value)
             "thumbnail-id" -> product.thumbnail = toLong(request.value)?.let { pictureService.findById(it) }
             "category-id" -> product.category = toLong(request.value)?.let { categoryService.findById(it) }
             "quantity" -> product.quantity = toInt(request.value) ?: 0

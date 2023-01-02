@@ -10,7 +10,7 @@ INSERT INTO T_CATEGORY(id, parent_fk, title, title_french)
         (1110, 1100, 'Computers', 'Ordinateurs')
     ;
 
-INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, comparable_price, currency, quantity, published, deleted)
+INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, currency, quantity, published, deleted)
     VALUES
-        (100, 1, null, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null)
+        (100, 1, null, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null)
     ;

@@ -1,3 +1,5 @@
+ALTER TABLE T_PRODUCT DROP COLUMN comparable_price;
+
 CREATE TABLE T_DISCOUNT(
     id              SERIAL NOT NULL,
 

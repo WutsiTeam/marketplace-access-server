@@ -43,7 +43,6 @@ data class ProductEntity(
     var summary: String? = null,
     var description: String? = null,
     var price: Long? = null,
-    var comparablePrice: Long? = null,
     val currency: String = "",
     var quantity: Int? = null,
 

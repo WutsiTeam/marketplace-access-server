@@ -11,11 +11,11 @@ INSERT INTO T_CATEGORY(id, parent_fk, title, title_french)
         (1110, 1100, 'Computers', 'Ordinateurs')
     ;
 
-INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, comparable_price, currency, quantity, published, deleted)
+INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, currency, quantity, published, deleted)
     VALUES
-        (100, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 200000, 'XAF', 10, now(), null),
-        (200, 1, 1110, 1, false, 'TV', 'Sample TV', 'Long description', 50000, null, 'XAF', null, null, null),
-        (300, 1, 1110, 1, false, 'TV', 'Sample TV', 'Long description', 50000, null, 'XAF', null, null, null)
+        (100, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null),
+        (200, 1, 1110, 1, false, 'TV', 'Sample TV', 'Long description', 50000, 'XAF', null, null, null),
+        (300, 1, 1110, 1, false, 'TV', 'Sample TV', 'Long description', 50000, 'XAF', null, null, null)
     ;
 
 INSERT INTO T_PICTURE(id, product_fk, url, hash, is_deleted, deleted)
