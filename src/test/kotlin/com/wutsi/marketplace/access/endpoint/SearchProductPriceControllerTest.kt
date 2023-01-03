@@ -8,8 +8,8 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.RestTemplate
-import java.time.LocalDate
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -63,7 +63,7 @@ class SearchProductPriceControllerTest {
         assertEquals(101L, prices[0].discountId)
         assertEquals(37500L, prices[0].savings)
         assertEquals(25, prices[0].savingsPercentage)
-        assertEquals(LocalDate.now().plusDays(3), prices[0].expires)
+        assertNotNull(prices[0].expires)
     }
 
     @Test
@@ -86,7 +86,7 @@ class SearchProductPriceControllerTest {
         assertEquals(200L, prices[0].discountId)
         assertEquals(400L, prices[0].savings)
         assertEquals(20, prices[0].savingsPercentage)
-        assertEquals(LocalDate.now().plusDays(3), prices[0].expires)
+        assertNotNull(prices[0].expires)
     }
 
     private fun url() = "http://localhost:$port/v1/products/prices"

@@ -12,7 +12,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
-import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
@@ -35,8 +36,8 @@ class GetDiscountControllerTest {
         assertEquals(10, discount.rate)
         assertFalse(discount.allProducts)
         assertEquals(listOf(100L, 101L, 103L), discount.productIds)
-        assertEquals(LocalDate.of(2020, 1, 1), discount.starts)
-        assertEquals(LocalDate.of(2020, 1, 30), discount.ends)
+        assertEquals(OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC), discount.starts)
+        assertEquals(OffsetDateTime.of(2020, 1, 30, 0, 0, 0, 0, ZoneOffset.UTC), discount.ends)
     }
 
     @Test

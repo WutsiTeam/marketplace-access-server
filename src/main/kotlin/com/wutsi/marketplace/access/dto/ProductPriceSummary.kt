@@ -1,7 +1,9 @@
 package com.wutsi.marketplace.access.dto
 
-import org.springframework.format.annotation.DateTimeFormat
-import java.time.LocalDate
+import org.springframework.format.`annotation`.DateTimeFormat
+import java.time.OffsetDateTime
+import kotlin.Int
+import kotlin.Long
 
 public data class ProductPriceSummary(
     public val productId: Long = 0,
@@ -11,5 +13,5 @@ public data class ProductPriceSummary(
     public val savings: Long = 0,
     public val savingsPercentage: Int = 0,
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    public val expires: LocalDate? = null,
+    public val expires: OffsetDateTime? = null,
 )

@@ -16,9 +16,9 @@ import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.util.Date
 import javax.persistence.EntityManager
 import javax.persistence.Query
@@ -34,8 +34,8 @@ class DiscountService(
         dao.save(
             DiscountEntity(
                 store = storeService.findById(request.storeId),
-                starts = request.starts?.let { Date(it.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()) },
-                ends = request.ends?.let { Date(it.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()) },
+                starts = request.starts?.let { Date(it.toInstant().toEpochMilli()) },
+                ends = request.ends?.let { Date(it.toInstant().toEpochMilli()) },
                 name = request.name,
                 rate = request.rate,
                 type = DiscountType.valueOf(request.type.uppercase()),
@@ -113,8 +113,8 @@ class DiscountService(
         id = discount.id,
         name = discount.name,
         storeId = discount.store.id ?: -1,
-        starts = discount.starts?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
-        ends = discount.ends?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
+        starts = discount.starts?.toInstant()?.atOffset(ZoneOffset.UTC),
+        ends = discount.ends?.toInstant()?.atOffset(ZoneOffset.UTC),
         rate = discount.rate,
         allProducts = discount.allProducts,
         type = discount.type.name,
@@ -127,8 +127,8 @@ class DiscountService(
         id = discount.id,
         name = discount.name,
         storeId = discount.store.id ?: -1,
-        starts = discount.starts?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
-        ends = discount.starts?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
+        starts = discount.starts?.toInstant()?.atOffset(ZoneOffset.UTC),
+        ends = discount.ends?.toInstant()?.atOffset(ZoneOffset.UTC),
         rate = discount.rate,
         created = OffsetDateTime.ofInstant(discount.created.toInstant(), ZoneId.of("UTC")),
         type = discount.type.name,
@@ -218,20 +218,6 @@ class DiscountService(
         }
     }
 
-    private fun toString(value: String?): String? =
-        if (value.isNullOrEmpty()) {
-            null
-        } else {
-            value
-        }
-
-    private fun toLong(value: String?): Long? =
-        if (value.isNullOrEmpty()) {
-            null
-        } else {
-            value.toLong()
-        }
-
     private fun toInt(value: String?): Int? =
         if (value.isNullOrEmpty()) {
             null
@@ -243,6 +229,7 @@ class DiscountService(
         if (value.isNullOrEmpty()) {
             return null
         }
-        return SimpleDateFormat("yyyy-MM-dd").parse(value)
+        val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:00")
+        return fmt.parse(value)
     }
 }

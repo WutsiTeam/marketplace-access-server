@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.RestTemplate
-import java.time.LocalDate
+import java.time.OffsetDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -31,8 +31,8 @@ class CreateDiscountControllerTest {
         // GIVEN
         val request = CreateDiscountRequest(
             name = "FIN25",
-            starts = LocalDate.now(),
-            ends = LocalDate.now().plusDays(15),
+            starts = OffsetDateTime.now(),
+            ends = OffsetDateTime.now().plusDays(15),
             rate = 15,
             allProducts = true,
             storeId = 1L,
@@ -44,8 +44,8 @@ class CreateDiscountControllerTest {
         val discountId = response.body!!.discountId
         val discount = dao.findById(discountId).get()
         assertEquals(request.name, discount.name)
-        assertEquals(request.starts!!.toEpochDay(), discount.starts!!.time / 86400000)
-        assertEquals(request.ends!!.toEpochDay(), discount.ends!!.time / 86400000)
+        assertEquals(request.starts!!.toInstant().toEpochMilli() / 1000, discount.starts!!.time / 1000)
+        assertEquals(request.ends!!.toInstant().toEpochMilli() / 1000, discount.ends!!.time / 1000)
         assertEquals(request.allProducts, discount.allProducts)
         assertEquals(request.rate, discount.rate)
         assertEquals(DiscountType.SALES, discount.type)

@@ -9,6 +9,7 @@ import com.wutsi.marketplace.access.entity.DiscountEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.OffsetDateTime
 import java.time.ZoneId
 
 @Service
@@ -89,7 +90,7 @@ class PriceService(
             savingsPercentage = (savings * 100L / price).toInt(),
             referencePrice = price,
             price = price - savings,
-            expires = discount.ends?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
+            expires = discount.ends?.let { OffsetDateTime.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
         )
     }
 }
