@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate
 import java.text.SimpleDateFormat
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/UpdateDiscountAttributeController.sql"])
@@ -141,6 +142,20 @@ public class UpdateDiscountAttributeControllerTest {
 
         val discount = dao.findById(discountId).get()
         assertNull(discount.ends)
+    }
+
+    @Test
+    fun allProducts() {
+        val request = UpdateProductAttributeRequest(
+            name = "all-products",
+            value = "true",
+        )
+        val response = rest.postForEntity(url(), request, Any::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val discount = dao.findById(discountId).get()
+        assertTrue(discount.allProducts)
     }
 
     @Test

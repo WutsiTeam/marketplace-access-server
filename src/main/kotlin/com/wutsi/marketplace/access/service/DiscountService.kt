@@ -52,6 +52,7 @@ class DiscountService(
             "ends" -> discount.ends = toDate(request.value)
             "rate" -> discount.rate = toInt(request.value) ?: 0
             "name" -> discount.name = request.value ?: ""
+            "all-products" -> discount.allProducts = toBoolean(request.value)
             else -> throw BadRequestException(
                 error = Error(
                     code = ErrorURN.ATTRIBUTE_NOT_VALID.urn,
@@ -232,4 +233,11 @@ class DiscountService(
         val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:00")
         return fmt.parse(value)
     }
+
+    private fun toBoolean(value: String?): Boolean =
+        if (value.isNullOrEmpty()) {
+            false
+        } else {
+            value.toBoolean()
+        }
 }
