@@ -48,7 +48,7 @@ data class ProductEntity(
 
     var isDeleted: Boolean = false,
     val created: Date = Date(),
-    val updated: Date = Date(),
+    var updated: Date = Date(),
     var published: Date? = null,
     var deleted: Date? = null,
 

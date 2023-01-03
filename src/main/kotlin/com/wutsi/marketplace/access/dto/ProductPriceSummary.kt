@@ -10,6 +10,6 @@ public data class ProductPriceSummary(
     public val discountId: Long? = null,
     public val savings: Long = 0,
     public val savingsPercentage: Int = 0,
-    @get:DateTimeFormat(pattern = "yyyy-MM-dd")
+    @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     public val expires: LocalDate? = null,
 )

@@ -13,11 +13,12 @@ INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summ
         (400, 4, null, 2, false, null, null, null, 300000, 'XAF', null, now(), null)
     ;
 
-INSERT INTO T_DISCOUNT(id, store_fk, name, rate, starts, ends, all_products)
+INSERT INTO T_DISCOUNT(id, store_fk, type, name, rate, starts, ends, all_products)
     VALUES
-        (100, 1, 'FIN10', 10, date_add(now(), interval -1 day), date_add(now(), interval 30 day), true),
-        (101, 1, 'FIN25', 25, date_add(now(), interval -1 day), date_add(now(), interval 3 day), true),
-        (200, 2, 'FIN20', 20, date_add(now(), interval -1 day), date_add(now(), interval 3 day), false)
+        (100, 1, 1, 'FIN10', 10, date_add(now(), interval -1 day), date_add(now(), interval 30 day), true),
+        (101, 1, 1, 'FIN25', 25, date_add(now(), interval -1 day), date_add(now(), interval 3 day), true),
+        (102, 1, 2, 'COUPON50', 50, date_add(now(), interval -1 day), date_add(now(), interval 3 day), true),
+        (200, 2, 1, 'FIN20', 20, date_add(now(), interval -1 day), date_add(now(), interval 3 day), false)
     ;
 
 INSERT INTO T_DISCOUNT_PRODUCT(discount_fk, product_fk)

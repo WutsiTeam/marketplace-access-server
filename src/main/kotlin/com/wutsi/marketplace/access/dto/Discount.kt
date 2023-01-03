@@ -12,12 +12,13 @@ import kotlin.collections.List
 public data class Discount(
     public val id: Long = 0,
     public val storeId: Long = 0,
+    public val type: String = "",
     public val name: String = "",
     public val rate: Int = 0,
     @get:DateTimeFormat(pattern = "yyyy-MM-dd")
-    public val starts: LocalDate = LocalDate.now(),
+    public val starts: LocalDate? = null,
     @get:DateTimeFormat(pattern = "yyyy-MM-dd")
-    public val ends: LocalDate = LocalDate.now(),
+    public val ends: LocalDate? = null,
     public val allProducts: Boolean = false,
     public val productIds: List<Long> = emptyList(),
     @get:DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")

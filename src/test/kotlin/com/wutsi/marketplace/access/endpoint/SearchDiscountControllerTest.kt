@@ -1,5 +1,6 @@
 package com.wutsi.marketplace.access.endpoint
 
+import com.wutsi.enums.DiscountType
 import com.wutsi.marketplace.access.dto.SearchDiscountRequest
 import com.wutsi.marketplace.access.dto.SearchDiscountResponse
 import org.junit.jupiter.api.Test
@@ -58,6 +59,20 @@ class SearchDiscountControllerTest {
 
         val discounts = response.body!!.discounts
         assertEquals(listOf(100L, 101L, 102L, 110L), discounts.map { it.id })
+    }
+
+    @Test
+    public fun searchByType() {
+        val request = SearchDiscountRequest(
+            storeId = 3L,
+            type = DiscountType.COUPON.name,
+        )
+        val response = rest.postForEntity(url(), request, SearchDiscountResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val discounts = response.body!!.discounts
+        assertEquals(listOf(300L), discounts.map { it.id })
     }
 
     private fun url() = "http://localhost:$port/v1/discounts/search"

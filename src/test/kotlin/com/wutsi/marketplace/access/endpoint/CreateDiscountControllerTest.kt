@@ -1,5 +1,6 @@
 package com.wutsi.marketplace.access.endpoint
 
+import com.wutsi.enums.DiscountType
 import com.wutsi.marketplace.access.dao.DiscountRepository
 import com.wutsi.marketplace.access.dto.CreateDiscountRequest
 import com.wutsi.marketplace.access.dto.CreateDiscountResponse
@@ -35,6 +36,7 @@ class CreateDiscountControllerTest {
             rate = 15,
             allProducts = true,
             storeId = 1L,
+            type = DiscountType.SALES.name,
         )
         val response = rest.postForEntity(url(), request, CreateDiscountResponse::class.java)
 
@@ -42,10 +44,11 @@ class CreateDiscountControllerTest {
         val discountId = response.body!!.discountId
         val discount = dao.findById(discountId).get()
         assertEquals(request.name, discount.name)
-        assertEquals(request.starts.toEpochDay(), discount.starts.time / 86400000)
-        assertEquals(request.ends.toEpochDay(), discount.ends.time / 86400000)
+        assertEquals(request.starts!!.toEpochDay(), discount.starts!!.time / 86400000)
+        assertEquals(request.ends!!.toEpochDay(), discount.ends!!.time / 86400000)
         assertEquals(request.allProducts, discount.allProducts)
         assertEquals(request.rate, discount.rate)
+        assertEquals(DiscountType.SALES, discount.type)
         assertFalse(discount.isDeleted)
         assertNull(discount.deleted)
     }

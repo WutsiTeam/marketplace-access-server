@@ -72,6 +72,7 @@ class ProductService(
 
         if (!request.pictureUrl.isNullOrEmpty()) {
             product.thumbnail = pictureService.create(product, request.pictureUrl)
+            product.updated = Date()
             dao.save(product)
         }
 
@@ -83,6 +84,7 @@ class ProductService(
         val product = findById(id)
         product.isDeleted = true
         product.deleted = Date()
+        product.updated = Date()
         dao.save(product)
 
         storeService.updateProductCount(product.store)
@@ -199,6 +201,7 @@ class ProductService(
         product.eventMeetingProvider = request.meetingProviderId?.let {
             meetingProviderService.findById(it)
         }
+        product.updated = Date()
         dao.save(product)
     }
 
@@ -225,11 +228,13 @@ class ProductService(
                 ),
             )
         }
+        product.updated = Date()
         dao.save(product)
     }
 
     fun setThumbnail(product: ProductEntity, picture: PictureEntity?) {
         product.thumbnail = picture
+        product.updated = Date()
         dao.save(product)
     }
 
@@ -256,6 +261,7 @@ class ProductService(
             )
         }
         product.status = status
+        product.updated = Date()
         dao.save(product)
         storeService.updateProductCount(product.store)
     }
@@ -284,6 +290,7 @@ class ProductService(
             val product = it.product
             if (product.quantity != null) {
                 product.quantity = product.quantity!! - it.quantity
+                product.updated = Date()
                 if (product.quantity!! < 0) {
                     throw availabilityException(product.id!!, product.quantity)
                 } else {
@@ -303,6 +310,7 @@ class ProductService(
             val product = it.product
             if (product.quantity != null) {
                 product.quantity = product.quantity!! + it.quantity
+                product.updated = Date()
                 products.add(product)
             }
         }
@@ -372,6 +380,7 @@ class ProductService(
         product.totalUnits = record.get(3).toLong()
         product.totalSales = record.get(4).toLong()
         product.totalViews = record.get(5).toLong()
+        product.updated = Date()
         dao.save(product)
     }
 

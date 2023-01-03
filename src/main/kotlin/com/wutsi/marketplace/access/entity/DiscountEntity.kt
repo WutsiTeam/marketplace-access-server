@@ -1,5 +1,6 @@
 package com.wutsi.marketplace.access.entity
 
+import com.wutsi.enums.DiscountType
 import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -25,10 +26,11 @@ data class DiscountEntity(
 
     var name: String = "",
     var rate: Int = 0,
-    var starts: Date = Date(),
-    var ends: Date = Date(),
+    var starts: Date? = null,
+    var ends: Date? = null,
     var allProducts: Boolean = false,
     var isDeleted: Boolean = false,
+    var type: DiscountType = DiscountType.SALES,
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

@@ -1,18 +1,21 @@
 package com.wutsi.marketplace.access.service
 
+import com.wutsi.enums.DiscountType
 import com.wutsi.marketplace.access.dao.DiscountRepository
 import com.wutsi.marketplace.access.dto.CreateDiscountRequest
 import com.wutsi.marketplace.access.dto.Discount
 import com.wutsi.marketplace.access.dto.DiscountSummary
 import com.wutsi.marketplace.access.dto.SearchDiscountRequest
-import com.wutsi.marketplace.access.dto.UpdateDiscountRequest
+import com.wutsi.marketplace.access.dto.UpdateDiscountAttributeRequest
 import com.wutsi.marketplace.access.entity.DiscountEntity
 import com.wutsi.marketplace.access.error.ErrorURN
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
+import com.wutsi.platform.core.error.exception.BadRequestException
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -31,23 +34,36 @@ class DiscountService(
         dao.save(
             DiscountEntity(
                 store = storeService.findById(request.storeId),
-                starts = Date(request.starts.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()),
-                ends = Date(request.ends.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()),
+                starts = request.starts?.let { Date(it.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()) },
+                ends = request.ends?.let { Date(it.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()) },
                 name = request.name,
                 rate = request.rate,
+                type = DiscountType.valueOf(request.type.uppercase()),
                 allProducts = request.allProducts,
                 created = Date(),
                 updated = Date(),
             ),
         )
 
-    fun update(id: Long, request: UpdateDiscountRequest) {
+    fun updateAttribute(id: Long, request: UpdateDiscountAttributeRequest) {
         val discount = findById(id)
-        discount.name = request.name
-        discount.starts = Date(request.starts.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli())
-        discount.ends = Date(request.ends.atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli())
-        discount.rate = request.rate
-        discount.allProducts = request.allProducts
+        when (request.name.lowercase()) {
+            "starts" -> discount.starts = toDate(request.value)
+            "ends" -> discount.ends = toDate(request.value)
+            "rate" -> discount.rate = toInt(request.value) ?: 0
+            "name" -> discount.name = request.value ?: ""
+            else -> throw BadRequestException(
+                error = Error(
+                    code = ErrorURN.ATTRIBUTE_NOT_VALID.urn,
+                    parameter = Parameter(
+                        name = "name",
+                        value = request.name,
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD,
+                    ),
+                ),
+            )
+        }
+        discount.updated = Date()
         dao.save(discount)
     }
 
@@ -97,10 +113,11 @@ class DiscountService(
         id = discount.id,
         name = discount.name,
         storeId = discount.store.id ?: -1,
-        starts = LocalDate.ofInstant(discount.starts.toInstant(), ZoneId.of("UTC")),
-        ends = LocalDate.ofInstant(discount.ends.toInstant(), ZoneId.of("UTC")),
+        starts = discount.starts?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
+        ends = discount.ends?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
         rate = discount.rate,
         allProducts = discount.allProducts,
+        type = discount.type.name,
         productIds = discount.products.filter { !it.isDeleted }.mapNotNull { it.id },
         created = OffsetDateTime.ofInstant(discount.created.toInstant(), ZoneId.of("UTC")),
         updated = OffsetDateTime.ofInstant(discount.updated.toInstant(), ZoneId.of("UTC")),
@@ -110,10 +127,11 @@ class DiscountService(
         id = discount.id,
         name = discount.name,
         storeId = discount.store.id ?: -1,
-        starts = LocalDate.ofInstant(discount.starts.toInstant(), ZoneId.of("UTC")),
-        ends = LocalDate.ofInstant(discount.ends.toInstant(), ZoneId.of("UTC")),
+        starts = discount.starts?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
+        ends = discount.starts?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
         rate = discount.rate,
         created = OffsetDateTime.ofInstant(discount.created.toInstant(), ZoneId.of("UTC")),
+        type = discount.type.name,
     )
 
     fun addProduct(discountId: Long, productId: Long) {
@@ -172,7 +190,11 @@ class DiscountService(
         }
 
         if (request.date != null) {
-            criteria.add("D.starts <= :date AND D.ends >= :date")
+            criteria.add("D.starts <= :date AND (D.ends >= :date OR D.ends IS NULL)")
+        }
+
+        if (request.type != null) {
+            criteria.add("D.type = :type")
         }
 
         return criteria.joinToString(separator = " AND ")
@@ -190,5 +212,37 @@ class DiscountService(
         if (request.date != null) {
             query.setParameter("date", Date.from(request.date.atStartOfDay(ZoneId.of("UTC")).toInstant()))
         }
+
+        if (request.type != null) {
+            query.setParameter("type", DiscountType.valueOf(request.type.uppercase()))
+        }
+    }
+
+    private fun toString(value: String?): String? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            value
+        }
+
+    private fun toLong(value: String?): Long? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            value.toLong()
+        }
+
+    private fun toInt(value: String?): Int? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            value.toInt()
+        }
+
+    private fun toDate(value: String?): Date? {
+        if (value.isNullOrEmpty()) {
+            return null
+        }
+        return SimpleDateFormat("yyyy-MM-dd").parse(value)
     }
 }

@@ -1,5 +1,6 @@
 package com.wutsi.marketplace.access.service
 
+import com.wutsi.enums.DiscountType
 import com.wutsi.marketplace.access.dto.ProductPriceSummary
 import com.wutsi.marketplace.access.dto.SearchDiscountRequest
 import com.wutsi.marketplace.access.dto.SearchProductPriceRequest
@@ -34,6 +35,7 @@ class PriceService(
                 storeId = request.storeId,
                 productIds = request.productIds,
                 date = LocalDate.now(),
+                type = DiscountType.SALES.name,
                 limit = 100,
             ),
         )
@@ -87,7 +89,7 @@ class PriceService(
             savingsPercentage = (savings * 100L / price).toInt(),
             referencePrice = price,
             price = price - savings,
-            expires = LocalDate.ofInstant(discount.ends.toInstant(), ZoneId.of("UTC")),
+            expires = discount.ends?.let { LocalDate.ofInstant(it.toInstant(), ZoneId.of("UTC")) },
         )
     }
 }
