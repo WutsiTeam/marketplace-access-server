@@ -20,6 +20,7 @@ class OfferService(
             request = SearchProductRequest(
                 status = ProductStatus.PUBLISHED.name,
                 storeId = request.storeId,
+                productIds = request.productIds,
                 sortBy = request.sortBy,
                 limit = request.limit,
                 offset = request.offset,
