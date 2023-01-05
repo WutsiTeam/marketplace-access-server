@@ -190,6 +190,10 @@ class DiscountService(
             criteria.add("(D.allProducts=true OR P.id IN :product_ids)")
         }
 
+        if (request.discountIds.isNotEmpty()) {
+            criteria.add("(D.id IN :discount_ids)")
+        }
+
         if (request.date != null) {
             criteria.add("D.starts <= :date AND (D.ends >= :date OR D.ends IS NULL)")
         }
@@ -208,6 +212,10 @@ class DiscountService(
 
         if (request.productIds.isNotEmpty()) {
             query.setParameter("product_ids", request.productIds)
+        }
+
+        if (request.discountIds.isNotEmpty()) {
+            query.setParameter("discount_ids", request.discountIds)
         }
 
         if (request.date != null) {
