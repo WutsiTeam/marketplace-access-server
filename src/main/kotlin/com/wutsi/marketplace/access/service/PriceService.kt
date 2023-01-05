@@ -26,6 +26,10 @@ class PriceService(
                 limit = request.productIds.size,
             ),
         )
+        return searchPrices(products)
+    }
+
+    fun searchPrices(products: List<ProductEntity>): List<ProductPriceSummary> {
         if (products.isEmpty()) {
             return emptyList()
         }
@@ -33,8 +37,8 @@ class PriceService(
         // Search discounts
         val discounts = discountService.search(
             request = SearchDiscountRequest(
-                storeId = request.storeId,
-                productIds = request.productIds,
+                storeId = products[0].store.id ?: -1,
+                productIds = products.mapNotNull { it.id },
                 date = LocalDate.now(),
                 type = DiscountType.SALES.name,
                 limit = 100,

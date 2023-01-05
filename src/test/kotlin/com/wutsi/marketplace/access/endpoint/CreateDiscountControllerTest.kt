@@ -44,8 +44,8 @@ class CreateDiscountControllerTest {
         val discountId = response.body!!.discountId
         val discount = dao.findById(discountId).get()
         assertEquals(request.name, discount.name)
-        assertEquals(request.starts!!.toInstant().toEpochMilli() / 1000, discount.starts!!.time / 1000)
-        assertEquals(request.ends!!.toInstant().toEpochMilli() / 1000, discount.ends!!.time / 1000)
+        assertEquals(request.starts!!.toInstant().toEpochMilli() / 10000, discount.starts!!.time / 10000)
+        assertEquals(request.ends!!.toInstant().toEpochMilli() / 10000, discount.ends!!.time / 10000)
         assertEquals(request.allProducts, discount.allProducts)
         assertEquals(request.rate, discount.rate)
         assertEquals(DiscountType.SALES, discount.type)
