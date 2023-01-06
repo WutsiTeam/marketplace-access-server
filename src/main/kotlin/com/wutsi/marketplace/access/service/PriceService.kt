@@ -23,7 +23,11 @@ class PriceService(
             request = SearchProductRequest(
                 storeId = request.storeId,
                 productIds = request.productIds,
-                limit = request.productIds.size,
+                limit = if (request.productIds.isEmpty()) {
+                    100
+                } else {
+                    request.productIds.size
+                },
             ),
         )
         return searchPrices(products)

@@ -89,5 +89,44 @@ class SearchProductPriceControllerTest {
         assertNotNull(prices[0].expires)
     }
 
+    @Test
+    fun `search multiple products`() {
+        // WHEN
+        val request = SearchProductPriceRequest(
+            storeId = 5L,
+        )
+        val response = rest.postForEntity(url(), request, SearchProductPriceResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val prices = response.body!!.prices
+        assertEquals(3, prices.size)
+
+        assertEquals(500L, prices[0].productId)
+        assertEquals(1600L, prices[0].price)
+        assertEquals(2000L, prices[0].referencePrice)
+        assertEquals(500L, prices[0].discountId)
+        assertEquals(400L, prices[0].savings)
+        assertEquals(20, prices[0].savingsPercentage)
+        assertNotNull(prices[0].expires)
+
+        assertEquals(501L, prices[1].productId)
+        assertEquals(1500L, prices[1].price)
+        assertEquals(2000L, prices[1].referencePrice)
+        assertEquals(501L, prices[1].discountId)
+        assertEquals(500L, prices[1].savings)
+        assertEquals(25, prices[1].savingsPercentage)
+        assertNotNull(prices[1].expires)
+
+        assertEquals(502L, prices[2].productId)
+        assertEquals(240000L, prices[2].price)
+        assertEquals(300000L, prices[2].referencePrice)
+        assertEquals(500L, prices[2].discountId)
+        assertEquals(60000L, prices[2].savings)
+        assertEquals(20, prices[2].savingsPercentage)
+        assertNotNull(prices[2].expires)
+    }
+
     private fun url() = "http://localhost:$port/v1/products/prices"
 }
