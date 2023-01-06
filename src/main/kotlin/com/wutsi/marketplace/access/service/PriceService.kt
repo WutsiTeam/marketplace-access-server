@@ -39,7 +39,7 @@ class PriceService(
             request = SearchDiscountRequest(
                 storeId = products[0].store.id ?: -1,
                 productIds = products.mapNotNull { it.id },
-                date = LocalDate.now(),
+                date = LocalDate.now(ZoneId.of("UTC")),
                 type = DiscountType.SALES.name,
                 limit = 100,
             ),

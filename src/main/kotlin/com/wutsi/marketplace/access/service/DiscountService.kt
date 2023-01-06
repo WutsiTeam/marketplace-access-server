@@ -195,7 +195,7 @@ class DiscountService(
         }
 
         if (request.date != null) {
-            criteria.add("D.starts <= :date AND (D.ends >= :date OR D.ends IS NULL)")
+            criteria.add("D.starts <= :date AND (D.ends > :date OR D.ends IS NULL)")
         }
 
         if (request.type != null) {
