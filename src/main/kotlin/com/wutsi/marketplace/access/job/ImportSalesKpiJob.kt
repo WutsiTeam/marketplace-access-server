@@ -20,6 +20,8 @@ class ImportSalesKpiJob(
     }
 
     override fun doRun(): Long {
-        return service.importSalesKpi(LocalDate.now())
+        val now = LocalDate.now()
+        return service.importSalesKpi(now.minusDays(1)) // Yesterday
+        +service.importSalesKpi(now) // Today
     }
 }

@@ -333,12 +333,17 @@ class ProductService(
 
     fun importSalesKpi(date: LocalDate): Long {
         val path = "kpi/" + date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) + "/sales.csv"
-        val file = downloadFromStorage(path)
         try {
-            return importSalesKpi(file)
-        } finally {
-            file.delete()
+            val file = downloadFromStorage(path)
+            try {
+                return importSalesKpi(file)
+            } finally {
+                file.delete()
+            }
+        } catch (ex: Exception) {
+            LOGGER.warn("Unable to log KPIs for $date from $path", ex)
         }
+        return 0L
     }
 
     private fun downloadFromStorage(path: String): File {
