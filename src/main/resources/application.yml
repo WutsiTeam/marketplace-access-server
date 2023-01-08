@@ -63,7 +63,9 @@ wutsi:
   application:
     name: marketplace-access
     jobs:
-      import-sales-kpi:
+      import-yesterday-sales-kpi:
+        cron: "0 55 20 * * *"  # Runs every day at 20:55 PM
+      import-today-sales-kpi:
         cron: "0 15 * * * *"  # Runs every hour at *:15
   platform:
     cache:

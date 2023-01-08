@@ -336,7 +336,10 @@ class ProductService(
         try {
             val file = downloadFromStorage(path)
             try {
-                return importSalesKpi(file)
+                val result = importSalesKpi(file)
+                LOGGER.info("$result KPIs loaded for $date from $path")
+
+                return result
             } finally {
                 file.delete()
             }
@@ -350,7 +353,9 @@ class ProductService(
         val file = File.createTempFile(UUID.randomUUID().toString(), "csv")
         val out = FileOutputStream(file)
         out.use {
-            storage.get(storage.toURL(path), out)
+            val url = storage.toURL(path)
+            LOGGER.info("Downloading $url to $file")
+            storage.get(url, out)
         }
         return file
     }

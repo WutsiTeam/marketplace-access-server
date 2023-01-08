@@ -13,10 +13,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/clean.sql", "/db/ImportSalesKpiJob.sql"])
-internal class ImportSalesKpiJobTest : AbstractLanguageAwareControllerTest() {
+@Sql(value = ["/db/clean.sql", "/db/ImportTodaySalesKpiJob.sql"])
+internal class ImportTodaySalesKpiJobTest : AbstractLanguageAwareControllerTest() {
     @Autowired
-    private lateinit var job: ImportSalesKpiJob
+    private lateinit var job: ImportTodaySalesKpiJob
 
     @Autowired
     private lateinit var storage: StorageService
