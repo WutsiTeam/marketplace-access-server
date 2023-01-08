@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.jdbc.Sql
 import java.io.ByteArrayInputStream
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(value = ["/db/clean.sql", "/db/ImportSalesKpiJob.sql"])
@@ -34,7 +35,7 @@ internal class ImportSalesKpiJobTest : AbstractLanguageAwareControllerTest() {
             9,9999,1,1,1500,999
         """.trimIndent()
         val date = LocalDate.now()
-        val path = "kpi/${date.year}/${date.monthValue}/${date.dayOfMonth}/sales.csv"
+        val path = "kpi/" + date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) + "/sales.csv"
         storage.store(path, ByteArrayInputStream(csv.toByteArray()))
 
         // WHEN

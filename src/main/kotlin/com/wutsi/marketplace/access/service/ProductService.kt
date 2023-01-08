@@ -34,6 +34,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.UUID
 import javax.persistence.EntityManager
@@ -331,7 +332,7 @@ class ProductService(
     }
 
     fun importSalesKpi(date: LocalDate): Long {
-        val path = "kpi/${date.year}/${date.monthValue}/${date.dayOfMonth}/sales.csv"
+        val path = "kpi/" + date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) + "/sales.csv"
         val file = downloadFromStorage(path)
         try {
             return importSalesKpi(file)
