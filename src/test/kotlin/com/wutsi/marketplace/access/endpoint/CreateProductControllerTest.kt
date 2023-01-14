@@ -75,7 +75,7 @@ class CreateProductControllerTest {
 
         val thumbnail = pictureDao.findById(product.get().thumbnail!!.id)
         assertTrue(thumbnail.isPresent)
-        assertEquals(request.pictureUrl?.lowercase(), thumbnail.get().url)
+        assertEquals(request.pictureUrl, thumbnail.get().url)
         assertEquals(DigestUtils.md5Hex(request.pictureUrl?.lowercase()), thumbnail.get().hash)
 
         val store = storeDao.findById(request.storeId)

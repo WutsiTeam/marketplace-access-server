@@ -25,8 +25,8 @@ class PictureService(
         dao.save(
             PictureEntity(
                 product = product,
-                url = url.lowercase(),
-                hash = hash(url),
+                url = url.trim(),
+                hash = hash(url.lowercase()),
             ),
         )
 

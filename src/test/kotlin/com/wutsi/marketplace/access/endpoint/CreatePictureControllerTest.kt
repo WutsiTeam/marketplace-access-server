@@ -64,7 +64,7 @@ class CreatePictureControllerTest {
         val picture = dao.findById(pictureId)
         assertTrue(picture.isPresent)
         assertEquals(request.productId, picture.get().product.id)
-        assertEquals(request.url.lowercase(), picture.get().url)
+        assertEquals(request.url, picture.get().url)
         assertNotNull(picture.get().hash)
 
         val product = productDao.findById(request.productId).get()
