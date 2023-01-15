@@ -72,4 +72,9 @@ data class ProductEntity(
     var totalOrders: Long = 0,
     var totalUnits: Long = 0,
     var totalViews: Long = 0,
-)
+) {
+
+    val outOfScope: Boolean
+        @javax.persistence.Transient
+        get() = quantity != null && quantity == 0
+}

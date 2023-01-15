@@ -14,7 +14,8 @@ INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summ
     VALUES
         (100, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null, 1),
         (200, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null, 2),
-        (300, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null, 3),
+        (300, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', null, now(), null, 3),
+        (400, 1, 1110, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 0, now(), null, 1),
         (199, 1, 1110, 1, true, 'TV', 'Sample TV', 'Long description', 50000, 'XAF', null, null, now(), 1)
     ;
 

@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.HttpClientErrorException
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -41,6 +42,7 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(ProductStatus.PUBLISHED.name, product.status)
         assertEquals(150000L, product.price)
         assertEquals(10, product.quantity)
+        assertFalse(product.outOfStock)
         assertEquals("XAF", product.currency)
         assertEquals(ProductType.PHYSICAL_PRODUCT.name, product.type)
         assertNull(product.event)
@@ -77,6 +79,7 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(ProductStatus.PUBLISHED.name, product.status)
         assertEquals(150000L, product.price)
         assertEquals(10, product.quantity)
+        assertFalse(product.outOfStock)
         assertEquals("XAF", product.currency)
         assertEquals(ProductType.EVENT.name, product.type)
         assertEquals(100, product.totalOrders)
@@ -112,7 +115,8 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals("description of TV", product.description)
         assertEquals(ProductStatus.PUBLISHED.name, product.status)
         assertEquals(150000L, product.price)
-        assertEquals(10, product.quantity)
+        assertNull(product.quantity)
+        assertFalse(product.outOfStock)
         assertEquals("XAF", product.currency)
         assertEquals(ProductType.DIGITAL_DOWNLOAD.name, product.type)
         assertNull(product.event)
@@ -133,6 +137,17 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals(1110L, product.category?.id)
         assertEquals("Computers", product.category?.title)
         assertEquals(1100L, product.category?.parentId)
+    }
+
+    @Test
+    fun outOfScope() {
+        val response = rest.getForEntity(url(400), GetProductResponse::class.java)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val product = response.body!!.product
+        assertEquals(0, product.quantity)
+        assertTrue(product.outOfStock)
     }
 
     @Test
