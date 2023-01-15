@@ -11,6 +11,8 @@ import com.wutsi.marketplace.access.dto.SearchProductRequest
 import com.wutsi.marketplace.access.entity.DiscountEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
 import com.wutsi.marketplace.access.error.ErrorURN
+import com.wutsi.marketplace.access.service.filter.OfferSetFilter
+import com.wutsi.marketplace.access.service.filter.OutOfStockProductFilter
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.exception.NotFoundException
 import org.springframework.stereotype.Service
@@ -23,6 +25,12 @@ class OfferService(
     private val productService: ProductService,
     private val discountService: DiscountService,
 ) {
+    private val filters = OfferSetFilter(
+        filters = listOf(
+            OutOfStockProductFilter(), /* IMPORTANT: Should be the last filter */
+        ),
+    )
+
     fun search(request: SearchOfferRequest, language: String?): List<OfferSummary> {
         val products = productService.search(
             request = SearchProductRequest(
@@ -36,7 +44,7 @@ class OfferService(
         )
         val prices = searchPrices(products).associateBy { it.productId }
 
-        return products.mapNotNull {
+        val offers = products.mapNotNull {
             val price = prices[it.id]
             if (price == null) {
                 null
@@ -47,6 +55,7 @@ class OfferService(
                 )
             }
         }
+        return filters.filter(offers)
     }
 
     fun findById(id: Long, language: String?): Offer {

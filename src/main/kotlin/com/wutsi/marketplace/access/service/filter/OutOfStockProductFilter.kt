@@ -1,15 +1,15 @@
 package com.wutsi.marketplace.access.service.filter
 
-import com.wutsi.marketplace.access.entity.ProductEntity
+import com.wutsi.marketplace.access.dto.OfferSummary
 
 /**
  * Bubble down out of stock products
  */
-class OutOfStockProductFilter : ProductFilter {
-    override fun filter(products: List<ProductEntity>): List<ProductEntity> {
-        val result = mutableListOf<ProductEntity>()
-        result.addAll(products.filter { !it.outOfScope })
-        result.addAll(products.filter { it.outOfScope })
+class OutOfStockProductFilter : OfferFilter {
+    override fun filter(offers: List<OfferSummary>): List<OfferSummary> {
+        val result = mutableListOf<OfferSummary>()
+        result.addAll(offers.filter { !it.product.outOfStock })
+        result.addAll(offers.filter { it.product.outOfStock })
         return result
     }
 }

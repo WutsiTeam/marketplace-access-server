@@ -18,8 +18,6 @@ import com.wutsi.marketplace.access.entity.PictureEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
 import com.wutsi.marketplace.access.entity.ReservationEntity
 import com.wutsi.marketplace.access.error.ErrorURN
-import com.wutsi.marketplace.access.service.filter.OutOfStockProductFilter
-import com.wutsi.marketplace.access.service.filter.ProductSetFilter
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.Parameter
 import com.wutsi.platform.core.error.ParameterType
@@ -56,12 +54,6 @@ class ProductService(
     companion object {
         private val LOGGER = LoggerFactory.getLogger(ProductService::class.java)
     }
-
-    private val filters = ProductSetFilter(
-        filters = listOf(
-            OutOfStockProductFilter(), /* IMPORTANT: Should be the last filter */
-        ),
-    )
 
     fun create(request: CreateProductRequest): ProductEntity {
         val store = storeService.findById(request.storeId)
@@ -335,12 +327,10 @@ class ProductService(
         val sql = sql(request)
         val query = em.createQuery(sql)
         parameters(request, query)
-        val products = query
+        return query
             .setFirstResult(request.offset)
             .setMaxResults(request.limit)
             .resultList as List<ProductEntity>
-
-        return filters.filter(products)
     }
 
     fun importSalesKpi(date: LocalDate): Long {
