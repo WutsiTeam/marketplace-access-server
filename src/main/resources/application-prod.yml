@@ -12,6 +12,12 @@ spring:
 
 wutsi:
   client-id: marketplace-access
+  application:
+    jobs:
+      import-yesterday-sales-kpi:
+        cron: "0 10 0 * * *"  # Runs every day at 00:10 AM
+      import-today-sales-kpi:
+        cron: "0 15 * * * *"  # Runs every hour at *:15
   platform:
     cache:
       type: memcached
