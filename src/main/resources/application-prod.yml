@@ -15,9 +15,9 @@ wutsi:
   application:
     jobs:
       import-yesterday-sales-kpi:
-        cron: "0 10 0 * * *"  # Runs every day at 00:10 AM
+        cron: "0 20 0 * * *"  # Runs every day at 00:20 AM
       import-today-sales-kpi:
-        cron: "0 15 * * * *"  # Runs every hour at *:15
+        cron: "0 30 * * * *"  # Runs every hour at *:30
   platform:
     cache:
       type: memcached
