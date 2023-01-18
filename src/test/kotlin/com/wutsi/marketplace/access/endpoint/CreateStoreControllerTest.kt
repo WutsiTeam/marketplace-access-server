@@ -30,6 +30,7 @@ class CreateStoreControllerTest {
     fun create() {
         val request = CreateStoreRequest(
             accountId = 555,
+            businessId = 333,
             currency = "USD",
         )
         val response = rest.postForEntity(url(), request, CreateStoreResponse::class.java)
@@ -39,6 +40,7 @@ class CreateStoreControllerTest {
         val store = dao.findById(response.body!!.storeId)
         assertTrue(store.isPresent)
         assertEquals(request.accountId, store.get().accountId)
+        assertEquals(request.businessId, store.get().businessId)
         assertEquals(request.currency, store.get().currency)
         assertEquals(StoreStatus.ACTIVE, store.get().status)
         assertEquals(0, store.get().productCount)

@@ -7,6 +7,7 @@ import kotlin.String
 
 public data class CreateStoreRequest(
     public val accountId: Long = 0,
+    public val businessId: Long = 0,
     @get:NotBlank
     @get:Size(
         min = 3,

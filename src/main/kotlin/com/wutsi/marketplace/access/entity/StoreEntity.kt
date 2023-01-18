@@ -16,6 +16,7 @@ data class StoreEntity(
     val id: Long? = null,
 
     val accountId: Long = -1,
+    val businessId: Long = -1,
     var productCount: Int = 0,
     var publishedProductCount: Int = 0,
     val currency: String = "",

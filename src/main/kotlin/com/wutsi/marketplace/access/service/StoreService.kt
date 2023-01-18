@@ -49,6 +49,7 @@ class StoreService(
             dao.save(
                 StoreEntity(
                     accountId = request.accountId,
+                    businessId = request.businessId,
                     currency = request.currency,
                     status = StoreStatus.ACTIVE,
                 ),
@@ -116,7 +117,9 @@ class StoreService(
         if (request.storeIds.isNotEmpty()) {
             criteria.add("P.id IN :store_ids")
         }
-
+        if (request.businessId != null) {
+            criteria.add("P.businessId = :business_id")
+        }
         return criteria.joinToString(separator = " AND ")
     }
 
@@ -127,11 +130,15 @@ class StoreService(
         if (request.storeIds.isNotEmpty()) {
             query.setParameter("store_ids", request.storeIds)
         }
+        if (request.businessId != null) {
+            query.setParameter("business_id", request.businessId)
+        }
     }
 
     fun toStore(store: StoreEntity) = Store(
         id = store.id ?: -1,
         accountId = store.accountId,
+        businessId = store.businessId,
         productCount = store.productCount,
         publishedProductCount = store.publishedProductCount,
         created = store.created.toInstant().atOffset(ZoneOffset.UTC),
@@ -144,6 +151,7 @@ class StoreService(
     fun toStoreSummary(store: StoreEntity) = StoreSummary(
         id = store.id ?: -1,
         accountId = store.accountId,
+        businessId = store.businessId,
         currency = store.currency,
         status = store.status.name,
         created = store.created.toInstant().atOffset(ZoneOffset.UTC),

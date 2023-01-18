@@ -48,5 +48,21 @@ class SearchStoreControllerTest {
         assertEquals(listOf(100L), storeIds)
     }
 
+    @Test
+    fun businessId() {
+        // WHEN
+        val request = SearchStoreRequest(
+            businessId = 3L,
+        )
+        val response = rest.postForEntity(url(), request, SearchStoreResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val storeIds = response.body!!.stores.map { it.id }
+        assertEquals(1, storeIds.size)
+        assertEquals(listOf(400L), storeIds)
+    }
+
     private fun url() = "http://localhost:$port/v1/stores/search"
 }

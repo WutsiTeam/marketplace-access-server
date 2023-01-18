@@ -33,6 +33,7 @@ class GetStoreControllerTest {
         val store = response.body!!.store
         assertEquals(100L, store.id)
         assertEquals(100L, store.accountId)
+        assertEquals(333L, store.businessId)
         assertEquals(10, store.productCount)
         assertEquals(5, store.publishedProductCount)
         assertEquals(StoreStatus.INACTIVE.name, store.status)
