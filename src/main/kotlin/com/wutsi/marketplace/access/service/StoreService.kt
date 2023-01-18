@@ -44,7 +44,7 @@ class StoreService(
             }
 
     fun create(request: CreateStoreRequest): StoreEntity {
-        val stores = dao.findByAccountIdAndStatusNot(request.accountId, StoreStatus.INACTIVE)
+        val stores = dao.findByAccountIdAndStatus(request.accountId, StoreStatus.ACTIVE)
         return if (stores.isEmpty()) {
             dao.save(
                 StoreEntity(
