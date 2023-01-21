@@ -154,6 +154,7 @@ class ProductService(
         totalUnits = product.totalUnits,
         totalViews = product.totalViews,
         outOfStock = product.outOfScope,
+        url = "/p/${product.id}/" + (product.title?.let { HandleGenerator.generate(it) } ?: ""),
     )
 
     fun toProductSummary(product: ProductEntity, language: String?) = ProductSummary(
@@ -170,6 +171,7 @@ class ProductService(
         type = product.type.name,
         event = toEvent(product),
         outOfStock = product.outOfScope,
+        url = "/p/${product.id}/" + (product.title?.let { HandleGenerator.generate(it) } ?: ""),
     )
 
     private fun toEvent(product: ProductEntity): Event? {

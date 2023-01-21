@@ -114,6 +114,7 @@ class GetProductControllerTest : AbstractLanguageAwareControllerTest() {
         assertEquals("summary of TV", product.summary)
         assertEquals("description of TV", product.description)
         assertEquals(ProductStatus.PUBLISHED.name, product.status)
+        assertEquals("/p/300/tv", product.url)
         assertEquals(150000L, product.price)
         assertNull(product.quantity)
         assertFalse(product.outOfStock)
