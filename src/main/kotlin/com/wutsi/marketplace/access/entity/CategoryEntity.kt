@@ -16,6 +16,9 @@ data class CategoryEntity(
     var title: String = "",
     var titleFrench: String? = null,
     var titleFrenchAscii: String? = null,
+    var level: Int = 0,
+    var longTitle: String? = null,
+    var longTitleFrench: String? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_fk")
