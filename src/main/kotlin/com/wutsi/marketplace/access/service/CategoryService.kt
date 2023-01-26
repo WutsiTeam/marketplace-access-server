@@ -231,9 +231,6 @@ public class CategoryService(
     private fun where(request: SearchCategoryRequest, language: String?): String {
         val criteria = mutableListOf<String>()
 
-        if (request.topCategories == true) {
-            criteria.add("a.parent IS NULL")
-        }
         if (request.categoryIds.isNotEmpty()) {
             criteria.add("a.id IN :category_ids")
         }

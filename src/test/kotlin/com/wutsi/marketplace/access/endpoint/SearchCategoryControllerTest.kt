@@ -18,9 +18,7 @@ class SearchCategoryControllerTest : AbstractLanguageAwareControllerTest() {
     @Test
     fun topCategories() {
         // WHEN
-        val request = SearchCategoryRequest(
-            topCategories = true,
-        )
+        val request = SearchCategoryRequest(level = 0)
         val response = rest.postForEntity(url(), request, SearchCategoryResponse::class.java)
 
         // THEN

@@ -14,7 +14,7 @@ class SearchCategoryDelegate(
     private val logger: KVLogger,
 ) {
     fun invoke(request: SearchCategoryRequest): SearchCategoryResponse {
-        logger.add("request_top_categories", request.topCategories)
+        logger.add("request_level", request.level)
         logger.add("request_keyword", request.keyword)
         logger.add("request_category_ids", request.categoryIds)
         logger.add("request_limit", request.limit)
