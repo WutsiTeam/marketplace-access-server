@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.test.context.jdbc.Sql
 import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql(value = ["/db/clean.sql"])
 public class ImportCategoryControllerTest {
     @LocalServerPort
     public val port: Int = 0
@@ -24,7 +26,7 @@ public class ImportCategoryControllerTest {
         Thread.sleep(30000L)
 
         val categories = dao.findAll()
-        assertEquals(5596, categories.toList().size)
+        assertEquals(5595, categories.toList().size)
 
         val category = dao.findById(503026L).get()
         assertEquals(503026L, category.id)
