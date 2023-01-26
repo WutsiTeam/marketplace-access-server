@@ -29,6 +29,19 @@ class SearchCategoryControllerTest : AbstractLanguageAwareControllerTest() {
     }
 
     @Test
+    fun byParent() {
+        // WHEN
+        val request = SearchCategoryRequest(parentId = 1100L)
+        val response = rest.postForEntity(url(), request, SearchCategoryResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val categories = response.body!!.categories.sortedBy { it.id }
+        assertEquals(16, categories.size)
+    }
+
+    @Test
     fun byKeyword() {
         // WHEN
         val url = "http://localhost:$port/v1/categories/search"

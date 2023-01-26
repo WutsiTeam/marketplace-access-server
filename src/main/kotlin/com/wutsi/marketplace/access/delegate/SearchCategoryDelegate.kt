@@ -19,6 +19,7 @@ class SearchCategoryDelegate(
         logger.add("request_category_ids", request.categoryIds)
         logger.add("request_limit", request.limit)
         logger.add("request_offset", request.offset)
+        logger.add("request_parent_id", request.parentId)
 
         val language = httpRequest.getHeader("Accept-Language")
         logger.add("language", language)
