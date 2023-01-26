@@ -231,6 +231,9 @@ public class CategoryService(
     private fun where(request: SearchCategoryRequest, language: String?): String {
         val criteria = mutableListOf<String>()
 
+        if (request.parentId != null) {
+            criteria.add("a.parent.id = :parent_id")
+        }
         if (request.categoryIds.isNotEmpty()) {
             criteria.add("a.id IN :category_ids")
         }
@@ -247,6 +250,9 @@ public class CategoryService(
     }
 
     private fun parameters(request: SearchCategoryRequest, query: Query) {
+        if (request.parentId != null) {
+            query.setParameter("parent_id", request.parentId)
+        }
         if (request.categoryIds.isNotEmpty()) {
             query.setParameter("category_ids", request.categoryIds)
         }

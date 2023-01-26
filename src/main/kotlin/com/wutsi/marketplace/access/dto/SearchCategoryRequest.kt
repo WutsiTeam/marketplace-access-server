@@ -6,6 +6,7 @@ import kotlin.String
 import kotlin.collections.List
 
 public data class SearchCategoryRequest(
+    public val parentId: Long? = null,
     public val categoryIds: List<Long> = emptyList(),
     public val keyword: String? = null,
     public val level: Int? = null,
