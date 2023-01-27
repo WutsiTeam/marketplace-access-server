@@ -40,6 +40,13 @@ class GetStoreControllerTest {
         assertNotNull(store.created)
         assertNotNull(store.updated)
         assertNotNull(store.deactivated)
+        assertEquals(true, store.cancellationPolity.accepted)
+        assertEquals(3, store.cancellationPolity.window)
+        assertEquals("Hurry up", store.cancellationPolity.message)
+        assertEquals(true, store.returnPolicy.accepted)
+        assertEquals(5, store.returnPolicy.contactWindow)
+        assertEquals(10, store.returnPolicy.shipBackWindow)
+        assertEquals("Yo!", store.returnPolicy.message)
     }
 
     @Test

@@ -21,8 +21,15 @@ data class StoreEntity(
     var publishedProductCount: Int = 0,
     val currency: String = "",
     var status: StoreStatus = StoreStatus.UNKNOWN,
-
     val created: Date = Date(),
-    val updated: Date = Date(),
+    var updated: Date = Date(),
     var deactivated: Date? = null,
+
+    var cancellationAccepted: Boolean = false,
+    var cancellationWindow: Int = 0,
+    var cancellationMessage: String? = null,
+    var returnAccepted: Boolean = false,
+    var returnContactWindow: Int = 0,
+    var returnShipBackWindow: Int = 0,
+    var returnMessage: String? = null,
 )

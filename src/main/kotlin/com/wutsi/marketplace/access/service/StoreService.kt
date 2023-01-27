@@ -4,10 +4,13 @@ import com.wutsi.enums.ProductStatus
 import com.wutsi.enums.StoreStatus
 import com.wutsi.marketplace.access.dao.ProductRepository
 import com.wutsi.marketplace.access.dao.StoreRepository
+import com.wutsi.marketplace.access.dto.CancellationPolicy
 import com.wutsi.marketplace.access.dto.CreateStoreRequest
+import com.wutsi.marketplace.access.dto.ReturnPolicy
 import com.wutsi.marketplace.access.dto.SearchStoreRequest
 import com.wutsi.marketplace.access.dto.Store
 import com.wutsi.marketplace.access.dto.StoreSummary
+import com.wutsi.marketplace.access.dto.UpdateStorePolicyAttributeRequest
 import com.wutsi.marketplace.access.dto.UpdateStoreStatusRequest
 import com.wutsi.marketplace.access.entity.StoreEntity
 import com.wutsi.marketplace.access.error.ErrorURN
@@ -71,6 +74,7 @@ class StoreService(
         }
 
         store.status = status
+        store.updated = Date()
         when (status) {
             StoreStatus.INACTIVE -> store.deactivated = Date()
             StoreStatus.UNDER_REVIEW -> store.deactivated = null
@@ -150,6 +154,17 @@ class StoreService(
         deactivated = store.deactivated?.toInstant()?.atOffset(ZoneOffset.UTC),
         currency = store.currency,
         status = store.status.name,
+        cancellationPolity = CancellationPolicy(
+            accepted = store.cancellationAccepted,
+            window = store.cancellationWindow,
+            message = store.cancellationMessage,
+        ),
+        returnPolicy = ReturnPolicy(
+            accepted = store.returnAccepted,
+            contactWindow = store.returnContactWindow,
+            shipBackWindow = store.returnShipBackWindow,
+            message = store.returnMessage,
+        ),
     )
 
     fun toStoreSummary(store: StoreEntity) = StoreSummary(
@@ -167,4 +182,50 @@ class StoreService(
             productDao.countByStoreAndIsDeletedAndStatus(store, false, ProductStatus.PUBLISHED)
         dao.save(store)
     }
+
+    fun updatePolicyAttribute(id: Long, request: UpdateStorePolicyAttributeRequest) {
+        val store = findById(id)
+        when (request.name.lowercase()) {
+            "cancellation-accepted" -> store.cancellationAccepted = toBoolean(request.value)
+            "cancellation-window" -> store.cancellationWindow = (toInt(request.value) ?: 12)
+            "cancellation-message" -> store.cancellationMessage = toString(request.value)
+            "return-accepted" -> store.returnAccepted = toBoolean(request.value)
+            "return-contact-window" -> store.returnContactWindow = (toInt(request.value) ?: 24)
+            "return-ship-back-window" -> store.returnShipBackWindow = (toInt(request.value) ?: 240)
+
+            else -> BadRequestException(
+                error = Error(
+                    code = ErrorURN.ATTRIBUTE_NOT_VALID.name,
+                    parameter = Parameter(
+                        name = "name",
+                        value = request.name,
+                        type = ParameterType.PARAMETER_TYPE_PAYLOAD,
+                    ),
+                ),
+            )
+        }
+        store.updated = Date()
+        dao.save(store)
+    }
+
+    private fun toString(value: String?): String? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            value
+        }
+
+    private fun toInt(value: String?): Int? =
+        if (value.isNullOrEmpty()) {
+            null
+        } else {
+            value.toInt()
+        }
+
+    private fun toBoolean(value: String?): Boolean =
+        if (value.isNullOrEmpty()) {
+            false
+        } else {
+            value.toBoolean()
+        }
 }
