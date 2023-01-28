@@ -154,7 +154,7 @@ class StoreService(
         deactivated = store.deactivated?.toInstant()?.atOffset(ZoneOffset.UTC),
         currency = store.currency,
         status = store.status.name,
-        cancellationPolity = CancellationPolicy(
+        cancellationPolicy = CancellationPolicy(
             accepted = store.cancellationAccepted,
             window = store.cancellationWindow,
             message = store.cancellationMessage,
