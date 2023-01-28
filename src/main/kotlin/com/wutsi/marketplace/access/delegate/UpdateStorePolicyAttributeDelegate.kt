@@ -5,7 +5,7 @@ import com.wutsi.marketplace.access.service.StoreService
 import org.springframework.stereotype.Service
 
 @Service
-public class UpdateStorePolicyDelegate(private val service: StoreService) {
+public class UpdateStorePolicyAttributeDelegate(private val service: StoreService) {
     public fun invoke(id: Long, request: UpdateStorePolicyAttributeRequest) {
         service.updatePolicyAttribute(id, request)
     }

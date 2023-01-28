@@ -11,8 +11,8 @@ import org.springframework.web.client.RestTemplate
 import kotlin.test.assertEquals
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(value = ["/db/clean.sql", "/db/UpdateStorePolicyController.sql"])
-class UpdateStorePolicyControllerTest {
+@Sql(value = ["/db/clean.sql", "/db/UpdateStorePolicyAttributeController.sql"])
+class UpdateStorePolicyAttributeControllerTest {
     @LocalServerPort
     val port: Int = 0
 

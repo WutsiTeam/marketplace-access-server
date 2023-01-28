@@ -1,6 +1,6 @@
 package com.wutsi.marketplace.access.endpoint
 
-import com.wutsi.marketplace.access.`delegate`.UpdateStorePolicyDelegate
+import com.wutsi.marketplace.access.`delegate`.UpdateStorePolicyAttributeDelegate
 import com.wutsi.marketplace.access.dto.UpdateStorePolicyAttributeRequest
 import org.springframework.web.bind.`annotation`.PathVariable
 import org.springframework.web.bind.`annotation`.PostMapping
@@ -10,8 +10,8 @@ import javax.validation.Valid
 import kotlin.Long
 
 @RestController
-public class UpdateStorePolicyController(
-    public val `delegate`: UpdateStorePolicyDelegate,
+public class UpdateStorePolicyAttributeController(
+    public val `delegate`: UpdateStorePolicyAttributeDelegate,
 ) {
     @PostMapping("/v1/stores/{id}/policies")
     public fun invoke(
