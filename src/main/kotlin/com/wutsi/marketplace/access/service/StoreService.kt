@@ -192,6 +192,7 @@ class StoreService(
             "return-accepted" -> store.returnAccepted = toBoolean(request.value)
             "return-contact-window" -> store.returnContactWindow = (toInt(request.value) ?: 24)
             "return-ship-back-window" -> store.returnShipBackWindow = (toInt(request.value) ?: 240)
+            "return-message" -> store.returnMessage = toString(request.value)
 
             else -> BadRequestException(
                 error = Error(
