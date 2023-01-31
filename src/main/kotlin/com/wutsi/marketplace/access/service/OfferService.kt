@@ -37,6 +37,7 @@ class OfferService(
                 status = ProductStatus.PUBLISHED.name,
                 storeId = request.storeId,
                 productIds = request.productIds,
+                types = request.types,
                 sortBy = request.sortBy,
                 limit = request.limit,
                 offset = request.offset,

@@ -2,6 +2,7 @@ package com.wutsi.marketplace.access.endpoint
 
 import com.wutsi.enums.ProductSort
 import com.wutsi.enums.ProductStatus
+import com.wutsi.enums.ProductType
 import com.wutsi.marketplace.access.dto.SearchProductRequest
 import com.wutsi.marketplace.access.dto.SearchProductResponse
 import org.junit.jupiter.api.Test
@@ -83,6 +84,22 @@ class SearchProductControllerTest {
 
         val productIds = response.body!!.products.map { it.id }
         assertEquals(4, productIds.size)
+    }
+
+    @Test
+    fun byType() {
+        // GIVEN
+        val request = SearchProductRequest(
+            types = listOf(ProductType.EVENT.name, ProductType.DIGITAL_DOWNLOAD.name),
+        )
+        val response = rest.postForEntity(url(), request, SearchProductResponse::class.java)
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.statusCode)
+
+        val productIds = response.body!!.products.map { it.id }.sorted()
+        assertEquals(3, productIds.size)
+        assertEquals(listOf(100L, 101L, 102L), productIds)
     }
 
     private fun url() = "http://localhost:$port/v1/products/search"

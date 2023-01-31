@@ -433,6 +433,10 @@ class ProductService(
             criteria.add("P.status=:status")
         }
 
+        if (request.types.isNotEmpty()) {
+            criteria.add("P.type IN :types")
+        }
+
         return criteria.joinToString(separator = " AND ")
     }
 
@@ -462,6 +466,10 @@ class ProductService(
 
         if (!request.status.isNullOrEmpty()) {
             query.setParameter("status", ProductStatus.valueOf(request.status.uppercase()))
+        }
+
+        if (request.types.isNotEmpty()) {
+            query.setParameter("types", request.types.map { ProductType.valueOf(it) })
         }
     }
 
