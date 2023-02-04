@@ -11,6 +11,7 @@ import com.wutsi.marketplace.access.dto.SearchProductRequest
 import com.wutsi.marketplace.access.entity.DiscountEntity
 import com.wutsi.marketplace.access.entity.ProductEntity
 import com.wutsi.marketplace.access.error.ErrorURN
+import com.wutsi.marketplace.access.service.filter.ExpiredEventFilter
 import com.wutsi.marketplace.access.service.filter.OfferSetFilter
 import com.wutsi.marketplace.access.service.filter.OutOfStockProductFilter
 import com.wutsi.platform.core.error.Error
@@ -27,6 +28,7 @@ class OfferService(
 ) {
     private val filters = OfferSetFilter(
         filters = listOf(
+            ExpiredEventFilter(),
             OutOfStockProductFilter(), /* IMPORTANT: Should be the last filter */
         ),
     )
