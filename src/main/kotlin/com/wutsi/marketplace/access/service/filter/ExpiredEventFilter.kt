@@ -13,5 +13,6 @@ class ExpiredEventFilter : OfferFilter {
 
     private fun isNotExpired(offer: OfferSummary): Boolean =
         offer.product.type != ProductType.EVENT.name ||
-            (offer.product.event?.ends != null && offer.product.event.ends.isBefore(OffsetDateTime.now()))
+            offer.product.event?.ends == null ||
+            offer.product.event.ends.isAfter(OffsetDateTime.now())
 }

@@ -6,15 +6,16 @@ INSERT INTO T_STORE(id, account_id, product_count, published_product_count, curr
         (5, 51, 0, 0, 'XAF', 1)
     ;
 
-INSERT INTO T_PRODUCT(id, store_fk, category_fk, status, is_deleted, title, summary, description, price, currency, quantity, published, deleted)
+INSERT INTO T_PRODUCT(id, store_fk, type, status, is_deleted, title, summary, description, price, currency, quantity, published, deleted, event_ends)
     VALUES
-        (100, 1, null, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null),
-        (200, 2, null, 2, false, null, null, null, 2000, 'XAF', null, now(), null),
-        (300, 3, null, 2, false, null, null, null, 300000, 'XAF', null, now(), null),
-        (400, 4, null, 2, false, null, null, null, 300000, 'XAF', null, now(), null),
-        (500, 5, null, 2, false, null, null, null, 2000, 'XAF', null, now(), null),
-        (501, 5, null, 2, false, null, null, null, 2000, 'XAF', null, now(), null),
-        (502, 5, null, 2, false, null, null, null, 300000, 'XAF', null, now(), null)
+        (100, 1, 1, 2, false, 'TV', 'summary of TV', 'description of TV', 150000, 'XAF', 10, now(), null, null),
+        (200, 2, 1, 2, false, null, null, null, 2000, 'XAF', null, now(), null, null),
+        (300, 3, 1, 2, false, null, null, null, 300000, 'XAF', null, now(), null, null),
+        (400, 4, 1, 2, false, null, null, null, 300000, 'XAF', null, now(), null, null),
+        (500, 5, 1, 2, false, null, null, null, 2000, 'XAF', null, now(), null, null),
+        (501, 5, 1, 2, false, null, null, null, 2000, 'XAF', null, now(), null, null),
+        (502, 5, 1, 2, false, null, null, null, 300000, 'XAF', null, now(), null, null),
+        (503, 5, 2, 2, false, null, null, null, 300000, 'XAF', null, now(), null, '2020-01-01')
     ;
 
 INSERT INTO T_DISCOUNT(id, store_fk, type, name, rate, starts, ends, all_products)
